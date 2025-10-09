@@ -1,0 +1,68 @@
+# VibeSec .gitignore
+
+# Build outputs
+/build/
+/dist/
+/bin/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Dependencies
+/node_modules/
+/vendor/
+/venv/
+/__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+/coverage/
+*.test
+*.out
+.pytest_cache/
+htmlcov/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Temporary files
+/tmp/
+*.tmp
+*.temp
+
+# Reports (for local development)
+/reports/*.html
+/reports/*.json
+!/reports/.gitkeep
+
+# Custom rules (user-specific)
+/rules/custom/
+!/rules/custom/.gitkeep
