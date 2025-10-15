@@ -59,8 +59,38 @@ Transform the POC into a **market-ready product** that vibe coders trust for sec
 
 ### 3. Integration Layer 🔗
 
-#### 3.1 Snyk Integration
-**Purpose:** Enrich findings with dependency vulnerability data
+#### 3.1 Smart Dependency Scanning (Post-POC Enhancement)
+**Purpose:** Integrate with native language dependency scanners
+
+**POC Approach (Current):**
+- Pattern-based detection via regex
+- Checks for outdated packages in package.json, requirements.txt, Cargo.toml
+- Fast, works offline, no external dependencies
+- Good enough for POC validation
+
+**MVP Approach (Lazy-Loaded):**
+- Auto-detect languages in project (JavaScript, Python, Rust, Go, etc.)
+- Lazy-load appropriate scanners only when needed:
+  - `npm audit` for JavaScript/TypeScript (if npm installed)
+  - `cargo audit` for Rust (if cargo-audit installed)
+  - `pip-audit` for Python (if pip-audit installed)
+  - `govulncheck` for Go (if installed)
+- Graceful fallback to pattern-based detection if tools unavailable
+- Optional flag: `vibesec scan . --deep-deps` for external tool integration
+
+**Workflow:**
+```
+VibeSec Scan → Detect Languages → Check Tool Availability
+→ Load Appropriate Scanner → Merge with Pattern Results → Report
+```
+
+**Benefits:**
+- Fast for POC users (no external dependencies)
+- Comprehensive for MVP users (native tool integration)
+- Works everywhere (graceful degradation)
+
+#### 3.2 Snyk Integration
+**Purpose:** Enrich findings with vulnerability intelligence
 
 **Workflow:**
 ```
@@ -70,7 +100,7 @@ VibeSec Scan → Detect dependencies → Query Snyk API
 
 **Output:** Findings tagged with Snyk vulnerability IDs and severity
 
-#### 3.2 Socket.dev Integration
+#### 3.3 Socket.dev Integration
 **Purpose:** Supply chain attack detection
 
 **Workflow:**
@@ -81,7 +111,7 @@ VibeSec Scan → Extract package.json/requirements.txt
 
 **Output:** Supply chain risk score + package risk breakdown
 
-#### 3.3 GitHub Action
+#### 3.4 GitHub Action
 **Purpose:** Automate security checks in CI/CD
 
 **Features:**

@@ -1,0 +1,229 @@
+# CSRF (Cross-Site Request Forgery) Security Rules
+# Detects missing CSRF protection in state-changing endpoints
+
+rules:
+  - id: missing-csrf-protection
+    name: Missing CSRF Protection
+    description: State-changing endpoints lack CSRF token validation
+    severity: high
+    category: web-security
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "app\\.(post|put|delete|patch)\\s*\\([\"'][^\"']+[\"'](?!.*csrf)"
+        flags: gi
+      - regex: "router\\.(post|put|delete|patch)\\s*\\([\"'][^\"']+[\"'](?!.*csrf)"
+        flags: gi
+    fix:
+      template: |
+        Use CSRF protection middleware for state-changing requests.
+
+        Before:
+        app.post('/transfer', (req, res) => {
+          // Transfer money
+        });
+
+        After:
+        const csrf = require('csurf');
+        const csrfProtection = csrf({ cookie: true });
+
+        app.post('/transfer', csrfProtection, (req, res) => {
+          // CSRF token validated automatically
+        });
+
+        // In your form:
+        // <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      references:
+        - https://owasp.org/www-community/attacks/csrf
+        - https://cwe.mitre.org/data/definitions/352.html
+    metadata:
+      cwe: CWE-352
+      owasp: "A01:2021"
+      tags:
+        - csrf
+        - web-security
+        - session
+
+  - id: csrf-cookie-misconfiguration
+    name: CSRF Cookie Misconfiguration
+    description: CSRF tokens stored in cookies without proper security flags
+    severity: medium
+    category: web-security
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "csrf\\s*\\(\\s*\\{[^}]*cookie\\s*:\\s*true(?!.*sameSite)"
+        flags: gi
+      - regex: "res\\.cookie\\s*\\([\"']csrf[\"'].*(?!.*sameSite)"
+        flags: gi
+    fix:
+      template: |
+        Set SameSite and Secure flags on CSRF cookies.
+
+        Before:
+        const csrfProtection = csrf({ cookie: true });
+
+        After:
+        const csrfProtection = csrf({
+          cookie: {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict'
+          }
+        });
+      references:
+        - https://owasp.org/www-community/attacks/csrf
+        - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite
+    metadata:
+      cwe: CWE-352
+      owasp: "A01:2021"
+      tags:
+        - csrf
+        - cookies
+        - samesite
+
+  - id: missing-csrf-flask
+    name: Missing CSRF Protection (Flask)
+    description: Flask application without CSRF protection enabled
+    severity: high
+    category: web-security
+    languages:
+      - python
+    enabled: true
+    patterns:
+      - regex: "@app\\.route\\s*\\([^)]*methods\\s*=\\s*\\[[^\\]]*[\"'](POST|PUT|DELETE|PATCH)[\"'][^\\]]*\\](?!.*csrf)"
+        flags: gi
+      - regex: "from flask import.*(?!.*CSRFProtect)"
+        flags: gi
+    fix:
+      template: |
+        Enable Flask-WTF CSRF protection.
+
+        Before:
+        from flask import Flask
+        app = Flask(__name__)
+
+        @app.route('/transfer', methods=['POST'])
+        def transfer():
+            pass
+
+        After:
+        from flask import Flask
+        from flask_wtf.csrf import CSRFProtect
+
+        app = Flask(__name__)
+        app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+        csrf = CSRFProtect(app)
+
+        @app.route('/transfer', methods=['POST'])
+        def transfer():
+            pass  # CSRF automatically validated
+      references:
+        - https://flask-wtf.readthedocs.io/en/stable/csrf.html
+        - https://cwe.mitre.org/data/definitions/352.html
+    metadata:
+      cwe: CWE-352
+      owasp: "A01:2021"
+      tags:
+        - csrf
+        - flask
+        - python
+
+  - id: cors-credentials-without-origin
+    name: CORS Credentials Without Strict Origin
+    description: Allowing credentials with wildcard CORS origin enables CSRF attacks
+    severity: critical
+    category: web-security
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "cors\\s*\\(\\s*\\{[^}]*credentials\\s*:\\s*true[^}]*origin\\s*:\\s*[\"']\\*[\"']"
+        flags: gi
+      - regex: "Access-Control-Allow-Credentials[\"']\\s*,\\s*[\"']true[\"'].*Access-Control-Allow-Origin[\"']\\s*,\\s*[\"']\\*[\"']"
+        flags: gi
+    fix:
+      template: |
+        Never use wildcard origin with credentials. Specify exact origins.
+
+        Before:
+        app.use(cors({
+          origin: '*',
+          credentials: true
+        }));
+
+        After:
+        const allowedOrigins = ['https://example.com', 'https://app.example.com'];
+        app.use(cors({
+          origin: (origin, callback) => {
+            if (!origin || allowedOrigins.includes(origin)) {
+              callback(null, true);
+            } else {
+              callback(new Error('Not allowed by CORS'));
+            }
+          },
+          credentials: true
+        }));
+      references:
+        - https://owasp.org/www-community/attacks/csrf
+        - https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+    metadata:
+      cwe: CWE-352
+      owasp: "A05:2021"
+      tags:
+        - csrf
+        - cors
+        - credentials
+
+  - id: json-csrf-vulnerability
+    name: JSON Endpoint Without CSRF Protection
+    description: JSON endpoints can still be vulnerable to CSRF attacks
+    severity: medium
+    category: web-security
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "app\\.(post|put|delete|patch)\\s*\\([\"']/api/[^\"']+[\"'].*\\)\\s*=>.*req\\.body(?!.*csrf|.*origin)"
+        flags: gi
+      - regex: "express\\.json\\s*\\(\\)(?!.*csrf)"
+        flags: gi
+    fix:
+      template: |
+        JSON endpoints need CSRF protection too, or validate Origin header.
+
+        Before:
+        app.post('/api/transfer', (req, res) => {
+          const amount = req.body.amount;
+        });
+
+        After:
+        // Option 1: Use CSRF tokens
+        app.post('/api/transfer', csrfProtection, (req, res) => {
+          const amount = req.body.amount;
+        });
+
+        // Option 2: Validate Origin/Referer headers
+        app.use((req, res, next) => {
+          const origin = req.get('origin');
+          if (req.method !== 'GET' && !allowedOrigins.includes(origin)) {
+            return res.status(403).json({ error: 'Forbidden' });
+          }
+          next();
+        });
+      references:
+        - https://owasp.org/www-community/attacks/csrf
+        - https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html
+    metadata:
+      cwe: CWE-352
+      owasp: "A01:2021"
+      tags:
+        - csrf
+        - json
+        - api

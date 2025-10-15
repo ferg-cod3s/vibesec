@@ -1,0 +1,414 @@
+# Insecure Deserialization Security Rules
+# Detects unsafe deserialization of untrusted data
+
+rules:
+  - id: unsafe-node-serialize
+    name: Unsafe Node-Serialize Deserialization
+    description: node-serialize.unserialize() with user input allows remote code execution
+    severity: critical
+    category: deserialization
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "node-serialize|serialize\\.unserialize"
+        flags: gi
+      - regex: "unserialize\\s*\\(\\s*req\\.(body|query|params)"
+        flags: gi
+    fix:
+      template: |
+        Never deserialize untrusted data. Use JSON.parse() instead.
+
+        Before:
+        const serialize = require('node-serialize');
+        const obj = serialize.unserialize(req.body.data);
+
+        After:
+        // Use JSON.parse() for safe deserialization
+        const obj = JSON.parse(req.body.data);
+
+        // If you must deserialize complex objects, validate thoroughly
+        const safeUnserialize = (data) => {
+          const parsed = JSON.parse(data);
+          // Validate structure and types
+          if (typeof parsed !== 'object' || parsed === null) {
+            throw new Error('Invalid data');
+          }
+          return parsed;
+        };
+      references:
+        - https://owasp.org/www-community/vulnerabilities/Deserialization_of_untrusted_data
+        - https://cwe.mitre.org/data/definitions/502.html
+    metadata:
+      cwe: CWE-502
+      owasp: "A08:2021"
+      tags:
+        - deserialization
+        - node-serialize
+        - rce
+
+  - id: python-pickle-deserialization
+    name: Unsafe Python Pickle Deserialization
+    description: pickle.loads() with untrusted data allows arbitrary code execution
+    severity: critical
+    category: deserialization
+    languages:
+      - python
+    enabled: true
+    patterns:
+      - regex: "pickle\\.loads?\\s*\\(.*request\\.(args|form|json|data)"
+        flags: gi
+      - regex: "pickle\\.loads?\\s*\\(.*input\\(|.*sys\\.stdin"
+        flags: gi
+      - regex: "cPickle\\.loads?\\s*\\("
+        flags: gi
+    fix:
+      template: |
+        Never use pickle with untrusted data. Use JSON or other safe formats.
+
+        Before:
+        import pickle
+        data = pickle.loads(request.data)
+
+        After:
+        import json
+        data = json.loads(request.data)
+
+        # If you must use pickle (not recommended):
+        # 1. Only deserialize from trusted sources
+        # 2. Use HMAC to sign pickled data
+        # 3. Validate the signature before unpickling
+        import hmac
+        import hashlib
+
+        def safe_unpickle(pickled_data, signature, secret_key):
+            # Verify signature
+            expected = hmac.new(secret_key.encode(), pickled_data, hashlib.sha256).hexdigest()
+            if not hmac.compare_digest(signature, expected):
+                raise ValueError('Invalid signature')
+            return pickle.loads(pickled_data)
+      references:
+        - https://owasp.org/www-community/vulnerabilities/Deserialization_of_untrusted_data
+        - https://docs.python.org/3/library/pickle.html#restricting-globals
+    metadata:
+      cwe: CWE-502
+      owasp: "A08:2021"
+      tags:
+        - deserialization
+        - pickle
+        - python
+        - rce
+
+  - id: php-unserialize
+    name: Unsafe PHP Unserialize
+    description: unserialize() with user input can lead to object injection attacks
+    severity: critical
+    category: deserialization
+    languages:
+      - php
+    enabled: true
+    patterns:
+      - regex: "unserialize\\s*\\(\\s*\\$_(GET|POST|REQUEST|COOKIE)"
+        flags: gi
+      - regex: "unserialize\\s*\\(\\s*file_get_contents\\s*\\("
+        flags: gi
+    fix:
+      template: |
+        Use json_decode() instead of unserialize() with untrusted data.
+
+        Before:
+        $data = unserialize($_POST['data']);
+
+        After:
+        $data = json_decode($_POST['data'], true);
+
+        // If you must use unserialize:
+        // 1. Use allowed_classes option (PHP 7.0+)
+        $data = unserialize($_POST['data'], ['allowed_classes' => false]);
+
+        // 2. Or specify allowed classes
+        $data = unserialize($_POST['data'], [
+          'allowed_classes' => ['SafeClass1', 'SafeClass2']
+        ]);
+
+        // 3. Validate the data structure after deserialization
+      references:
+        - https://owasp.org/www-community/vulnerabilities/PHP_Object_Injection
+        - https://www.php.net/manual/en/function.unserialize.php
+    metadata:
+      cwe: CWE-502
+      owasp: "A08:2021"
+      tags:
+        - deserialization
+        - php
+        - object-injection
+
+  - id: java-deserialization
+    name: Unsafe Java Deserialization
+    description: ObjectInputStream.readObject() with untrusted data allows remote code execution
+    severity: critical
+    category: deserialization
+    languages:
+      - java
+    enabled: true
+    patterns:
+      - regex: "ObjectInputStream\\s*\\(.*\\)\\.readObject\\(\\)"
+        flags: gi
+      - regex: "new\\s+ObjectInputStream\\s*\\([^)]*request\\."
+        flags: gi
+    fix:
+      template: |
+        Avoid deserializing untrusted data. Use JSON or implement safe deserialization.
+
+        Before:
+        ObjectInputStream ois = new ObjectInputStream(request.getInputStream());
+        Object obj = ois.readObject();
+
+        After:
+        // Option 1: Use JSON instead
+        ObjectMapper mapper = new ObjectMapper();
+        MyClass obj = mapper.readValue(request.getInputStream(), MyClass.class);
+
+        // Option 2: Implement look-ahead deserialization filter (Java 9+)
+        ObjectInputStream ois = new ObjectInputStream(request.getInputStream());
+        ois.setObjectInputFilter(info -> {
+          if (info.serialClass() != null) {
+            // Whitelist allowed classes
+            if (info.serialClass() == MyClass.class) {
+              return ObjectInputFilter.Status.ALLOWED;
+            }
+            return ObjectInputFilter.Status.REJECTED;
+          }
+          return ObjectInputFilter.Status.UNDECIDED;
+        });
+
+        // Option 3: Use SerialKiller or similar libraries
+      references:
+        - https://owasp.org/www-community/vulnerabilities/Deserialization_of_untrusted_data
+        - https://github.com/frohoff/ysoserial
+    metadata:
+      cwe: CWE-502
+      owasp: "A08:2021"
+      tags:
+        - deserialization
+        - java
+        - rce
+
+  - id: yaml-unsafe-load
+    name: Unsafe YAML Deserialization
+    description: YAML parsers with unsafe loading can execute arbitrary code
+    severity: critical
+    category: deserialization
+    languages:
+      - python
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "yaml\\.load\\s*\\((?!.*Loader=yaml\\.SafeLoader)"
+        flags: gi
+      - regex: "yaml\\.unsafe_load\\s*\\("
+        flags: gi
+      - regex: "yaml\\.full_load\\s*\\(.*request\\."
+        flags: gi
+    fix:
+      template: |
+        Use safe YAML loading methods.
+
+        Before (Python):
+        import yaml
+        data = yaml.load(file)
+
+        After (Python):
+        import yaml
+        data = yaml.safe_load(file)  # or yaml.load(file, Loader=yaml.SafeLoader)
+
+        Before (JavaScript):
+        const yaml = require('js-yaml');
+        const data = yaml.load(input);
+
+        After (JavaScript):
+        const yaml = require('js-yaml');
+        const data = yaml.safeLoad(input);  // or yaml.load(input, { schema: yaml.SAFE_SCHEMA })
+      references:
+        - https://owasp.org/www-community/vulnerabilities/Deserialization_of_untrusted_data
+        - https://github.com/yaml/pyyaml/wiki/PyYAML-yaml.load(input)-Deprecation
+    metadata:
+      cwe: CWE-502
+      owasp: "A08:2021"
+      tags:
+        - deserialization
+        - yaml
+        - rce
+
+  - id: xml-external-entity
+    name: XML External Entity (XXE) Injection
+    description: XML parser allows external entities, enabling XXE attacks
+    severity: critical
+    category: deserialization
+    languages:
+      - javascript
+      - typescript
+      - python
+      - java
+      - php
+    enabled: true
+    patterns:
+      # JavaScript/Node.js
+      - regex: "libxmljs\\.parseXml\\s*\\((?!.*noent\\s*:\\s*false)"
+        flags: gi
+      - regex: "new\\s+DOMParser\\(\\)\\.parseFromString\\s*\\([^,)]*,\\s*[\"']text\\/xml[\"']"
+        flags: gi
+
+      # Python
+      - regex: "xml\\.etree\\.ElementTree\\.parse\\s*\\("
+        flags: gi
+      - regex: "lxml\\.etree\\.parse\\s*\\((?!.*resolve_entities\\s*=\\s*False)"
+        flags: gi
+
+      # Java
+      - regex: "DocumentBuilderFactory\\.newInstance\\(\\)(?!.*setFeature)"
+        flags: gi
+      - regex: "SAXParserFactory\\.newInstance\\(\\)(?!.*setFeature)"
+        flags: gi
+
+      # PHP
+      - regex: "simplexml_load_string\\s*\\((?!.*LIBXML_NOENT)"
+        flags: gi
+      - regex: "DOMDocument::load\\s*\\((?!.*LIBXML_NOENT)"
+        flags: gi
+    fix:
+      template: |
+        Disable external entity processing in XML parsers.
+
+        JavaScript/Node.js:
+        const libxmljs = require('libxmljs');
+        const doc = libxmljs.parseXml(xml, { noent: false, nonet: true });
+
+        Python:
+        from defusedxml.ElementTree import parse
+        tree = parse(file)  # Use defusedxml instead of xml.etree
+
+        Java:
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        factory.setXIncludeAware(false);
+        factory.setExpandEntityReferences(false);
+
+        PHP:
+        libxml_disable_entity_loader(true);
+        $doc = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOENT | LIBXML_DTDLOAD);
+      references:
+        - https://owasp.org/www-community/vulnerabilities/XML_External_Entity_(XXE)_Processing
+        - https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
+    metadata:
+      cwe: CWE-611
+      owasp: "A05:2021"
+      tags:
+        - deserialization
+        - xxe
+        - xml
+
+  - id: msgpack-deserialization
+    name: Unsafe MessagePack Deserialization
+    description: MessagePack deserialization without validation
+    severity: high
+    category: deserialization
+    languages:
+      - javascript
+      - typescript
+      - python
+    enabled: true
+    patterns:
+      - regex: "msgpack\\.decode\\s*\\(\\s*req\\.(body|query|params)"
+        flags: gi
+      - regex: "msgpack\\.unpack\\s*\\(.*request\\."
+        flags: gi
+    fix:
+      template: |
+        Validate MessagePack data structure after deserialization.
+
+        Before:
+        const msgpack = require('msgpack');
+        const data = msgpack.decode(req.body.data);
+
+        After:
+        const msgpack = require('msgpack');
+        const data = msgpack.decode(req.body.data);
+
+        // Validate the deserialized data
+        if (typeof data !== 'object' || data === null) {
+          throw new Error('Invalid data structure');
+        }
+
+        // Use a schema validator
+        const Ajv = require('ajv');
+        const ajv = new Ajv();
+        const validate = ajv.compile(schema);
+
+        if (!validate(data)) {
+          throw new Error('Data validation failed');
+        }
+      references:
+        - https://owasp.org/www-community/vulnerabilities/Deserialization_of_untrusted_data
+    metadata:
+      cwe: CWE-502
+      owasp: "A08:2021"
+      tags:
+        - deserialization
+        - msgpack
+
+  - id: protobuf-without-validation
+    name: Protocol Buffers Without Validation
+    description: Deserializing Protocol Buffers without proper validation
+    severity: medium
+    category: deserialization
+    languages:
+      - javascript
+      - typescript
+      - python
+      - java
+    enabled: true
+    patterns:
+      - regex: "\\.decode\\s*\\(\\s*req\\.(body|query|params)(?!.*validate)"
+        flags: gi
+      - regex: "parseFrom\\s*\\(.*request\\.(?!.*validate)"
+        flags: gi
+    fix:
+      template: |
+        Always validate deserialized Protocol Buffer messages.
+
+        Before:
+        const message = MyMessage.decode(req.body.data);
+
+        After:
+        const message = MyMessage.decode(req.body.data);
+
+        // Validate message
+        const error = MyMessage.verify(message);
+        if (error) {
+          throw new Error(`Invalid message: ${error}`);
+        }
+
+        // Check required fields
+        if (!message.requiredField) {
+          throw new Error('Missing required field');
+        }
+
+        // Validate field ranges and constraints
+        if (message.age < 0 || message.age > 150) {
+          throw new Error('Invalid age');
+        }
+      references:
+        - https://owasp.org/www-community/vulnerabilities/Deserialization_of_untrusted_data
+    metadata:
+      cwe: CWE-502
+      owasp: "A08:2021"
+      tags:
+        - deserialization
+        - protobuf
+        - validation

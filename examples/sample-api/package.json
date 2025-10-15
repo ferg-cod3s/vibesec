@@ -1,0 +1,29 @@
+{
+  "name": "vibesec-sample-vulnerable-api",
+  "version": "1.0.0",
+  "description": "Intentionally vulnerable API for testing VibeSec scanner",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "echo \"Warning: This API contains vulnerabilities. Do not deploy to production!\" && exit 0"
+  },
+  "keywords": [
+    "security",
+    "testing",
+    "vulnerable",
+    "vibesec"
+  ],
+  "author": "VibeSec Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "body-parser": "^1.20.2"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "private": true,
+  "warning": "⚠️ This package contains intentional security vulnerabilities for testing purposes. DO NOT use in production!"
+}

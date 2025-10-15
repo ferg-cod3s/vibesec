@@ -1,0 +1,149 @@
+# Command Injection Security Rules
+# Detects user input being passed to shell commands without proper sanitization
+
+rules:
+  - id: command-injection-exec
+    name: Command Injection via exec/spawn
+    description: User input is passed directly to shell commands, allowing attackers to execute arbitrary commands
+    severity: critical
+    category: injection
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "exec\\s*\\(\\s*[`\"].*\\$\\{.*\\}.*[`\"]"
+        flags: gi
+      - regex: "spawn\\s*\\(\\s*[`\"].*\\$\\{.*\\}.*[`\"]"
+        flags: gi
+      - regex: "execSync\\s*\\(\\s*[`\"].*\\$\\{.*\\}.*[`\"]"
+        flags: gi
+      - regex: "child_process\\.(exec|spawn|execSync)\\s*\\(\\s*[`\"].*\\$\\{.*\\}.*[`\"]"
+        flags: gi
+    fix:
+      template: |
+        Use parameterized commands or sanitize input. Never concatenate user input into shell commands.
+
+        Before:
+        exec(`git clone ${userRepo}`);
+
+        After:
+        const { execFile } = require('child_process');
+        execFile('git', ['clone', userRepo]);
+      references:
+        - https://owasp.org/www-community/attacks/Command_Injection
+        - https://cwe.mitre.org/data/definitions/78.html
+    metadata:
+      cwe: CWE-78
+      owasp: "A03:2021"
+      tags:
+        - injection
+        - command-injection
+        - rce
+
+  - id: command-injection-eval
+    name: Code Injection via eval()
+    description: Using eval() with user input allows arbitrary code execution
+    severity: critical
+    category: injection
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "eval\\s*\\(.*req\\.(body|query|params)"
+        flags: gi
+      - regex: "eval\\s*\\(\\s*[`\"].*\\$\\{.*\\}.*[`\"]"
+        flags: gi
+      - regex: "Function\\s*\\(.*req\\.(body|query|params)"
+        flags: gi
+    fix:
+      template: |
+        Never use eval() with user input. Use JSON.parse() for data or safer alternatives.
+
+        Before:
+        eval(req.body.code);
+
+        After:
+        // For data: JSON.parse(req.body.data)
+        // For logic: Use a sandboxed VM or avoid dynamic code entirely
+      references:
+        - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#never_use_eval!
+        - https://cwe.mitre.org/data/definitions/95.html
+    metadata:
+      cwe: CWE-95
+      owasp: "A03:2021"
+      tags:
+        - injection
+        - code-injection
+        - eval
+
+  - id: shell-injection-python
+    name: Shell Injection in Python
+    description: User input passed to os.system or shell=True allows command injection
+    severity: critical
+    category: injection
+    languages:
+      - python
+    enabled: true
+    patterns:
+      - regex: "os\\.system\\s*\\(\\s*f[\"'].*\\{.*\\}.*[\"']"
+        flags: gi
+      - regex: "subprocess\\.(run|call|Popen)\\s*\\([^,)]*,\\s*shell\\s*=\\s*True"
+        flags: gi
+      - regex: "os\\.popen\\s*\\(.*\\+.*\\)"
+        flags: gi
+    fix:
+      template: |
+        Use subprocess with shell=False and pass arguments as a list.
+
+        Before:
+        os.system(f"rm {user_file}")
+
+        After:
+        subprocess.run(['rm', user_file], shell=False)
+      references:
+        - https://owasp.org/www-community/attacks/Command_Injection
+        - https://docs.python.org/3/library/subprocess.html#security-considerations
+    metadata:
+      cwe: CWE-78
+      owasp: "A03:2021"
+      tags:
+        - injection
+        - command-injection
+        - python
+
+  - id: command-injection-go
+    name: Command Injection in Go
+    description: User input passed to exec.Command with shell expansion allows command injection
+    severity: critical
+    category: injection
+    languages:
+      - go
+    enabled: true
+    patterns:
+      - regex: "exec\\.Command\\s*\\(\\s*[\"']sh[\"']\\s*,\\s*[\"\'](-c|/c)[\"']"
+        flags: gi
+      - regex: "exec\\.Command\\s*\\([^,)]*\\+[^)]*\\)"
+        flags: gi
+      - regex: "exec\\.CommandContext\\s*\\([^,)]*,\\s*[\"']sh[\"']"
+        flags: gi
+    fix:
+      template: |
+        Avoid shell invocation. Pass command and arguments directly to exec.Command.
+
+        Before:
+        cmd := exec.Command("sh", "-c", "git clone " + userRepo)
+
+        After:
+        cmd := exec.Command("git", "clone", userRepo)
+      references:
+        - https://owasp.org/www-community/attacks/Command_Injection
+        - https://pkg.go.dev/os/exec
+    metadata:
+      cwe: CWE-78
+      owasp: "A03:2021"
+      tags:
+        - injection
+        - command-injection
+        - go

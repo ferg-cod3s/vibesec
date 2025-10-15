@@ -1,0 +1,151 @@
+# AI-Specific Security Rules
+# These rules detect common security issues in AI-generated APIs and web services
+# AI code often generates overly permissive CORS, verbose errors, and debug modes
+
+rules:
+  - id: permissive-cors
+    severity: high
+    category: ai-specific
+    name: Overly Permissive CORS Configuration
+    description: CORS allows requests from any origin (Access-Control-Allow-Origin wildcard)
+    patterns:
+      - "Access-Control-Allow-Origin[\"']?\\s*[:,]\\s*[\"']\\*[\"']"
+      - "cors\\(\\{[^}]*origin\\s*:\\s*[\"']\\*[\"']"
+      - "cors\\(\\{[^}]*origin\\s*:\\s*true"
+      - "@cross_origin\\(origins?\\s*=\\s*[\"']\\*[\"']"
+      - "CORS\\([^)]*allow_origins\\s*=\\s*\\[[\"']\\*[\"']\\]"
+    risk: Allowing all origins enables any website to make requests to your API, potentially exposing sensitive data or enabling CSRF attacks
+    fix: |
+      Restrict CORS to specific trusted origins
+      
+      Before:
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      // OR
+      app.use(cors({ origin: '*' }));
+      
+      After:
+      const allowedOrigins = ['https://app.example.com', 'https://admin.example.com'];
+      app.use(cors({
+        origin: (origin, callback) => {
+          if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+          } else {
+            callback(new Error('Not allowed by CORS'));
+          }
+        }
+      }));
+    references:
+      - https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+      - https://owasp.org/www-community/attacks/CORS_OriginHeaderScrutiny
+    cwe: CWE-942
+    owasp: OWASP A5:2021
+
+  - id: verbose-error-response
+    severity: high
+    category: ai-specific
+    name: Verbose Error Messages Expose System Details
+    description: Error responses include stack traces or system information
+    patterns:
+      - "res\\.(?:send|json)\\([^)]*error\\.stack"
+      - "res\\.(?:send|json)\\([^)]*err\\.stack"
+      - "return\\s+(?:jsonify|Response)\\([^)]*traceback"
+      - "response.*error.*__traceback__"
+      - "console\\.error.*stack.*res\\.send"
+    risk: Exposing stack traces and error details reveals system architecture, file paths, and dependencies, helping attackers plan targeted attacks
+    fix: |
+      Log detailed errors server-side, return generic messages to clients
+      
+      Before:
+      app.use((err, req, res, next) => {
+        res.status(500).json({ error: err.stack });
+      });
+      
+      After:
+      app.use((err, req, res, next) => {
+        logger.error('Server error', { 
+          error: err.message, 
+          stack: err.stack,
+          path: req.path 
+        });
+        
+        res.status(500).json({ 
+          error: 'Internal server error',
+          requestId: req.id // for support reference
+        });
+      });
+    references:
+      - https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure
+      - https://cwe.mitre.org/data/definitions/209.html
+    cwe: CWE-209
+    owasp: OWASP A3:2017
+
+  - id: debug-mode-enabled
+    severity: critical
+    category: ai-specific
+    name: Debug Mode Enabled in Production
+    description: Application running with debug or development mode enabled
+    patterns:
+      - "DEBUG\\s*=\\s*True"
+      - "app\\.run\\([^)]*debug\\s*=\\s*True"
+      - "NODE_ENV\\s*=\\s*[\"']development[\"']"
+      - "process\\.env\\.NODE_ENV\\s*!==\\s*[\"']production[\"']"
+      - "app\\.use\\(morgan\\([\"']dev[\"']\\)\\)"
+    risk: Debug mode exposes detailed error messages, enables hot-reloading, disables security features, and may leak sensitive configuration
+    fix: |
+      Always disable debug mode in production
+      
+      Before:
+      app.run(debug=True)
+      // OR
+      const app = express();
+      app.use(morgan('dev'));
+      
+      After:
+      const isProduction = process.env.NODE_ENV === 'production';
+      app.run(debug=!isProduction)
+      
+      // OR use environment variables
+      if (process.env.NODE_ENV === 'production') {
+        app.use(morgan('combined'));
+      }
+    references:
+      - https://flask.palletsprojects.com/en/2.0.x/config/#DEBUG
+      - https://expressjs.com/en/advanced/best-practice-performance.html
+    cwe: CWE-489
+    owasp: OWASP A6:2021
+
+  - id: exposed-admin-endpoint
+    severity: critical
+    category: ai-specific
+    name: Admin Endpoint Without Authentication
+    description: Administrative endpoints accessible without authentication
+    patterns:
+      - "@app\\.route\\([\"']/admin[^)]*\\)\\s*\\n\\s*def\\s+\\w+\\([^)]*\\)(?!.*@login_required)(?!.*@auth)"
+      - "router\\.(get|post|put|delete)\\([\"']/admin[^)]*\\)(?!.*authenticate)(?!.*auth)"
+      - "@app\\.route\\([\"']/api/admin[^)]*\\)\\s*\\n\\s*def"
+      - "app\\.(get|post)\\([\"']/dashboard[^)]*\\)(?!.*auth)"
+    risk: Unauthenticated admin endpoints allow anyone to access administrative functions, leading to complete system compromise
+    fix: |
+      Always protect admin routes with authentication middleware
+      
+      Before:
+      app.get('/admin/users', (req, res) => {
+        res.json(await User.findAll());
+      });
+      
+      After:
+      const requireAdmin = (req, res, next) => {
+        if (!req.user || !req.user.isAdmin) {
+          return res.status(403).json({ error: 'Forbidden' });
+        }
+        next();
+      };
+      
+      app.get('/admin/users', requireAuth, requireAdmin, (req, res) => {
+        res.json(await User.findAll());
+      });
+    references:
+      - https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control
+      - https://cwe.mitre.org/data/definitions/306.html
+    cwe: CWE-306
+    owasp: OWASP A1:2021

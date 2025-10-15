@@ -1,0 +1,395 @@
+# Cryptography Security Rules
+# Detects insecure cryptographic implementations and weak algorithms
+
+rules:
+  - id: weak-crypto-md5
+    name: Weak Cryptographic Hash (MD5)
+    description: MD5 is cryptographically broken and should not be used for security purposes
+    severity: high
+    category: crypto
+    languages:
+      - javascript
+      - typescript
+      - python
+      - php
+      - java
+    enabled: true
+    patterns:
+      # JavaScript/Node.js
+      - regex: "crypto\\.createHash\\s*\\([\"']md5[\"']\\)"
+        flags: gi
+      # Python
+      - regex: "hashlib\\.md5\\s*\\("
+        flags: gi
+      # PHP
+      - regex: "md5\\s*\\("
+        flags: gi
+      # Java
+      - regex: "MessageDigest\\.getInstance\\s*\\([\"']MD5[\"']\\)"
+        flags: gi
+    fix:
+      template: |
+        Use SHA-256 or stronger hash algorithms instead of MD5.
+
+        Before:
+        const hash = crypto.createHash('md5').update(data).digest('hex');
+
+        After:
+        const hash = crypto.createHash('sha256').update(data).digest('hex');
+      references:
+        - https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/09-Testing_for_Weak_Cryptography/04-Testing_for_Weak_Encryption
+        - https://cwe.mitre.org/data/definitions/327.html
+    metadata:
+      cwe: CWE-327
+      owasp: "A02:2021"
+      tags:
+        - crypto
+        - weak-algorithm
+        - md5
+
+  - id: weak-crypto-sha1
+    name: Weak Cryptographic Hash (SHA1)
+    description: SHA-1 is deprecated and vulnerable to collision attacks
+    severity: medium
+    category: crypto
+    languages:
+      - javascript
+      - typescript
+      - python
+      - php
+      - java
+    enabled: true
+    patterns:
+      - regex: "crypto\\.createHash\\s*\\([\"']sha1[\"']\\)"
+        flags: gi
+      - regex: "hashlib\\.sha1\\s*\\("
+        flags: gi
+      - regex: "sha1\\s*\\("
+        flags: gi
+      - regex: "MessageDigest\\.getInstance\\s*\\([\"']SHA-?1[\"']\\)"
+        flags: gi
+    fix:
+      template: |
+        Use SHA-256 or SHA-3 instead of SHA-1.
+
+        Before:
+        const hash = crypto.createHash('sha1').update(data).digest('hex');
+
+        After:
+        const hash = crypto.createHash('sha256').update(data).digest('hex');
+      references:
+        - https://shattered.io/
+        - https://cwe.mitre.org/data/definitions/327.html
+    metadata:
+      cwe: CWE-327
+      owasp: "A02:2021"
+      tags:
+        - crypto
+        - weak-algorithm
+        - sha1
+
+  - id: hardcoded-crypto-key
+    name: Hardcoded Cryptographic Key
+    description: Cryptographic keys should never be hardcoded in source code
+    severity: critical
+    category: crypto
+    languages:
+      - javascript
+      - typescript
+      - python
+      - php
+      - java
+    enabled: true
+    patterns:
+      - regex: "(encryption[_-]?key|secret[_-]?key|aes[_-]?key)\\s*[=:]\\s*[\"'][a-zA-Z0-9+/=]{16,}[\"']"
+        flags: gi
+      - regex: "crypto\\.createCipher(iv)?\\s*\\([^,)]*,\\s*[\"'][^\"']{8,}[\"']"
+        flags: gi
+      - regex: "Cipher\\.getInstance\\([^)]*\\).*\\.init\\([^,)]*,\\s*[\"'][^\"']{8,}[\"']"
+        flags: gi
+    fix:
+      template: |
+        Store cryptographic keys in environment variables or secure key management systems.
+
+        Before:
+        const cipher = crypto.createCipher('aes-256-cbc', 'hardcoded-secret-key');
+
+        After:
+        const cipher = crypto.createCipher('aes-256-cbc', process.env.ENCRYPTION_KEY);
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html
+        - https://cwe.mitre.org/data/definitions/321.html
+    metadata:
+      cwe: CWE-321
+      owasp: "A02:2021"
+      tags:
+        - crypto
+        - hardcoded-secret
+        - key-management
+
+  - id: insecure-random
+    name: Insecure Random Number Generation
+    description: Math.random() is not cryptographically secure and should not be used for security purposes
+    severity: high
+    category: crypto
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "Math\\.random\\(\\).*(?:token|password|key|secret|salt|nonce|session)"
+        flags: gi
+      - regex: "(?:token|password|key|secret|salt|nonce|session).*Math\\.random\\(\\)"
+        flags: gi
+    fix:
+      template: |
+        Use crypto.randomBytes() for cryptographically secure random values.
+
+        Before:
+        const token = Math.random().toString(36).substring(2);
+
+        After:
+        const crypto = require('crypto');
+        const token = crypto.randomBytes(32).toString('hex');
+      references:
+        - https://owasp.org/www-community/vulnerabilities/Insecure_Randomness
+        - https://cwe.mitre.org/data/definitions/338.html
+    metadata:
+      cwe: CWE-338
+      owasp: "A02:2021"
+      tags:
+        - crypto
+        - random
+        - weak-random
+
+  - id: weak-cipher-des
+    name: Weak Encryption Algorithm (DES/3DES)
+    description: DES and 3DES are deprecated and vulnerable encryption algorithms
+    severity: high
+    category: crypto
+    languages:
+      - javascript
+      - typescript
+      - python
+      - java
+    enabled: true
+    patterns:
+      - regex: "crypto\\.createCipher(iv)?\\s*\\([\"'](des|des3|des-ede3)[\"']"
+        flags: gi
+      - regex: "Cipher\\.getInstance\\s*\\([\"'](DES|DESede|TripleDES)[\"']"
+        flags: gi
+      - regex: "Crypto\\.DES\\."
+        flags: gi
+    fix:
+      template: |
+        Use AES-256-GCM for encryption instead of DES/3DES.
+
+        Before:
+        const cipher = crypto.createCipher('des', key);
+
+        After:
+        const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
+      references:
+        - https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/09-Testing_for_Weak_Cryptography/04-Testing_for_Weak_Encryption
+        - https://cwe.mitre.org/data/definitions/327.html
+    metadata:
+      cwe: CWE-327
+      owasp: "A02:2021"
+      tags:
+        - crypto
+        - weak-algorithm
+        - des
+
+  - id: ecb-mode-cipher
+    name: ECB Mode Cipher Usage
+    description: ECB mode does not provide semantic security and should not be used
+    severity: high
+    category: crypto
+    languages:
+      - javascript
+      - typescript
+      - python
+      - java
+    enabled: true
+    patterns:
+      - regex: "crypto\\.createCipher(iv)?\\s*\\([\"'][^\"']*-ecb[\"']"
+        flags: gi
+      - regex: "Cipher\\.getInstance\\s*\\([\"'][^\"']*/ECB/[^\"']*[\"']"
+        flags: gi
+      - regex: "MODE_ECB"
+        flags: gi
+    fix:
+      template: |
+        Use CBC or GCM mode instead of ECB mode.
+
+        Before:
+        const cipher = crypto.createCipher('aes-256-ecb', key);
+
+        After:
+        const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
+      references:
+        - https://crypto.stackexchange.com/questions/20941/why-shouldnt-i-use-ecb-encryption
+        - https://cwe.mitre.org/data/definitions/327.html
+    metadata:
+      cwe: CWE-327
+      owasp: "A02:2021"
+      tags:
+        - crypto
+        - ecb
+        - mode-of-operation
+
+  - id: static-iv
+    name: Static or Hardcoded Initialization Vector
+    description: Initialization vectors (IVs) must be unique and unpredictable for each encryption
+    severity: high
+    category: crypto
+    languages:
+      - javascript
+      - typescript
+      - python
+      - java
+    enabled: true
+    patterns:
+      - regex: "createCipheriv\\s*\\([^,)]*,\\s*[^,)]*,\\s*[\"'][^\"']+[\"']\\s*\\)"
+        flags: gi
+      - regex: "iv\\s*=\\s*[\"'][a-zA-Z0-9]{16,}[\"']"
+        flags: gi
+      - regex: "IvParameterSpec\\s*\\(\\s*[\"'][^\"']+[\"']"
+        flags: gi
+    fix:
+      template: |
+        Generate a new random IV for each encryption operation.
+
+        Before:
+        const iv = '1234567890123456';
+        const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+
+        After:
+        const iv = crypto.randomBytes(16);
+        const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html
+        - https://cwe.mitre.org/data/definitions/329.html
+    metadata:
+      cwe: CWE-329
+      owasp: "A02:2021"
+      tags:
+        - crypto
+        - iv
+        - initialization-vector
+
+  - id: weak-key-derivation
+    name: Weak Key Derivation Function
+    description: Using weak password hashing or key derivation functions
+    severity: high
+    category: crypto
+    languages:
+      - javascript
+      - typescript
+      - python
+      - php
+    enabled: true
+    patterns:
+      - regex: "crypto\\.pbkdf2(?!Sync)\\([^,)]*,\\s*[^,)]*,\\s*(?:1000|[1-9]\\d{0,2}|10[0-9]{2})\\s*,"
+        flags: gi
+      - regex: "bcrypt\\.(hash|compare).*rounds?\\s*[=:]\\s*[1-9](?!\\d)"
+        flags: gi
+      - regex: "hashlib\\.pbkdf2_hmac\\([^,)]*,\\s*[^,)]*,\\s*[^,)]*,\\s*(?:1000|[1-9]\\d{0,2}|10[0-9]{2})\\)"
+        flags: gi
+    fix:
+      template: |
+        Use sufficient iterations for PBKDF2 (minimum 100,000) or use Argon2id.
+
+        Before:
+        crypto.pbkdf2(password, salt, 1000, 64, 'sha256', callback);
+
+        After:
+        crypto.pbkdf2(password, salt, 100000, 64, 'sha256', callback);
+        // Or better, use Argon2id:
+        const argon2 = require('argon2');
+        const hash = await argon2.hash(password);
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+        - https://cwe.mitre.org/data/definitions/916.html
+    metadata:
+      cwe: CWE-916
+      owasp: "A02:2021"
+      tags:
+        - crypto
+        - kdf
+        - password-hashing
+
+  - id: rsa-weak-key-size
+    name: Weak RSA Key Size
+    description: RSA keys should be at least 2048 bits for adequate security
+    severity: high
+    category: crypto
+    languages:
+      - javascript
+      - typescript
+      - python
+      - java
+    enabled: true
+    patterns:
+      - regex: "crypto\\.generateKeyPair(Sync)?\\s*\\([\"']rsa[\"']\\s*,\\s*\\{[^}]*modulusLength\\s*:\\s*(?:512|768|1024)\\s*[,}]"
+        flags: gi
+      - regex: "KeyPairGenerator\\.getInstance\\([\"']RSA[\"']\\).*\\.initialize\\s*\\(\\s*(?:512|768|1024)\\s*\\)"
+        flags: gi
+      - regex: "RSA\\.generate\\s*\\(\\s*(?:512|768|1024)\\s*\\)"
+        flags: gi
+    fix:
+      template: |
+        Use at least 2048-bit RSA keys (3072 or 4096 bits recommended).
+
+        Before:
+        crypto.generateKeyPair('rsa', { modulusLength: 1024 }, callback);
+
+        After:
+        crypto.generateKeyPair('rsa', { modulusLength: 2048 }, callback);
+      references:
+        - https://www.keylength.com/
+        - https://cwe.mitre.org/data/definitions/326.html
+    metadata:
+      cwe: CWE-326
+      owasp: "A02:2021"
+      tags:
+        - crypto
+        - rsa
+        - key-size
+
+  - id: insecure-tls-version
+    name: Insecure TLS Version
+    description: TLS 1.0 and 1.1 are deprecated and vulnerable
+    severity: high
+    category: crypto
+    languages:
+      - javascript
+      - typescript
+      - python
+    enabled: true
+    patterns:
+      - regex: "secureProtocol\\s*:\\s*[\"']TLSv1(_method)?[\"']"
+        flags: gi
+      - regex: "minVersion\\s*:\\s*[\"']TLSv1(\\.0)?[\"']"
+        flags: gi
+      - regex: "ssl\\.PROTOCOL_TLSv1"
+        flags: gi
+    fix:
+      template: |
+        Use TLS 1.2 or higher.
+
+        Before:
+        const options = { secureProtocol: 'TLSv1_method' };
+
+        After:
+        const options = { minVersion: 'TLSv1.2' };
+      references:
+        - https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/09-Testing_for_Weak_Cryptography/01-Testing_for_Weak_Transport_Layer_Security
+        - https://cwe.mitre.org/data/definitions/327.html
+    metadata:
+      cwe: CWE-327
+      owasp: "A02:2021"
+      tags:
+        - crypto
+        - tls
+        - ssl

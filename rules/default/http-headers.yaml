@@ -1,0 +1,282 @@
+# HTTP Security Headers Rules
+# Detects missing security headers that protect against common web attacks
+
+rules:
+  - id: missing-content-security-policy
+    name: Missing Content-Security-Policy Header
+    description: CSP header missing, allowing XSS and data injection attacks
+    severity: high
+    category: web-security
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "app\\.use\\s*\\((?!.*helmet|.*contentSecurityPolicy|.*res\\.setHeader.*Content-Security-Policy)"
+        flags: gi
+      - regex: "express\\s*\\(\\)(?!.*helmet)"
+        flags: gi
+    fix:
+      template: |
+        Add Content-Security-Policy header using helmet middleware.
+
+        Before:
+        const app = express();
+
+        After:
+        const helmet = require('helmet');
+        app.use(helmet.contentSecurityPolicy({
+          directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            imgSrc: ["'self'", "data:", "https:"],
+          }
+        }));
+      references:
+        - https://owasp.org/www-project-secure-headers/#content-security-policy
+        - https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
+    metadata:
+      cwe: CWE-693
+      owasp: "A05:2021"
+      tags:
+        - headers
+        - csp
+        - xss-protection
+
+  - id: missing-x-frame-options
+    name: Missing X-Frame-Options Header
+    description: Missing protection against clickjacking attacks
+    severity: medium
+    category: web-security
+    languages:
+      - javascript
+      - typescript
+      - python
+    enabled: true
+    patterns:
+      - regex: "app\\.use\\s*\\((?!.*helmet|.*frameguard|.*X-Frame-Options)"
+        flags: gi
+      - regex: "Flask\\s*\\(__name__\\)(?!.*X-Frame-Options)"
+        flags: gi
+    fix:
+      template: |
+        Add X-Frame-Options header to prevent clickjacking.
+
+        Before (Express):
+        const app = express();
+
+        After (Express):
+        app.use(helmet.frameguard({ action: 'deny' }));
+        // Or: app.use((req, res, next) => {
+        //   res.setHeader('X-Frame-Options', 'DENY');
+        //   next();
+        // });
+
+        Before (Flask):
+        @app.route('/')
+        def index():
+            return render_template('index.html')
+
+        After (Flask):
+        @app.after_request
+        def set_security_headers(response):
+            response.headers['X-Frame-Options'] = 'DENY'
+            return response
+      references:
+        - https://owasp.org/www-project-secure-headers/#x-frame-options
+        - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
+    metadata:
+      cwe: CWE-1021
+      owasp: "A05:2021"
+      tags:
+        - headers
+        - clickjacking
+        - x-frame-options
+
+  - id: missing-strict-transport-security
+    name: Missing Strict-Transport-Security Header
+    description: HSTS header missing, vulnerable to protocol downgrade attacks
+    severity: medium
+    category: web-security
+    languages:
+      - javascript
+      - typescript
+      - python
+    enabled: true
+    patterns:
+      - regex: "app\\.listen\\s*\\([^)]*(?!.*Strict-Transport-Security|.*hsts)"
+        flags: gi
+      - regex: "https\\.createServer(?!.*Strict-Transport-Security)"
+        flags: gi
+    fix:
+      template: |
+        Add HSTS header to enforce HTTPS connections.
+
+        Before:
+        const app = express();
+        app.listen(3000);
+
+        After:
+        const helmet = require('helmet');
+        app.use(helmet.hsts({
+          maxAge: 31536000, // 1 year
+          includeSubDomains: true,
+          preload: true
+        }));
+        app.listen(3000);
+      references:
+        - https://owasp.org/www-project-secure-headers/#http-strict-transport-security
+        - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
+    metadata:
+      cwe: CWE-319
+      owasp: "A05:2021"
+      tags:
+        - headers
+        - hsts
+        - https
+
+  - id: missing-x-content-type-options
+    name: Missing X-Content-Type-Options Header
+    description: Missing protection against MIME type sniffing attacks
+    severity: low
+    category: web-security
+    languages:
+      - javascript
+      - typescript
+      - python
+    enabled: true
+    patterns:
+      - regex: "res\\.send\\s*\\((?!.*X-Content-Type-Options)"
+        flags: gi
+      - regex: "res\\.json\\s*\\((?!.*X-Content-Type-Options)"
+        flags: gi
+    fix:
+      template: |
+        Add X-Content-Type-Options header to prevent MIME sniffing.
+
+        Before:
+        res.send(html);
+
+        After:
+        app.use(helmet.noSniff());
+        // Or: res.setHeader('X-Content-Type-Options', 'nosniff');
+        res.send(html);
+      references:
+        - https://owasp.org/www-project-secure-headers/#x-content-type-options
+        - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
+    metadata:
+      cwe: CWE-430
+      owasp: "A05:2021"
+      tags:
+        - headers
+        - mime-sniffing
+        - x-content-type-options
+
+  - id: missing-referrer-policy
+    name: Missing Referrer-Policy Header
+    description: Referrer header may leak sensitive information
+    severity: low
+    category: web-security
+    languages:
+      - javascript
+      - typescript
+      - python
+    enabled: true
+    patterns:
+      - regex: "app\\.use\\s*\\((?!.*helmet|.*referrerPolicy|.*Referrer-Policy)"
+        flags: gi
+    fix:
+      template: |
+        Add Referrer-Policy header to control referrer information.
+
+        Before:
+        const app = express();
+
+        After:
+        app.use(helmet.referrerPolicy({ policy: 'strict-origin-when-cross-origin' }));
+        // Or stricter: policy: 'no-referrer'
+      references:
+        - https://owasp.org/www-project-secure-headers/#referrer-policy
+        - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
+    metadata:
+      cwe: CWE-200
+      owasp: "A05:2021"
+      tags:
+        - headers
+        - referrer-policy
+        - privacy
+
+  - id: missing-permissions-policy
+    name: Missing Permissions-Policy Header
+    description: Permissions-Policy header missing, allowing unnecessary browser features
+    severity: low
+    category: web-security
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "app\\.use\\s*\\((?!.*Permissions-Policy|.*Feature-Policy)"
+        flags: gi
+    fix:
+      template: |
+        Add Permissions-Policy header to restrict browser features.
+
+        Before:
+        const app = express();
+
+        After:
+        app.use((req, res, next) => {
+          res.setHeader('Permissions-Policy',
+            'geolocation=(), camera=(), microphone=(), payment=()');
+          next();
+        });
+      references:
+        - https://owasp.org/www-project-secure-headers/#permissions-policy
+        - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy
+    metadata:
+      cwe: CWE-693
+      owasp: "A05:2021"
+      tags:
+        - headers
+        - permissions-policy
+        - privacy
+
+  - id: insecure-cookie-settings
+    name: Insecure Cookie Settings
+    description: Cookies set without Secure, HttpOnly, or SameSite flags
+    severity: medium
+    category: web-security
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "res\\.cookie\\s*\\([^)]*\\)(?!.*httpOnly|.*secure|.*sameSite)"
+        flags: gi
+      - regex: "session\\s*\\(\\s*\\{(?!.*cookie\\s*:\\s*\\{[^}]*(httpOnly|secure|sameSite))"
+        flags: gi
+    fix:
+      template: |
+        Set security flags on all cookies.
+
+        Before:
+        res.cookie('sessionId', token);
+
+        After:
+        res.cookie('sessionId', token, {
+          httpOnly: true,    // Prevent XSS access
+          secure: true,      // HTTPS only
+          sameSite: 'strict' // CSRF protection
+        });
+      references:
+        - https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/06-Session_Management_Testing/02-Testing_for_Cookies_Attributes
+        - https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
+    metadata:
+      cwe: CWE-614
+      owasp: "A05:2021"
+      tags:
+        - headers
+        - cookies
+        - session

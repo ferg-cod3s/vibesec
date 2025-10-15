@@ -1,0 +1,354 @@
+# SSRF (Server-Side Request Forgery) Security Rules
+# Detects server-side requests using unsanitized user input
+
+rules:
+  - id: ssrf-fetch-user-input
+    name: SSRF via fetch/axios with User Input
+    description: Making HTTP requests to user-controlled URLs allows SSRF attacks
+    severity: critical
+    category: injection
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "fetch\\s*\\(\\s*req\\.(body|query|params)\\."
+        flags: gi
+      - regex: "fetch\\s*\\(\\s*[`\"].*\\$\\{\\s*req\\.(body|query|params)"
+        flags: gi
+      - regex: "axios\\.(get|post|put|delete)\\s*\\(\\s*req\\.(body|query|params)\\."
+        flags: gi
+      - regex: "axios\\.(get|post|put|delete)\\s*\\(\\s*[`\"].*\\$\\{\\s*req\\.(body|query|params)"
+        flags: gi
+    fix:
+      template: |
+        Validate and whitelist URLs before making requests.
+
+        Before:
+        const response = await fetch(req.body.url);
+
+        After:
+        const allowedDomains = ['api.example.com', 'cdn.example.com'];
+
+        function isUrlSafe(url) {
+          try {
+            const parsed = new URL(url);
+
+            // Block private IPs
+            const privateIpRegex = /^(10\.|172\.(1[6-9]|2[0-9]|3[01])\.|192\.168\.|127\.|169\.254\.|::1|fc00:)/;
+            if (privateIpRegex.test(parsed.hostname)) {
+              return false;
+            }
+
+            // Whitelist domains
+            return allowedDomains.includes(parsed.hostname);
+          } catch {
+            return false;
+          }
+        }
+
+        if (!isUrlSafe(req.body.url)) {
+          return res.status(400).json({ error: 'Invalid URL' });
+        }
+
+        const response = await fetch(req.body.url);
+      references:
+        - https://owasp.org/www-community/attacks/Server_Side_Request_Forgery
+        - https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
+    metadata:
+      cwe: CWE-918
+      owasp: "A10:2021"
+      tags:
+        - ssrf
+        - fetch
+        - http-request
+
+  - id: ssrf-http-request
+    name: SSRF via HTTP Request Libraries
+    description: HTTP requests with user-controlled URLs in request/got/node-fetch
+    severity: critical
+    category: injection
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "request\\s*\\(\\s*\\{[^}]*url\\s*:\\s*req\\.(body|query|params)"
+        flags: gi
+      - regex: "got\\s*\\(\\s*req\\.(body|query|params)\\."
+        flags: gi
+      - regex: "got\\.(get|post)\\s*\\(\\s*[`\"].*\\$\\{\\s*req\\.(body|query|params)"
+        flags: gi
+      - regex: "http(s)?\\.get\\s*\\(\\s*req\\.(body|query|params)"
+        flags: gi
+    fix:
+      template: |
+        Implement URL validation before making HTTP requests.
+
+        Before:
+        const request = require('request');
+        request(req.body.webhook_url, callback);
+
+        After:
+        const { URL } = require('url');
+
+        function validateUrl(urlString, allowedHosts) {
+          try {
+            const url = new URL(urlString);
+
+            // Only allow HTTPS
+            if (url.protocol !== 'https:') {
+              return false;
+            }
+
+            // Block private networks
+            const hostname = url.hostname.toLowerCase();
+            if (hostname === 'localhost' ||
+                hostname.startsWith('192.168.') ||
+                hostname.startsWith('10.') ||
+                hostname.startsWith('172.')) {
+              return false;
+            }
+
+            // Whitelist allowed hosts
+            return allowedHosts.includes(hostname);
+          } catch {
+            return false;
+          }
+        }
+
+        const allowedHosts = ['hooks.slack.com', 'discord.com'];
+        if (!validateUrl(req.body.webhook_url, allowedHosts)) {
+          return res.status(400).json({ error: 'Invalid webhook URL' });
+        }
+
+        request(req.body.webhook_url, callback);
+      references:
+        - https://owasp.org/www-community/attacks/Server_Side_Request_Forgery
+        - https://cwe.mitre.org/data/definitions/918.html
+    metadata:
+      cwe: CWE-918
+      owasp: "A10:2021"
+      tags:
+        - ssrf
+        - http-client
+        - request
+
+  - id: ssrf-python-requests
+    name: SSRF in Python Requests
+    description: Python requests library with user-controlled URLs
+    severity: critical
+    category: injection
+    languages:
+      - python
+    enabled: true
+    patterns:
+      - regex: "requests\\.(get|post|put|delete)\\s*\\(\\s*request\\.(args|form|json)\\."
+        flags: gi
+      - regex: "requests\\.(get|post|put|delete)\\s*\\(\\s*f[\"'].*\\{.*request\\.(args|form|json)"
+        flags: gi
+      - regex: "urllib\\.request\\.urlopen\\s*\\(.*request\\.(args|form|json)"
+        flags: gi
+    fix:
+      template: |
+        Validate URLs and block private networks in Python.
+
+        Before:
+        import requests
+        response = requests.get(request.args.get('url'))
+
+        After:
+        import requests
+        from urllib.parse import urlparse
+        import ipaddress
+
+        def is_safe_url(url_string, allowed_domains):
+            try:
+                parsed = urlparse(url_string)
+
+                # Only allow HTTPS
+                if parsed.scheme != 'https':
+                    return False
+
+                # Block private IPs
+                try:
+                    ip = ipaddress.ip_address(parsed.hostname)
+                    if ip.is_private or ip.is_loopback or ip.is_link_local:
+                        return False
+                except ValueError:
+                    pass  # Not an IP, check domain
+
+                # Whitelist domains
+                return parsed.hostname in allowed_domains
+            except Exception:
+                return False
+
+        url = request.args.get('url')
+        allowed = ['api.example.com', 'cdn.example.com']
+
+        if not is_safe_url(url, allowed):
+            return jsonify({'error': 'Invalid URL'}), 400
+
+        response = requests.get(url, timeout=5)
+      references:
+        - https://owasp.org/www-community/attacks/Server_Side_Request_Forgery
+        - https://cwe.mitre.org/data/definitions/918.html
+    metadata:
+      cwe: CWE-918
+      owasp: "A10:2021"
+      tags:
+        - ssrf
+        - python
+        - requests
+
+  - id: ssrf-redirect-follow
+    name: Unsafe Redirect Following in HTTP Requests
+    description: Following redirects without validation allows SSRF via redirect chains
+    severity: high
+    category: injection
+    languages:
+      - javascript
+      - typescript
+      - python
+    enabled: true
+    patterns:
+      - regex: "fetch\\s*\\([^,)]*,\\s*\\{[^}]*redirect\\s*:\\s*[\"']follow[\"']"
+        flags: gi
+      - regex: "axios\\s*\\(\\s*\\{[^}]*maxRedirects\\s*:\\s*[1-9]"
+        flags: gi
+      - regex: "requests\\.(get|post)\\s*\\([^,)]*,\\s*allow_redirects\\s*=\\s*True"
+        flags: gi
+    fix:
+      template: |
+        Disable redirects or validate each redirect URL.
+
+        Before:
+        const response = await fetch(url, { redirect: 'follow' });
+
+        After:
+        // Option 1: Disable redirects
+        const response = await fetch(url, { redirect: 'manual' });
+
+        // Option 2: Use custom redirect handler
+        async function safeFetch(url) {
+          let response = await fetch(url, { redirect: 'manual' });
+
+          if (response.status >= 300 && response.status < 400) {
+            const redirectUrl = response.headers.get('location');
+            if (!isUrlSafe(redirectUrl)) {
+              throw new Error('Unsafe redirect');
+            }
+            return safeFetch(redirectUrl);
+          }
+
+          return response;
+        }
+      references:
+        - https://owasp.org/www-community/attacks/Server_Side_Request_Forgery
+    metadata:
+      cwe: CWE-918
+      owasp: "A10:2021"
+      tags:
+        - ssrf
+        - redirects
+
+  - id: ssrf-image-processing
+    name: SSRF via Image/File Processing
+    description: Processing images or files from user-provided URLs
+    severity: high
+    category: injection
+    languages:
+      - javascript
+      - typescript
+      - python
+    enabled: true
+    patterns:
+      - regex: "sharp\\s*\\(\\s*req\\.(body|query|params)\\."
+        flags: gi
+      - regex: "jimp\\.read\\s*\\(\\s*req\\.(body|query|params)\\."
+        flags: gi
+      - regex: "Image\\.open\\s*\\(.*request\\.(args|form|json)"
+        flags: gi
+      - regex: "cv2\\.imread\\s*\\(.*request\\.(args|form|json)"
+        flags: gi
+    fix:
+      template: |
+        Validate URLs before processing images/files.
+
+        Before:
+        const image = await sharp(req.body.imageUrl).resize(200, 200).toBuffer();
+
+        After:
+        const allowedDomains = ['cdn.example.com', 'images.example.com'];
+
+        if (!isUrlSafe(req.body.imageUrl, allowedDomains)) {
+          return res.status(400).json({ error: 'Invalid image URL' });
+        }
+
+        // Download with timeout and size limits
+        const response = await fetch(req.body.imageUrl, {
+          signal: AbortSignal.timeout(5000)
+        });
+
+        const contentLength = response.headers.get('content-length');
+        if (contentLength && parseInt(contentLength) > 10_000_000) {
+          throw new Error('Image too large');
+        }
+
+        const buffer = await response.arrayBuffer();
+        const image = await sharp(buffer).resize(200, 200).toBuffer();
+      references:
+        - https://owasp.org/www-community/attacks/Server_Side_Request_Forgery
+    metadata:
+      cwe: CWE-918
+      owasp: "A10:2021"
+      tags:
+        - ssrf
+        - image-processing
+        - file-upload
+
+  - id: ssrf-dns-rebinding
+    name: DNS Rebinding Vulnerability
+    description: Making requests without DNS rebinding protection
+    severity: medium
+    category: injection
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "fetch\\s*\\([^)]*\\)(?!.*dns.*cache|.*resolve)"
+        flags: gi
+    fix:
+      template: |
+        Implement DNS rebinding protection by caching DNS resolution.
+
+        Before:
+        const response = await fetch(userUrl);
+
+        After:
+        const dns = require('dns').promises;
+
+        async function safeFetch(url) {
+          const parsed = new URL(url);
+
+          // Resolve hostname once
+          const addresses = await dns.resolve4(parsed.hostname);
+
+          // Check if resolved IP is private
+          if (addresses.some(ip => isPrivateIp(ip))) {
+            throw new Error('Private IP detected');
+          }
+
+          // Make request using resolved IP
+          return fetch(url);
+        }
+      references:
+        - https://owasp.org/www-community/attacks/Server_Side_Request_Forgery
+        - https://portswigger.net/web-security/ssrf
+    metadata:
+      cwe: CWE-918
+      owasp: "A10:2021"
+      tags:
+        - ssrf
+        - dns-rebinding

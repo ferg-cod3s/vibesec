@@ -1,0 +1,385 @@
+# Insecure Dependencies Security Rules
+# Detects known vulnerable dependencies and unsafe package management practices
+
+rules:
+  - id: vulnerable-express-version
+    name: Vulnerable Express.js Version
+    description: Using outdated Express.js version with known vulnerabilities
+    severity: high
+    category: dependencies
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "\"express\"\\s*:\\s*\"[^\"]*[0-3]\\."
+        flags: gi
+      - regex: "\"express\"\\s*:\\s*\"4\\.([0-9]|1[0-7])\\."
+        flags: gi
+    fix:
+      template: |
+        Update Express.js to the latest stable version.
+
+        Before:
+        "express": "^4.17.1"
+
+        After:
+        "express": "^4.18.0"
+
+        Run: npm update express
+      references:
+        - https://expressjs.com/en/advanced/security-updates.html
+        - https://snyk.io/vuln/npm:express
+    metadata:
+      cwe: CWE-1035
+      owasp: "A06:2021"
+      tags:
+        - dependencies
+        - express
+        - outdated
+
+  - id: vulnerable-node-version
+    name: Unsupported Node.js Version
+    description: Using Node.js version that is end-of-life or has security issues
+    severity: medium
+    category: dependencies
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "\"node\"\\s*:\\s*\"([0-9]|1[0-5]|17|19)\\."
+        flags: gi
+      - regex: "\"engines\"\\s*:\\s*\\{[^}]*\"node\"\\s*:\\s*\"[^\"]*([0-9]|1[0-5])\\."
+        flags: gi
+    fix:
+      template: |
+        Update to a supported LTS version of Node.js.
+
+        Before:
+        "engines": {
+          "node": "14.x"
+        }
+
+        After:
+        "engines": {
+          "node": ">=18.0.0"
+        }
+
+        Current LTS versions: 18.x, 20.x, 22.x
+      references:
+        - https://nodejs.org/en/about/releases/
+        - https://endoflife.date/nodejs
+    metadata:
+      cwe: CWE-1035
+      owasp: "A06:2021"
+      tags:
+        - dependencies
+        - nodejs
+        - eol
+
+  - id: npm-install-without-lock
+    name: npm install Without Lock File
+    description: Running npm install in production without package-lock.json
+    severity: medium
+    category: dependencies
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "npm\\s+install(?!.*--ci|.*ci)"
+        flags: gi
+      - regex: "RUN\\s+npm\\s+install(?!.*--ci)"
+        flags: gi
+    fix:
+      template: |
+        Use npm ci in production for reproducible builds.
+
+        Before (Dockerfile):
+        RUN npm install
+
+        After (Dockerfile):
+        RUN npm ci --only=production
+
+        This ensures exact versions from package-lock.json are installed.
+      references:
+        - https://docs.npmjs.com/cli/v8/commands/npm-ci
+    metadata:
+      cwe: CWE-1104
+      owasp: "A06:2021"
+      tags:
+        - dependencies
+        - npm
+        - lock-file
+
+  - id: dangerous-package-scripts
+    name: Dangerous Package.json Scripts
+    description: Scripts that could execute malicious code during install
+    severity: high
+    category: dependencies
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "\"(preinstall|postinstall|install)\"\\s*:\\s*\"[^\"]*curl[^\"]*\\|[^\"]*sh"
+        flags: gi
+      - regex: "\"(preinstall|postinstall|install)\"\\s*:\\s*\"[^\"]*wget[^\"]*\\|[^\"]*sh"
+        flags: gi
+      - regex: "\"(preinstall|postinstall)\"\\s*:\\s*\"[^\"]*rm\\s+-rf"
+        flags: gi
+    fix:
+      template: |
+        Avoid running dangerous commands in install scripts.
+
+        Before:
+        "scripts": {
+          "postinstall": "curl https://example.com/script.sh | sh"
+        }
+
+        After:
+        // Remove dangerous install scripts
+        // Use safer alternatives or properly vetted build tools
+        "scripts": {
+          "postinstall": "node scripts/setup.js"
+        }
+      references:
+        - https://blog.npmjs.org/post/141702881055/package-install-scripts-vulnerability
+    metadata:
+      cwe: CWE-78
+      owasp: "A06:2021"
+      tags:
+        - dependencies
+        - npm-scripts
+        - supply-chain
+
+  - id: unpinned-docker-base-image
+    name: Unpinned Docker Base Image
+    description: Docker base image without specific version tag
+    severity: medium
+    category: dependencies
+    languages:
+      - dockerfile
+    enabled: true
+    patterns:
+      - regex: "FROM\\s+[a-z0-9/_-]+:latest"
+        flags: gi
+      - regex: "FROM\\s+[a-z0-9/_-]+(?!:[0-9])"
+        flags: gi
+    fix:
+      template: |
+        Pin Docker base images to specific versions.
+
+        Before:
+        FROM node:latest
+        # or
+        FROM node
+
+        After:
+        FROM node:18.17.0-alpine
+        # Use specific version and digest for maximum security
+        FROM node:18.17.0-alpine@sha256:abc123...
+      references:
+        - https://docs.docker.com/develop/dev-best-practices/
+        - https://snyk.io/blog/10-docker-image-security-best-practices/
+    metadata:
+      cwe: CWE-1104
+      owasp: "A06:2021"
+      tags:
+        - dependencies
+        - docker
+        - supply-chain
+
+  - id: insecure-package-registry
+    name: Insecure Package Registry
+    description: Using HTTP instead of HTTPS for package registry
+    severity: high
+    category: dependencies
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "registry\\s*=\\s*http://(?!localhost|127\\.0\\.0\\.1)"
+        flags: gi
+      - regex: "\"resolved\"\\s*:\\s*\"http://(?!localhost)"
+        flags: gi
+    fix:
+      template: |
+        Always use HTTPS for package registries.
+
+        Before (.npmrc):
+        registry=http://registry.npmjs.org/
+
+        After (.npmrc):
+        registry=https://registry.npmjs.org/
+      references:
+        - https://docs.npmjs.com/cli/v8/using-npm/config#registry
+    metadata:
+      cwe: CWE-319
+      owasp: "A02:2021"
+      tags:
+        - dependencies
+        - npm
+        - https
+
+  - id: missing-integrity-checks
+    name: Missing Subresource Integrity
+    description: Loading external scripts without integrity checks
+    severity: medium
+    category: dependencies
+    languages:
+      - javascript
+      - typescript
+      - html
+    enabled: true
+    patterns:
+      - regex: "<script[^>]+src\\s*=\\s*[\"']https?://[^\"']+[\"'][^>]*(?!integrity)"
+        flags: gi
+      - regex: "<link[^>]+rel\\s*=\\s*[\"']stylesheet[\"'][^>]+href\\s*=\\s*[\"']https?://[^\"']+[\"'][^>]*(?!integrity)"
+        flags: gi
+    fix:
+      template: |
+        Add Subresource Integrity (SRI) hashes to external resources.
+
+        Before:
+        <script src="https://cdn.example.com/library.js"></script>
+
+        After:
+        <script src="https://cdn.example.com/library.js"
+                integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/ux..."
+                crossorigin="anonymous"></script>
+
+        Generate SRI hash: https://www.srihash.org/
+      references:
+        - https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity
+        - https://owasp.org/www-community/controls/Subresource_Integrity
+    metadata:
+      cwe: CWE-353
+      owasp: "A06:2021"
+      tags:
+        - dependencies
+        - sri
+        - cdn
+
+  - id: outdated-python-packages
+    name: Outdated Python Packages
+    description: Using outdated Python packages with known vulnerabilities
+    severity: high
+    category: dependencies
+    languages:
+      - python
+    enabled: true
+    patterns:
+      - regex: "flask==0\\.|flask==1\\.[0-2]\\."
+        flags: gi
+      - regex: "django==1\\.|django==2\\.[0-1]\\."
+        flags: gi
+      - regex: "requests==0\\.|requests==1\\.|requests==2\\.[0-9]\\."
+        flags: gi
+      - regex: "pyyaml==3\\.|pyyaml==4\\.|pyyaml==5\\.[0-3]"
+        flags: gi
+    fix:
+      template: |
+        Update Python packages to latest secure versions.
+
+        Before (requirements.txt):
+        flask==1.1.2
+        django==2.2.0
+        requests==2.18.0
+
+        After (requirements.txt):
+        flask>=3.0.0
+        django>=4.2.0
+        requests>=2.31.0
+
+        Run: pip install --upgrade -r requirements.txt
+      references:
+        - https://pypi.org/
+        - https://github.com/pyupio/safety
+    metadata:
+      cwe: CWE-1035
+      owasp: "A06:2021"
+      tags:
+        - dependencies
+        - python
+        - outdated
+
+  - id: no-package-lock-committed
+    name: Package Lock File Not Committed
+    description: package-lock.json or yarn.lock not in version control
+    severity: medium
+    category: dependencies
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "^package-lock\\.json$"
+        flags: gm
+        file: ".gitignore"
+      - regex: "^yarn\\.lock$"
+        flags: gm
+        file: ".gitignore"
+      - regex: "^pnpm-lock\\.yaml$"
+        flags: gm
+        file: ".gitignore"
+    fix:
+      template: |
+        Commit lock files to ensure reproducible builds.
+
+        Before (.gitignore):
+        package-lock.json
+        yarn.lock
+
+        After (.gitignore):
+        # Remove these lines - lock files should be committed
+        # This ensures all developers use the same dependency versions
+
+        Then:
+        git add package-lock.json
+        git commit -m "Add package lock file"
+      references:
+        - https://docs.npmjs.com/cli/v8/configuring-npm/package-lock-json
+    metadata:
+      cwe: CWE-1104
+      owasp: "A06:2021"
+      tags:
+        - dependencies
+        - lock-file
+        - reproducibility
+
+  - id: unsafe-yaml-load
+    name: Unsafe YAML Loading
+    description: Using yaml.load() instead of yaml.safe_load() allows code execution
+    severity: critical
+    category: dependencies
+    languages:
+      - python
+    enabled: true
+    patterns:
+      - regex: "yaml\\.load\\s*\\([^,)]+(?!,\\s*Loader\\s*=\\s*yaml\\.SafeLoader)"
+        flags: gi
+    fix:
+      template: |
+        Use yaml.safe_load() to prevent arbitrary code execution.
+
+        Before:
+        import yaml
+        data = yaml.load(file)
+
+        After:
+        import yaml
+        data = yaml.safe_load(file)
+        # Or: data = yaml.load(file, Loader=yaml.SafeLoader)
+      references:
+        - https://owasp.org/www-community/vulnerabilities/Deserialization_of_untrusted_data
+        - https://github.com/yaml/pyyaml/wiki/PyYAML-yaml.load(input)-Deprecation
+    metadata:
+      cwe: CWE-502
+      owasp: "A08:2021"
+      tags:
+        - dependencies
+        - yaml
+        - deserialization

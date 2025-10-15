@@ -1,0 +1,261 @@
+# Prototype Pollution Security Rules
+# Detects JavaScript/Node.js prototype pollution vulnerabilities
+
+rules:
+  - id: unsafe-object-merge
+    name: Unsafe Object Merge
+    description: Merging user input into objects without protection can pollute prototypes
+    severity: high
+    category: injection
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "Object\\.assign\\s*\\([^,)]*,\\s*req\\.(body|query|params)"
+        flags: gi
+      - regex: "\\{\\s*\\.\\.\\.req\\.(body|query|params)"
+        flags: gi
+      - regex: "\\.extend\\s*\\([^,)]*,\\s*req\\.(body|query|params)"
+        flags: gi
+      - regex: "merge\\s*\\([^,)]*,\\s*req\\.(body|query|params)(?!.*\\{[^}]*prototype\\s*:\\s*false)"
+        flags: gi
+    fix:
+      template: |
+        Validate and sanitize object keys before merging user input.
+
+        Before:
+        const config = Object.assign({}, req.body);
+
+        After:
+        // Option 1: Use Object.create(null) for objects without prototype
+        const config = Object.assign(Object.create(null), req.body);
+
+        // Option 2: Filter dangerous keys
+        const safeMerge = (target, source) => {
+          const dangerousKeys = ['__proto__', 'constructor', 'prototype'];
+          for (const key in source) {
+            if (!dangerousKeys.includes(key) && source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+          return target;
+        };
+        const config = safeMerge({}, req.body);
+
+        // Option 3: Use libraries with prototype pollution protection
+        const _ = require('lodash');
+        const config = _.merge({}, req.body); // lodash v4.17.21+ is safe
+      references:
+        - https://owasp.org/www-community/vulnerabilities/Prototype_Pollution
+        - https://portswigger.net/web-security/prototype-pollution
+    metadata:
+      cwe: CWE-1321
+      owasp: "A03:2021"
+      tags:
+        - prototype-pollution
+        - javascript
+        - injection
+
+  - id: dangerous-recursive-merge
+    name: Dangerous Recursive Object Merge
+    description: Recursive merge functions without prototype pollution protection
+    severity: high
+    category: injection
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "function\\s+merge\\s*\\([^)]*\\)\\s*\\{[^}]*for\\s*\\([^)]*in\\s+[^)]*\\)(?!.*hasOwnProperty)"
+        flags: gi
+      - regex: "const\\s+merge\\s*=\\s*\\([^)]*\\)\\s*=>\\s*\\{[^}]*for\\s*\\([^)]*in\\s+[^)]*\\)(?!.*hasOwnProperty)"
+        flags: gi
+    fix:
+      template: |
+        Add prototype pollution checks to recursive merge functions.
+
+        Before:
+        function merge(target, source) {
+          for (const key in source) {
+            if (typeof source[key] === 'object') {
+              merge(target[key], source[key]);
+            } else {
+              target[key] = source[key];
+            }
+          }
+        }
+
+        After:
+        function merge(target, source) {
+          const dangerousKeys = ['__proto__', 'constructor', 'prototype'];
+
+          for (const key in source) {
+            if (!source.hasOwnProperty(key) || dangerousKeys.includes(key)) {
+              continue;
+            }
+
+            if (typeof source[key] === 'object' && source[key] !== null) {
+              target[key] = target[key] || {};
+              merge(target[key], source[key]);
+            } else {
+              target[key] = source[key];
+            }
+          }
+        }
+      references:
+        - https://owasp.org/www-community/vulnerabilities/Prototype_Pollution
+        - https://github.com/HoLyVieR/prototype-pollution-nsec18
+    metadata:
+      cwe: CWE-1321
+      owasp: "A03:2021"
+      tags:
+        - prototype-pollution
+        - recursive-merge
+
+  - id: lodash-vulnerable-version
+    name: Vulnerable Lodash Version
+    description: Using lodash version vulnerable to prototype pollution
+    severity: critical
+    category: dependencies
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "\"lodash\"\\s*:\\s*\"[^\"]*[0-3]\\.|\"lodash\"\\s*:\\s*\"4\\.([0-9]|1[0-6])\\."
+        flags: gi
+    fix:
+      template: |
+        Update lodash to version 4.17.21 or later.
+
+        Before:
+        "lodash": "^4.17.15"
+
+        After:
+        "lodash": "^4.17.21"
+
+        Run: npm update lodash
+      references:
+        - https://github.com/lodash/lodash/pull/5065
+        - https://snyk.io/vuln/SNYK-JS-LODASH-1018905
+    metadata:
+      cwe: CWE-1321
+      owasp: "A06:2021"
+      tags:
+        - prototype-pollution
+        - lodash
+        - dependencies
+
+  - id: direct-proto-assignment
+    name: Direct __proto__ Assignment
+    description: Directly assigning to __proto__ property
+    severity: medium
+    category: injection
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "\\.__proto__\\s*=|\\[\\s*[\"']__proto__[\"']\\s*\\]\\s*="
+        flags: gi
+      - regex: "Object\\.setPrototypeOf\\s*\\([^,)]*,\\s*req\\.(body|query|params)"
+        flags: gi
+    fix:
+      template: |
+        Avoid direct prototype manipulation. Use Object.create() instead.
+
+        Before:
+        obj.__proto__ = userInput;
+
+        After:
+        // Don't do this. If you need to set prototype:
+        const obj = Object.create(safePrototype);
+      references:
+        - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/proto
+    metadata:
+      cwe: CWE-1321
+      owasp: "A03:2021"
+      tags:
+        - prototype-pollution
+        - proto
+
+  - id: unsafe-json-parse
+    name: Unsafe JSON.parse with Reviver
+    description: JSON.parse with user-controlled reviver function
+    severity: medium
+    category: injection
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "JSON\\.parse\\s*\\([^,)]*,\\s*req\\.(body|query|params)"
+        flags: gi
+      - regex: "JSON\\.parse\\s*\\([^,)]*,\\s*function\\s*\\([^)]*\\)\\s*\\{.*__proto__"
+        flags: gi
+    fix:
+      template: |
+        Avoid user-controlled reviver functions in JSON.parse.
+
+        Before:
+        const data = JSON.parse(str, req.body.reviver);
+
+        After:
+        // Use JSON.parse without reviver
+        const data = JSON.parse(str);
+
+        // Or use a safe, predefined reviver
+        const safeReviver = (key, value) => {
+          if (key === '__proto__' || key === 'constructor') {
+            return undefined;
+          }
+          return value;
+        };
+        const data = JSON.parse(str, safeReviver);
+      references:
+        - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse
+    metadata:
+      cwe: CWE-1321
+      owasp: "A03:2021"
+      tags:
+        - prototype-pollution
+        - json-parse
+
+  - id: unsafe-property-access
+    name: Unsafe Dynamic Property Access
+    description: Accessing object properties with unsanitized user input
+    severity: medium
+    category: injection
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "\\[\\s*req\\.(body|query|params)\\.[^\\]]+\\]\\s*="
+        flags: gi
+      - regex: "config\\[\\s*userInput\\s*\\]\\s*="
+        flags: gi
+    fix:
+      template: |
+        Validate property names before dynamic access.
+
+        Before:
+        config[req.query.key] = req.query.value;
+
+        After:
+        const allowedKeys = ['theme', 'language', 'timezone'];
+        const key = req.query.key;
+
+        if (allowedKeys.includes(key) && key !== '__proto__' &&
+            key !== 'constructor' && key !== 'prototype') {
+          config[key] = req.query.value;
+        }
+      references:
+        - https://owasp.org/www-community/vulnerabilities/Prototype_Pollution
+    metadata:
+      cwe: CWE-1321
+      owasp: "A03:2021"
+      tags:
+        - prototype-pollution
+        - property-access

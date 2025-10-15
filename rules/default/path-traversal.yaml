@@ -1,0 +1,126 @@
+# Path Traversal Security Rules
+# Detects directory traversal attacks that allow access to files outside intended directories
+
+rules:
+  - id: path-traversal-fs-operations
+    name: Path Traversal in File Operations
+    description: User input used in file paths without sanitization allows access to arbitrary files
+    severity: critical
+    category: injection
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "fs\\.(readFile|writeFile|readFileSync|writeFileSync|unlink|unlinkSync)\\s*\\([^,)]*\\$\\{.*\\}"
+        flags: gi
+      - regex: "fs\\.(readFile|writeFile|readFileSync|writeFileSync)\\s*\\(\\s*req\\.(body|query|params)\\."
+        flags: gi
+      - regex: "path\\.join\\s*\\([^)]*req\\.(body|query|params)\\.[^)]*\\)"
+        flags: gi
+      - regex: "\\.\\.\\/.*req\\.(body|query|params)"
+        flags: gi
+    fix:
+      template: |
+        Sanitize and validate file paths. Use path.resolve() and check if result is within allowed directory.
+
+        Before:
+        fs.readFile(`./uploads/${req.params.filename}`, ...);
+
+        After:
+        const path = require('path');
+        const filename = path.basename(req.params.filename); // Remove directory components
+        const filepath = path.resolve('./uploads', filename);
+        if (!filepath.startsWith(path.resolve('./uploads'))) {
+          throw new Error('Invalid path');
+        }
+        fs.readFile(filepath, ...);
+      references:
+        - https://owasp.org/www-community/attacks/Path_Traversal
+        - https://cwe.mitre.org/data/definitions/22.html
+    metadata:
+      cwe: CWE-22
+      owasp: "A01:2021"
+      tags:
+        - path-traversal
+        - directory-traversal
+        - file-access
+
+  - id: path-traversal-python
+    name: Path Traversal in Python
+    description: User input in file operations without validation in Python
+    severity: critical
+    category: injection
+    languages:
+      - python
+    enabled: true
+    patterns:
+      - regex: "open\\s*\\(\\s*f[\"'].*\\{.*\\}.*[\"']"
+        flags: gi
+      - regex: "open\\s*\\(.*request\\.(args|form|json)\\."
+        flags: gi
+      - regex: "os\\.path\\.join\\s*\\([^)]*request\\.(args|form|json)"
+        flags: gi
+      - regex: "pathlib\\.Path\\s*\\([^)]*request\\.(args|form|json)"
+        flags: gi
+    fix:
+      template: |
+        Use pathlib and validate paths stay within allowed directories.
+
+        Before:
+        with open(f"./uploads/{user_file}") as f:
+
+        After:
+        from pathlib import Path
+        base_dir = Path("./uploads").resolve()
+        filepath = (base_dir / user_file).resolve()
+        if not filepath.is_relative_to(base_dir):
+            raise ValueError("Invalid path")
+        with open(filepath) as f:
+      references:
+        - https://owasp.org/www-community/attacks/Path_Traversal
+        - https://cwe.mitre.org/data/definitions/22.html
+    metadata:
+      cwe: CWE-22
+      owasp: "A01:2021"
+      tags:
+        - path-traversal
+        - python
+        - file-access
+
+  - id: unsafe-file-download
+    name: Unsafe File Download
+    description: Allowing users to specify arbitrary file paths for downloads
+    severity: high
+    category: injection
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "res\\.download\\s*\\([^,)]*req\\.(body|query|params)"
+        flags: gi
+      - regex: "res\\.sendFile\\s*\\([^,)]*req\\.(body|query|params)"
+        flags: gi
+    fix:
+      template: |
+        Validate file paths against a whitelist or ensure they're within allowed directory.
+
+        Before:
+        res.download(req.query.file);
+
+        After:
+        const allowedFiles = ['report.pdf', 'data.csv'];
+        const filename = path.basename(req.query.file);
+        if (!allowedFiles.includes(filename)) {
+          return res.status(403).send('Forbidden');
+        }
+        res.download(path.join('./downloads', filename));
+      references:
+        - https://owasp.org/www-community/attacks/Path_Traversal
+    metadata:
+      cwe: CWE-22
+      owasp: "A01:2021"
+      tags:
+        - path-traversal
+        - file-download

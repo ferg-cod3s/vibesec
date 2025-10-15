@@ -1,0 +1,147 @@
+# Authentication & Authorization Security Rules
+# These rules detect common authentication and authorization vulnerabilities
+# in AI-generated code that may skip security best practices
+
+rules:
+  - id: weak-password-validation
+    severity: high
+    category: auth
+    name: Weak Password Validation
+    description: Password validation is missing or insufficiently strict
+    patterns:
+      - "password\\.length\\s*[<>=!]+\\s*[1-6]"
+      - "len\\(password\\)\\s*[<>=!]+\\s*[1-6]"
+      - "if.*password.*length.*[<>=!]\\s*[1-6]"
+      - "password\\s*==\\s*[\"'][^\"']{1,6}[\"']"
+    risk: Weak password requirements allow users to create easily guessable passwords, making accounts vulnerable to brute-force attacks
+    fix: |
+      Implement strong password requirements: minimum 12 characters, mix of uppercase, lowercase, numbers, and special characters
+      
+      Before:
+      if (password.length < 6) { return false; }
+      
+      After:
+      if (password.length < 12 || 
+          !/[A-Z]/.test(password) || 
+          !/[a-z]/.test(password) || 
+          !/[0-9]/.test(password) || 
+          !/[^A-Za-z0-9]/.test(password)) {
+        return false;
+      }
+    references:
+      - https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/04-Authentication_Testing/07-Testing_for_Weak_Password_Policy
+      - https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html
+    cwe: CWE-521
+    owasp: OWASP A7:2021
+
+  - id: missing-rate-limiting
+    severity: critical
+    category: auth
+    name: Missing Rate Limiting on Authentication
+    description: Authentication endpoints lack rate limiting, allowing brute-force attacks
+    patterns:
+      - "@app\\.route\\([\"'].*login[\"'].*\\).*\\n.*def\\s+\\w+\\([^)]*\\):\\s*\\n(?!.*rate_limit)"
+      - "app\\.(get|post)\\([\"'].*login[\"'].*\\)(?!.*rateLimit)"
+      - "router\\.(get|post)\\([\"'].*login[\"'].*\\)(?!.*rateLimit)"
+      - "def\\s+(login|signin|authenticate)\\([^)]*\\):(?!.*@limiter)"
+    risk: Without rate limiting, attackers can attempt unlimited authentication attempts, enabling brute-force and credential stuffing attacks
+    fix: |
+      Implement rate limiting on authentication endpoints using middleware or decorators
+      
+      Before:
+      app.post('/login', async (req, res) => {
+        const user = await authenticate(req.body);
+      });
+      
+      After:
+      const rateLimit = require('express-rate-limit');
+      const loginLimiter = rateLimit({
+        windowMs: 15 * 60 * 1000, // 15 minutes
+        max: 5, // limit each IP to 5 requests per windowMs
+        message: 'Too many login attempts, please try again later'
+      });
+      
+      app.post('/login', loginLimiter, async (req, res) => {
+        const user = await authenticate(req.body);
+      });
+    references:
+      - https://owasp.org/www-community/controls/Blocking_Brute_Force_Attacks
+      - https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html
+    cwe: CWE-307
+    owasp: OWASP A7:2021
+
+  - id: insecure-session-config
+    severity: high
+    category: auth
+    name: Insecure Session Configuration
+    description: Session cookies lack security flags (httpOnly, secure, sameSite)
+    patterns:
+      - "session\\([^)]*\\)(?!.*httpOnly)"
+      - "cookie\\([^)]*\\)(?!.*httpOnly)"
+      - "set_cookie\\([^)]*\\)(?!.*httponly)"
+      - "SESSION_COOKIE_SECURE\\s*=\\s*False"
+      - "SESSION_COOKIE_HTTPONLY\\s*=\\s*False"
+      - "SESSION_COOKIE_SAMESITE\\s*=\\s*None"
+    risk: Sessions without security flags are vulnerable to XSS attacks (no httpOnly), interception (no secure), and CSRF attacks (no sameSite)
+    fix: |
+      Always set httpOnly, secure, and sameSite flags on session cookies
+      
+      Before:
+      res.cookie('sessionId', token);
+      
+      After:
+      res.cookie('sessionId', token, {
+        httpOnly: true,    // Prevents JavaScript access
+        secure: true,      // HTTPS only
+        sameSite: 'strict' // CSRF protection
+      });
+      
+      Python/Flask:
+      app.config['SESSION_COOKIE_HTTPONLY'] = True
+      app.config['SESSION_COOKIE_SECURE'] = True
+      app.config['SESSION_COOKIE_SAMESITE'] = 'Strict'
+    references:
+      - https://owasp.org/www-community/controls/SecureCookieAttribute
+      - https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html
+    cwe: CWE-614
+    owasp: OWASP A5:2021
+
+  - id: missing-jwt-verification
+    severity: critical
+    category: auth
+    name: JWT Token Used Without Verification
+    description: JWT tokens are decoded without signature verification
+    patterns:
+      - "jwt\\.decode\\([^)]*verify\\s*=\\s*False"
+      - "jwt\\.decode\\([^)]*\\)(?!.*verify)"
+      - "jsonwebtoken\\.decode\\([^)]*\\)(?!.*verify)"
+      - "JWT\\.decode\\([^)]*options.*verify:\\s*false"
+    risk: Unverified JWT tokens can be forged by attackers, allowing authentication bypass and privilege escalation
+    fix: |
+      Always verify JWT signatures and validate claims
+      
+      Before:
+      const decoded = jwt.decode(token);
+      // OR
+      decoded = jwt.decode(token, verify=False)
+      
+      After:
+      const decoded = jwt.verify(token, SECRET_KEY, {
+        algorithms: ['HS256'],
+        issuer: 'your-app',
+        audience: 'your-api'
+      });
+      
+      Python:
+      decoded = jwt.decode(
+        token, 
+        SECRET_KEY, 
+        algorithms=['HS256'],
+        verify=True,
+        audience='your-api'
+      )
+    references:
+      - https://auth0.com/blog/critical-vulnerabilities-in-json-web-token-libraries/
+      - https://cheatsheetseries.owasp.org/cheatsheets/JSON_Web_Token_for_Java_Cheat_Sheet.html
+    cwe: CWE-347
+    owasp: OWASP A2:2021

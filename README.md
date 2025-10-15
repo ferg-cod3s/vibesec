@@ -24,18 +24,42 @@ The rise of vibe coding has democratized software development, but **45% of AI-g
 
 ## 🚀 Quick Start
 
+### For Developers
+
 ```bash
-# Install VibeSec CLI
+# Install via npm
 npm install -g vibesec
-# or
-pip install vibesec
+
+# Or use with Bun (recommended for POC)
+bun install vibesec
 
 # Scan your project
 vibesec scan .
 
-# View results
-vibesec report --format html
+# Get plain language help
+vibesec scan --explain
+
+# Generate stakeholder report
+vibesec scan -f stakeholder -o report.txt
 ```
+
+### For Non-Technical Users (PMs, Designers, Product Owners)
+
+VibeSec speaks your language! No security expertise needed.
+
+```bash
+# Scan with plain language explanations
+vibesec scan . --explain
+
+# What you'll see:
+# ✅ Clear "What/Why/How" explanations (no jargon!)
+# ✅ Real-world analogies (e.g., "like leaving your door unlocked")
+# ✅ Time estimates for each fix (e.g., "15-30 minutes")
+# ✅ Who can fix it (e.g., "Any developer")
+# ✅ Security score out of 100
+```
+
+**First time?** Check out the [Quick Start Guide](docs/QUICK_START.md) for a step-by-step walkthrough.
 
 ---
 
@@ -52,12 +76,14 @@ vibesec report --format html
 - ✅ Data exfiltration risks
 
 ### Language Support
-- JavaScript/TypeScript
-- Python
-- Go
-- Java
+- JavaScript/TypeScript ✅
+- Python *(coming soon)*
+- Go *(coming soon)*
+- Java *(coming soon)*
 - Ruby *(coming soon)*
 - PHP *(coming soon)*
+
+**Note:** POC currently focuses on JavaScript/TypeScript. Built with TypeScript + Bun runtime. See [TECH_STACK.md](docs/TECH_STACK.md) for details.
 
 ---
 
@@ -70,13 +96,14 @@ vibesec report --format html
                             │
         ┌───────────────────┼───────────────────┐
         ▼                   ▼                   ▼
-┌───────────────┐   ┌───────────────┐   ┌──────────────┐
-│ Core Scanner  │   │ Integrations  │   │  Reporters   │
-│               │   │               │   │              │
-│ • AST Parser  │   │ • Snyk API    │   │ • JSON       │
-│ • Detectors   │   │ • Socket.dev  │   │ • SARIF      │
-│ • Analyzers   │   │ • GitHub      │   │ • HTML       │
-└───────────────┘   └───────────────┘   └──────────────┘
+┌───────────────┐   ┌───────────────┐   ┌──────────────────┐
+│ Core Scanner  │   │ Integrations  │   │  Reporters       │
+│               │   │               │   │                  │
+│ • AST Parser  │   │ • Snyk API    │   │ • Plain Text     │
+│ • Detectors   │   │ • Socket.dev  │   │ • JSON           │
+│ • Analyzers   │   │ • GitHub      │   │ • Plain Language │
+│               │   │               │   │ • Stakeholder    │
+└───────────────┘   └───────────────┘   └──────────────────┘
         │
         ▼
 ┌─────────────────────────────────────────────────────────┐
@@ -132,13 +159,30 @@ output:
 
 ## 📖 Documentation
 
+**[📚 Complete Documentation Index](docs/INDEX.md)** - Browse all documentation
+
+### Getting Started
+
+- **[Quick Start Guide](docs/QUICK_START.md)** - ⭐ Step-by-step guide for first-time users
+- **[Tech Stack](docs/TECH_STACK.md)** - TypeScript/Bun implementation details
+- **[API Documentation](docs/API.md)** - CLI and programmatic usage
+
+### Core Documentation
+
 - **[Architecture](docs/ARCHITECTURE.md)** - System design and components
 - **[POC Specification](docs/POC_SPEC.md)** - Proof of concept scope
 - **[MVP Roadmap](docs/MVP_ROADMAP.md)** - Feature roadmap and timeline
 - **[Detection Rules](docs/DETECTION_RULES.md)** - Security pattern library
-- **[API Documentation](docs/API.md)** - Programmatic usage
 - **[Integrations](docs/INTEGRATIONS.md)** - Third-party tool integrations
+- **[Market Strategy](docs/MARKET_STRATEGY.md)** - Business strategy and positioning
 - **[Contributing](docs/CONTRIBUTING.md)** - How to contribute
+
+### Additional Resources
+
+- **[Research](docs/RESEARCH.md)** - Market research and competitive analysis
+- **[User Testing Guide](docs/USER_TESTING_GUIDE.md)** - Beta testing instructions
+- **[SOP Documentation](docs/sop/)** - Standard operating procedures
+- **[Component READMEs](docs/INDEX.md#component-documentation)** - Detailed component docs
 
 ---
 
@@ -203,8 +247,37 @@ npm test -- --coverage
 
 ### Basic Scan
 ```bash
-cd examples/basic-scan
-vibesec scan . --output-format json
+# Scan current directory
+vibesec scan .
+
+# Scan with plain language (for PMs/designers)
+vibesec scan --explain
+
+# Only show critical issues
+vibesec scan --severity critical
+
+# Generate stakeholder report for board presentation
+vibesec scan -f stakeholder -o security-report.txt
+```
+
+### Using Security Scorecard
+```bash
+# Get security score (0-100) with benchmark comparison
+vibesec scan --explain
+
+# Output shows:
+# Security Score:
+#   85/100 (B) - Good
+#   Your score is 5 points above the average for small projects
+```
+
+### Accessibility Features
+```bash
+# Disable colors (for screen readers or terminals without color support)
+vibesec scan --no-color
+
+# Or use environment variable
+NO_COLOR=1 vibesec scan .
 ```
 
 ### CI/CD Integration
@@ -218,10 +291,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: vibesec/action@v1
-        with:
-          fail-on: high
-          integrations: snyk,socket
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v1
+      - name: Install VibeSec
+        run: bun install vibesec
+      - name: Run Security Scan
+        run: bun vibesec scan . --severity high -f json
 ```
 
 See [examples/](examples/) for more use cases.

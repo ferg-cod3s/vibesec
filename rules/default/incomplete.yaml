@@ -1,0 +1,125 @@
+# Incomplete Security Implementation Rules
+# These rules detect TODO/FIXME comments and placeholder code in security-sensitive areas
+# AI-generated code often includes placeholders that should never reach production
+
+rules:
+  - id: security-todo
+    severity: high
+    category: incomplete
+    name: Security TODO/FIXME Found
+    description: TODO or FIXME comment in security-critical code
+    patterns:
+      - "(?:TODO|FIXME).*(?:auth|password|credential|secret|token|session|security|encrypt|decrypt|hash)"
+      - "(?:auth|password|credential|secret|token|session|security|encrypt|decrypt|hash).*(?:TODO|FIXME)"
+      - "//\\s*TODO.*(?:security|auth|password|validate)"
+      - "#\\s*TODO.*(?:security|auth|password|validate)"
+    risk: Incomplete security implementations leave systems vulnerable. TODOs in security code indicate unfinished protection mechanisms that attackers can exploit
+    fix: |
+      Complete all security implementations before deploying to production
+      
+      Before:
+      // TODO: Add password validation
+      function login(password) { ... }
+      
+      After:
+      function login(password) {
+        if (!validatePassword(password)) {
+          throw new Error('Invalid password');
+        }
+        ...
+      }
+    references:
+      - https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/
+    cwe: CWE-489
+    owasp: OWASP A4:2021
+
+  - id: commented-security-check
+    severity: critical
+    category: incomplete
+    name: Commented Out Security Check
+    description: Security validation code has been commented out
+    patterns:
+      - "(?://|#)\\s*(?:if|assert).*(?:auth|password|permission|role|token|validate)"
+      - "/\\*.*(?:authenticate|authorize|validate|check).*\\*/"
+      - "(?://|#)\\s*validate.*(?:input|user|password|token)"
+      - "(?://|#)\\s*(?:check|verify).*(?:permission|role|auth)"
+    risk: Commented-out security checks disable critical protections, allowing unauthorized access or malicious input to pass through unchecked
+    fix: |
+      Re-enable all security checks. Never comment out validation or authentication logic
+      
+      Before:
+      // if (!user.hasPermission('admin')) { return forbidden(); }
+      dangerousAction();
+      
+      After:
+      if (!user.hasPermission('admin')) { 
+        return forbidden(); 
+      }
+      dangerousAction();
+    references:
+      - https://cwe.mitre.org/data/definitions/489.html
+    cwe: CWE-489
+    owasp: OWASP A4:2021
+
+  - id: placeholder-credentials
+    severity: critical
+    category: incomplete
+    name: Placeholder Credentials Detected
+    description: Placeholder or example credentials found in code
+    patterns:
+      - "(?:password|secret|key)\\s*=\\s*[\"'](?:example|placeholder|changeme|test123|temp|CHANGE_ME)[\"']"
+      - "(?:API_KEY|SECRET|PASSWORD)\\s*=\\s*[\"'](?:your|my|placeholder|xxx)[-_]?(?:key|secret|password|token)[\"']"
+      - "(?:username|user)\\s*=\\s*[\"'](?:admin|test|placeholder)[\"'].*password.*[\"'](?:admin|test|123)[\"']"
+      - "[\"'](?:PUT|ENTER|INSERT)[-_]?(?:YOUR|API|SECRET|KEY)[\"']"
+    risk: Placeholder credentials in code may be forgotten and deployed to production, creating easily exploitable backdoors
+    fix: |
+      Replace all placeholder credentials with environment variables
+      
+      Before:
+      const apiKey = "YOUR_API_KEY_HERE";
+      const password = "changeme";
+      
+      After:
+      const apiKey = process.env.API_KEY;
+      if (!apiKey) {
+        throw new Error('API_KEY environment variable is required');
+      }
+    references:
+      - https://cwe.mitre.org/data/definitions/798.html
+      - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html
+    cwe: CWE-798
+    owasp: OWASP A3:2017
+
+  - id: incomplete-error-handling
+    severity: high
+    category: incomplete
+    name: Incomplete Error Handling in Security Context
+    description: Try-catch block in security code with empty or minimal error handling
+    patterns:
+      - "try\\s*\\{[^}]*(?:auth|password|credential|decrypt|verify)[^}]*\\}\\s*catch[^{]*\\{\\s*(?://.*)?\\s*\\}"
+      - "except.*:\\s*(?:#.*)?\\s*pass\\s*$"
+      - "catch\\s*\\([^)]*\\)\\s*\\{\\s*(?://.*)?\\s*console\\.log"
+      - "except.*Exception.*:\\s*(?:#.*)?\\s*print"
+    risk: Empty or insufficient error handling in security code may hide failures, leading to bypassed authentication or exposed sensitive data
+    fix: |
+      Implement proper error handling with secure fallback behavior
+      
+      Before:
+      try {
+        await authenticate(token);
+      } catch (e) {
+        // TODO: handle error
+      }
+      
+      After:
+      try {
+        await authenticate(token);
+      } catch (e) {
+        logger.error('Authentication failed', { error: e.message });
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+    references:
+      - https://owasp.org/www-community/Improper_Error_Handling
+      - https://cwe.mitre.org/data/definitions/755.html
+    cwe: CWE-755
+    owasp: OWASP A4:2021

@@ -1,0 +1,125 @@
+rules:
+  - id: sql-injection
+    name: SQL Injection Vulnerability
+    description: Unsanitized user input is used directly in SQL queries, allowing attackers to manipulate database queries
+    severity: critical
+    category: injection
+    languages:
+      - javascript
+      - typescript
+      - python
+    enabled: true
+    patterns:
+      - regex: "(query|execute)\\s*\\(\\s*[`\"']SELECT.*\\$\\{.*\\}.*[`\"']"
+        flags: gi
+      - regex: "(query|execute)\\s*\\(\\s*[`\"'].*FROM.*\\$\\{.*\\}.*[`\"']"
+        flags: gi
+      - regex: "(query|execute)\\s*\\(\\s*f[\"']SELECT.*\\{.*\\}.*[\"']"
+        flags: gi
+      - regex: "SELECT\\s+.*\\s+FROM\\s+.*\\s+WHERE\\s+.*=\\s*\\$\\{.*\\}"
+        flags: gi
+    fix:
+      template: Use parameterized queries or prepared statements. Never concatenate user input directly into SQL queries.
+      references:
+        - https://owasp.org/www-project-top-ten/2017/A1_2017-Injection
+        - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+        - https://cwe.mitre.org/data/definitions/89.html
+    metadata:
+      cwe: CWE-89
+      owasp: "A1:2017"
+      tags:
+        - injection
+        - sql
+        - database
+
+  - id: xss-vulnerability
+    name: Cross-Site Scripting (XSS) Vulnerability
+    description: User input is rendered directly into HTML without sanitization, allowing attackers to inject malicious scripts
+    severity: high
+    category: injection
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "res\\.send\\s*\\(\\s*[`\"'].*\\$\\{.*\\}.*[`\"']\\s*\\)"
+        flags: gi
+      - regex: "innerHTML\\s*=\\s*.*\\$\\{.*\\}"
+        flags: gi
+      - regex: "document\\.write\\s*\\(\\s*.*\\$\\{.*\\}\\s*\\)"
+        flags: gi
+    fix:
+      template: Sanitize user input before rendering. Use templating engines with auto-escaping or sanitization libraries like DOMPurify.
+      references:
+        - https://owasp.org/www-project-top-ten/2017/A7_2017-Cross-Site_Scripting_(XSS)
+        - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+        - https://cwe.mitre.org/data/definitions/79.html
+    metadata:
+      cwe: CWE-79
+      owasp: "A7:2017"
+      tags:
+        - injection
+        - xss
+        - web
+
+  - id: command-injection
+    name: Command Injection Vulnerability
+    description: User input is passed to system commands without validation, allowing arbitrary command execution
+    severity: critical
+    category: injection
+    languages:
+      - javascript
+      - typescript
+      - python
+    enabled: true
+    patterns:
+      - regex: "exec\\s*\\(\\s*[`\"'].*\\$\\{.*\\}.*[`\"']\\s*\\)"
+        flags: gi
+      - regex: "execSync\\s*\\(\\s*[`\"'].*\\$\\{.*\\}.*[`\"']\\s*\\)"
+        flags: gi
+      - regex: "spawn\\s*\\(\\s*.*,\\s*\\[.*\\$\\{.*\\}.*\\]\\s*\\)"
+        flags: gi
+      - regex: "os\\.system\\s*\\(\\s*f[\"'].*\\{.*\\}.*[\"']\\s*\\)"
+        flags: gi
+    fix:
+      template: Avoid passing user input to system commands. If necessary, use allowlists and strict input validation.
+      references:
+        - https://owasp.org/www-project-top-ten/2017/A1_2017-Injection
+        - https://cwe.mitre.org/data/definitions/78.html
+    metadata:
+      cwe: CWE-78
+      owasp: "A1:2017"
+      tags:
+        - injection
+        - command
+        - rce
+
+  - id: path-traversal
+    name: Path Traversal Vulnerability
+    description: User input is used in file paths without validation, allowing access to unauthorized files
+    severity: high
+    category: injection
+    languages:
+      - javascript
+      - typescript
+      - python
+    enabled: true
+    patterns:
+      - regex: "readFile\\s*\\(\\s*.*\\$\\{.*\\}\\s*\\)"
+        flags: gi
+      - regex: "readFileSync\\s*\\(\\s*.*\\$\\{.*\\}\\s*\\)"
+        flags: gi
+      - regex: "open\\s*\\(\\s*f[\"'].*\\{.*\\}.*[\"']\\s*\\)"
+        flags: gi
+    fix:
+      template: Validate and sanitize file paths. Use path.resolve() and check that the resolved path is within allowed directories.
+      references:
+        - https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/05-Authorization_Testing/01-Testing_Directory_Traversal_File_Include
+        - https://cwe.mitre.org/data/definitions/22.html
+    metadata:
+      cwe: CWE-22
+      owasp: "A5:2017"
+      tags:
+        - injection
+        - path-traversal
+        - file-access

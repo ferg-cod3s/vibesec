@@ -1,0 +1,234 @@
+# Insecure Cryptography Security Rules
+# Detects weak cryptographic algorithms, poor key management, and insecure hashing
+
+rules:
+  - id: weak-hash-algorithm
+    name: Weak Hash Algorithm (MD5/SHA1)
+    description: Using deprecated hash algorithms MD5 or SHA1 that are vulnerable to collisions
+    severity: high
+    category: cryptography
+    languages:
+      - javascript
+      - typescript
+      - python
+    enabled: true
+    patterns:
+      - regex: "crypto\\.createHash\\s*\\([\"']md5[\"']\\)"
+        flags: gi
+      - regex: "crypto\\.createHash\\s*\\([\"']sha1[\"']\\)"
+        flags: gi
+      - regex: "hashlib\\.(md5|sha1)\\s*\\("
+        flags: gi
+      - regex: "Digest::MD5"
+        flags: gi
+    fix:
+      template: |
+        Use SHA-256 or stronger hash algorithms.
+
+        Before:
+        const hash = crypto.createHash('md5').update(data).digest('hex');
+
+        After:
+        const hash = crypto.createHash('sha256').update(data).digest('hex');
+        // For password hashing, use bcrypt, argon2, or scrypt instead
+      references:
+        - https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/09-Testing_for_Weak_Cryptography
+        - https://cwe.mitre.org/data/definitions/327.html
+    metadata:
+      cwe: CWE-327
+      owasp: "A02:2021"
+      tags:
+        - cryptography
+        - weak-hash
+        - md5
+        - sha1
+
+  - id: weak-encryption-algorithm
+    name: Weak Encryption Algorithm (DES/RC4)
+    description: Using deprecated encryption algorithms like DES or RC4
+    severity: critical
+    category: cryptography
+    languages:
+      - javascript
+      - typescript
+      - python
+    enabled: true
+    patterns:
+      - regex: "crypto\\.createCipher(iv)?\\s*\\([\"'](des|rc4|bf)[\"']"
+        flags: gi
+      - regex: "Cipher\\.(DES|RC4|Blowfish)"
+        flags: gi
+      - regex: "AES\\.new\\s*\\([^,)]*,\\s*AES\\.MODE_ECB"
+        flags: gi
+    fix:
+      template: |
+        Use AES-256-GCM or ChaCha20-Poly1305 for encryption.
+
+        Before:
+        const cipher = crypto.createCipher('des', key);
+
+        After:
+        const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
+        // GCM mode provides authenticated encryption
+      references:
+        - https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/09-Testing_for_Weak_Cryptography
+        - https://cwe.mitre.org/data/definitions/327.html
+    metadata:
+      cwe: CWE-327
+      owasp: "A02:2021"
+      tags:
+        - cryptography
+        - weak-encryption
+        - des
+        - rc4
+
+  - id: hardcoded-crypto-key
+    name: Hardcoded Cryptographic Key
+    description: Cryptographic keys or IVs hardcoded in source code
+    severity: critical
+    category: cryptography
+    languages:
+      - javascript
+      - typescript
+      - python
+    enabled: true
+    patterns:
+      - regex: "createCipheriv\\s*\\([^,)]*,\\s*[\"'][a-fA-F0-9]{32,}[\"']"
+        flags: gi
+      - regex: "(key|secret|iv)\\s*=\\s*[\"'][a-fA-F0-9]{32,}[\"']"
+        flags: gi
+      - regex: "AES\\.new\\s*\\([\"'][a-fA-F0-9]{32,}[\"']"
+        flags: gi
+    fix:
+      template: |
+        Store cryptographic keys in environment variables or secure key management systems.
+
+        Before:
+        const key = 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6';
+        const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
+
+        After:
+        const key = process.env.ENCRYPTION_KEY; // Store in .env file
+        if (!key) throw new Error('Encryption key not configured');
+        const cipher = crypto.createCipheriv('aes-256-gcm', Buffer.from(key, 'hex'), iv);
+      references:
+        - https://owasp.org/www-community/vulnerabilities/Use_of_hard-coded_cryptographic_key
+        - https://cwe.mitre.org/data/definitions/321.html
+    metadata:
+      cwe: CWE-321
+      owasp: "A02:2021"
+      tags:
+        - cryptography
+        - hardcoded-key
+        - secrets
+
+  - id: insecure-random
+    name: Insecure Random Number Generation
+    description: Using Math.random() or similar weak RNGs for security-sensitive operations
+    severity: high
+    category: cryptography
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "(token|secret|key|password|salt)\\s*=\\s*.*Math\\.random\\s*\\("
+        flags: gi
+      - regex: "Math\\.random\\s*\\(\\)\\s*\\*\\s*[0-9]+.*\\.(toString|slice)\\s*\\("
+        flags: gi
+    fix:
+      template: |
+        Use crypto.randomBytes() for cryptographically secure random values.
+
+        Before:
+        const token = Math.random().toString(36).substr(2);
+
+        After:
+        const crypto = require('crypto');
+        const token = crypto.randomBytes(32).toString('hex');
+      references:
+        - https://owasp.org/www-community/vulnerabilities/Insecure_Randomness
+        - https://cwe.mitre.org/data/definitions/338.html
+    metadata:
+      cwe: CWE-338
+      owasp: "A02:2021"
+      tags:
+        - cryptography
+        - weak-random
+        - prng
+
+  - id: insecure-password-storage
+    name: Insecure Password Storage
+    description: Storing passwords without proper hashing or using weak hashing
+    severity: critical
+    category: cryptography
+    languages:
+      - javascript
+      - typescript
+      - python
+    enabled: true
+    patterns:
+      - regex: "password\\s*=\\s*req\\.(body|query|params)\\.password(?!.*bcrypt|.*argon2|.*scrypt)"
+        flags: gi
+      - regex: "INSERT INTO.*password.*VALUES.*\\$\\{.*password.*\\}"
+        flags: gi
+      - regex: "\\.save\\s*\\(\\)(?=.*password\\s*:(?!.*bcrypt|.*argon2|.*scrypt))"
+        flags: gi
+    fix:
+      template: |
+        Use bcrypt, argon2, or scrypt to hash passwords.
+
+        Before:
+        user.password = req.body.password;
+        await user.save();
+
+        After:
+        const bcrypt = require('bcrypt');
+        const saltRounds = 10;
+        user.password = await bcrypt.hash(req.body.password, saltRounds);
+        await user.save();
+      references:
+        - https://owasp.org/www-project-proactive-controls/v3/en/c6-digital-identity
+        - https://cwe.mitre.org/data/definitions/916.html
+    metadata:
+      cwe: CWE-916
+      owasp: "A02:2021"
+      tags:
+        - cryptography
+        - password-storage
+        - authentication
+
+  - id: insecure-jwt-algorithm
+    name: Insecure JWT Algorithm
+    description: Using 'none' algorithm or allowing algorithm switching in JWT
+    severity: critical
+    category: cryptography
+    languages:
+      - javascript
+      - typescript
+    enabled: true
+    patterns:
+      - regex: "jwt\\.sign\\s*\\([^,)]*,\\s*[^,)]*,\\s*\\{[^}]*algorithm\\s*:\\s*[\"']none[\"']"
+        flags: gi
+      - regex: "jwt\\.verify\\s*\\([^,)]*,\\s*[^,)]*(?!.*\\{[^}]*algorithms\\s*:)"
+        flags: gi
+    fix:
+      template: |
+        Always specify and validate JWT algorithms. Never use 'none'.
+
+        Before:
+        jwt.verify(token, secret);
+
+        After:
+        jwt.verify(token, secret, { algorithms: ['HS256'] });
+        // Explicitly allow only the algorithms you use
+      references:
+        - https://auth0.com/blog/critical-vulnerabilities-in-json-web-token-libraries/
+        - https://cwe.mitre.org/data/definitions/327.html
+    metadata:
+      cwe: CWE-327
+      owasp: "A02:2021"
+      tags:
+        - cryptography
+        - jwt
+        - authentication
