@@ -1,0 +1,129 @@
+═══════════════════════════════════════════════════════════════
+                VibeSec Performance Benchmark Report           
+═══════════════════════════════════════════════════════════════
+
+Overall Status: ❌ SOME TESTS FAILED
+
+─────────────────────────────────────────────────────────────────
+Scenario: Small Project (50 files)
+
+Performance:
+  Duration: 1.22s
+  Files Scanned: 50
+  Throughput: 40.88 files/sec
+  Avg File Time: 24.46ms
+  10K Files Projected: 4m 4.61s ❌
+
+Memory:
+  Peak Heap: 3.76 MB
+  Peak RSS: 120.68 MB
+  Avg Heap: 2.97 MB
+  Growth: 1.80 MB
+  ⚠️  Memory Leak: 1.47 MB/s
+
+Targets:
+  Speed (<2min for 10K): ❌ FAIL
+  Memory (<500MB): ✅ PASS
+
+─────────────────────────────────────────────────────────────────
+Scenario: Medium Project (500 files)
+
+Performance:
+  Duration: 19.34s
+  Files Scanned: 500
+  Throughput: 25.86 files/sec
+  Avg File Time: 38.67ms
+  10K Files Projected: 6m 26.75s ❌
+
+Memory:
+  Peak Heap: 6.55 MB
+  Peak RSS: 118.05 MB
+  Avg Heap: 5.22 MB
+  Growth: 2.68 MB
+
+Targets:
+  Speed (<2min for 10K): ❌ FAIL
+  Memory (<500MB): ✅ PASS
+
+─────────────────────────────────────────────────────────────────
+Scenario: Large Project (2000 files)
+
+Performance:
+  Duration: 2m 31.94s
+  Files Scanned: 2000
+  Throughput: 13.16 files/sec
+  Avg File Time: 75.97ms
+  10K Files Projected: 12m 39.72s ❌
+
+Memory:
+  Peak Heap: 6.66 MB
+  Peak RSS: 123.77 MB
+  Avg Heap: 5.22 MB
+  Growth: -2938.04 KB
+
+Targets:
+  Speed (<2min for 10K): ❌ FAIL
+  Memory (<500MB): ✅ PASS
+
+─────────────────────────────────────────────────────────────────
+Scenario: Vulnerable Code (100 files)
+
+Performance:
+  Duration: 663.92ms
+  Files Scanned: 100
+  Throughput: 150.62 files/sec
+  Avg File Time: 6.64ms
+  10K Files Projected: 1m 6.39s ✅
+
+Memory:
+  Peak Heap: 3.84 MB
+  Peak RSS: 123.77 MB
+  Avg Heap: 3.59 MB
+  Growth: -517.61 KB
+
+Targets:
+  Speed (<2min for 10K): ✅ PASS
+  Memory (<500MB): ✅ PASS
+
+─────────────────────────────────────────────────────────────────
+Scenario: Clean Code (100 files)
+
+Performance:
+  Duration: 724.01ms
+  Files Scanned: 100
+  Throughput: 138.12 files/sec
+  Avg File Time: 7.24ms
+  10K Files Projected: 1m 12.40s ✅
+
+Memory:
+  Peak Heap: 3.46 MB
+  Peak RSS: 122.48 MB
+  Avg Heap: 3.34 MB
+  Growth: -251.39 KB
+
+Targets:
+  Speed (<2min for 10K): ✅ PASS
+  Memory (<500MB): ✅ PASS
+
+─────────────────────────────────────────────────────────────────
+Scenario: Mixed Languages (200 files)
+
+Performance:
+  Duration: 3.83s
+  Files Scanned: 200
+  Throughput: 52.28 files/sec
+  Avg File Time: 19.13ms
+  10K Files Projected: 3m 11.28s ❌
+
+Memory:
+  Peak Heap: 3.67 MB
+  Peak RSS: 122.85 MB
+  Avg Heap: 3.46 MB
+  Growth: 446.06 KB
+
+Targets:
+  Speed (<2min for 10K): ❌ FAIL
+  Memory (<500MB): ✅ PASS
+
+═══════════════════════════════════════════════════════════════
+Generated: 2025-10-15T15:17:42.671Z

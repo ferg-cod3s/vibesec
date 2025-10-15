@@ -1,0 +1,274 @@
+[
+  {
+    "scenario": "Small Project (50 files)",
+    "benchmarkResult": {
+      "name": "Small Project (50 files)",
+      "duration": 1223.040329,
+      "memoryUsed": 1882478,
+      "filesScanned": 50,
+      "filesPerSecond": 40.881726313049484,
+      "timestamp": "2025-10-15T15:14:45.703Z",
+      "metadata": {
+        "findingsCount": 0
+      }
+    },
+    "memoryProfile": {
+      "snapshots": [
+        {
+          "timestamp": "2025-10-15T15:14:44.479Z",
+          "heapUsed": 2056140,
+          "heapTotal": 2548736,
+          "external": 756584,
+          "arrayBuffers": 0,
+          "rss": 58896384
+        },
+        {
+          "timestamp": "2025-10-15T15:14:44.532Z",
+          "heapUsed": 3350101,
+          "heapTotal": 3305472,
+          "external": 1552709,
+          "arrayBuffers": 0,
+          "rss": 69812224
+        },
+        {
+          "timestamp": "2025-10-15T15:14:45.703Z",
+          "heapUsed": 3938618,
+          "heapTotal": 37132288,
+          "external": 1888170,
+          "arrayBuffers": 0,
+          "rss": 126541824
+        }
+      ],
+      "peakHeapUsed": 3938618,
+      "peakRSS": 126541824,
+      "avgHeapUsed": 3114953,
+      "memoryGrowth": 1882478,
+      "duration": 1224
+    },
+    "meetsTargets": {
+      "speed": false,
+      "memory": true
+    },
+    "timestamp": "2025-10-15T15:14:45.703Z"
+  },
+  {
+    "scenario": "Medium Project (500 files)",
+    "benchmarkResult": {
+      "name": "Medium Project (500 files)",
+      "duration": 19337.430942,
+      "memoryUsed": 2808488,
+      "filesScanned": 500,
+      "filesPerSecond": 25.85658878367464,
+      "timestamp": "2025-10-15T15:15:05.117Z",
+      "metadata": {
+        "findingsCount": 0
+      }
+    },
+    "memoryProfile": {
+      "snapshots": [
+        {
+          "timestamp": "2025-10-15T15:14:45.780Z",
+          "heapUsed": 4064869,
+          "heapTotal": 3018752,
+          "external": 1829948,
+          "arrayBuffers": 0,
+          "rss": 112295936
+        },
+        {
+          "timestamp": "2025-10-15T15:15:05.117Z",
+          "heapUsed": 6873357,
+          "heapTotal": 28890112,
+          "external": 3649805,
+          "arrayBuffers": 0,
+          "rss": 123785216
+        }
+      ],
+      "peakHeapUsed": 6873357,
+      "peakRSS": 123785216,
+      "avgHeapUsed": 5469113,
+      "memoryGrowth": 2808488,
+      "duration": 19337
+    },
+    "meetsTargets": {
+      "speed": false,
+      "memory": true
+    },
+    "timestamp": "2025-10-15T15:15:05.118Z"
+  },
+  {
+    "scenario": "Large Project (2000 files)",
+    "benchmarkResult": {
+      "name": "Large Project (2000 files)",
+      "duration": 151943.076435,
+      "memoryUsed": -3008550,
+      "filesScanned": 2000,
+      "filesPerSecond": 13.162824176826403,
+      "timestamp": "2025-10-15T15:17:37.354Z",
+      "metadata": {
+        "findingsCount": 0
+      }
+    },
+    "memoryProfile": {
+      "snapshots": [
+        {
+          "timestamp": "2025-10-15T15:15:05.411Z",
+          "heapUsed": 6978410,
+          "heapTotal": 3066880,
+          "external": 811925,
+          "arrayBuffers": 0,
+          "rss": 118181888
+        },
+        {
+          "timestamp": "2025-10-15T15:17:37.354Z",
+          "heapUsed": 3969860,
+          "heapTotal": 39932928,
+          "external": 1798660,
+          "arrayBuffers": 0,
+          "rss": 129785856
+        }
+      ],
+      "peakHeapUsed": 6978410,
+      "peakRSS": 129785856,
+      "avgHeapUsed": 5474135,
+      "memoryGrowth": -3008550,
+      "duration": 151943
+    },
+    "meetsTargets": {
+      "speed": false,
+      "memory": true
+    },
+    "timestamp": "2025-10-15T15:17:37.354Z"
+  },
+  {
+    "scenario": "Vulnerable Code (100 files)",
+    "benchmarkResult": {
+      "name": "Vulnerable Code (100 files)",
+      "duration": 663.9221980000148,
+      "memoryUsed": -530031,
+      "filesScanned": 100,
+      "filesPerSecond": 150.62005804480992,
+      "timestamp": "2025-10-15T15:17:38.048Z",
+      "metadata": {
+        "findingsCount": 100
+      }
+    },
+    "memoryProfile": {
+      "snapshots": [
+        {
+          "timestamp": "2025-10-15T15:17:37.384Z",
+          "heapUsed": 4031214,
+          "heapTotal": 3017728,
+          "external": 863213,
+          "arrayBuffers": 0,
+          "rss": 129785856
+        },
+        {
+          "timestamp": "2025-10-15T15:17:38.048Z",
+          "heapUsed": 3501183,
+          "heapTotal": 35230720,
+          "external": 1533631,
+          "arrayBuffers": 0,
+          "rss": 125284352
+        }
+      ],
+      "peakHeapUsed": 4031214,
+      "peakRSS": 129785856,
+      "avgHeapUsed": 3766198.5,
+      "memoryGrowth": -530031,
+      "duration": 664
+    },
+    "meetsTargets": {
+      "speed": true,
+      "memory": true
+    },
+    "timestamp": "2025-10-15T15:17:38.048Z"
+  },
+  {
+    "scenario": "Clean Code (100 files)",
+    "benchmarkResult": {
+      "name": "Clean Code (100 files)",
+      "duration": 724.0102970000007,
+      "memoryUsed": -257425,
+      "filesScanned": 100,
+      "filesPerSecond": 138.11958257273224,
+      "timestamp": "2025-10-15T15:17:38.797Z",
+      "metadata": {
+        "findingsCount": 0
+      }
+    },
+    "memoryProfile": {
+      "snapshots": [
+        {
+          "timestamp": "2025-10-15T15:17:38.073Z",
+          "heapUsed": 3628324,
+          "heapTotal": 3148800,
+          "external": 1351839,
+          "arrayBuffers": 0,
+          "rss": 121020416
+        },
+        {
+          "timestamp": "2025-10-15T15:17:38.797Z",
+          "heapUsed": 3370899,
+          "heapTotal": 39425024,
+          "external": 1469891,
+          "arrayBuffers": 0,
+          "rss": 128425984
+        }
+      ],
+      "peakHeapUsed": 3628324,
+      "peakRSS": 128425984,
+      "avgHeapUsed": 3499611.5,
+      "memoryGrowth": -257425,
+      "duration": 724
+    },
+    "meetsTargets": {
+      "speed": true,
+      "memory": true
+    },
+    "timestamp": "2025-10-15T15:17:38.798Z"
+  },
+  {
+    "scenario": "Mixed Languages (200 files)",
+    "benchmarkResult": {
+      "name": "Mixed Languages (200 files)",
+      "duration": 3825.597470000008,
+      "memoryUsed": 456766,
+      "filesScanned": 200,
+      "filesPerSecond": 52.279415586292615,
+      "timestamp": "2025-10-15T15:17:42.670Z",
+      "metadata": {
+        "findingsCount": 0
+      }
+    },
+    "memoryProfile": {
+      "snapshots": [
+        {
+          "timestamp": "2025-10-15T15:17:38.844Z",
+          "heapUsed": 3396311,
+          "heapTotal": 3132416,
+          "external": 1427576,
+          "arrayBuffers": 0,
+          "rss": 128819200
+        },
+        {
+          "timestamp": "2025-10-15T15:17:42.670Z",
+          "heapUsed": 3853077,
+          "heapTotal": 35233792,
+          "external": 1725669,
+          "arrayBuffers": 0,
+          "rss": 127766528
+        }
+      ],
+      "peakHeapUsed": 3853077,
+      "peakRSS": 128819200,
+      "avgHeapUsed": 3624694,
+      "memoryGrowth": 456766,
+      "duration": 3826
+    },
+    "meetsTargets": {
+      "speed": false,
+      "memory": true
+    },
+    "timestamp": "2025-10-15T15:17:42.670Z"
+  }
+]
