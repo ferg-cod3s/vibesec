@@ -2,6 +2,7 @@
 
 import { Command } from 'commander';
 import { scanCommand } from './commands/scan';
+import { benchmarkCommand } from './commands/benchmark';
 
 const program = new Command();
 
@@ -43,5 +44,33 @@ Tips:
 `
   )
   .action(scanCommand);
+
+program
+  .command('benchmark')
+  .description('Run performance benchmarks')
+  .option('-o, --output <file>', 'Output report file path')
+  .option('-v, --verbose', 'Verbose output')
+  .addHelpText(
+    'after',
+    `
+Examples:
+  $ vibesec benchmark                     Run all performance benchmarks
+  $ vibesec benchmark -o report.txt       Save report to file
+  $ vibesec benchmark --verbose           Detailed output
+
+Benchmarks:
+  • Small Project (50 files)
+  • Medium Project (500 files)
+  • Large Project (2000 files)
+  • Vulnerable Code (100 files)
+  • Clean Code (100 files)
+  • Mixed Languages (200 files)
+
+Target Performance:
+  • Speed: <2 minutes for 10,000 files
+  • Memory: <500MB peak usage
+`
+  )
+  .action(benchmarkCommand);
 
 program.parse();

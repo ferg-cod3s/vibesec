@@ -1,7 +1,7 @@
 # VibeSec Documentation Index
 
 **Version:** 1.0.0
-**Last Updated:** 2025-10-10
+**Last Updated:** 2025-10-15
 
 Welcome to the VibeSec documentation! This index will help you find what you need.
 
@@ -35,6 +35,10 @@ New to VibeSec? Start here:
 |----------|-------------|----------|
 | **[Architecture](ARCHITECTURE.md)** | System design, components, data flow | Engineering |
 | **[API Documentation](API.md)** | CLI and programmatic API reference | Developers |
+| **[Programmatic API](PROGRAMMATIC_API.md)** | Complete TypeScript/JavaScript API guide | Developers |
+| **[TypeScript API Reference](TYPESCRIPT_API.md)** | Full TypeScript type definitions | Developers |
+| **[Custom Reporters](CUSTOM_REPORTERS.md)** | Creating custom output formats | Developers |
+| **[Performance Benchmarks](PERFORMANCE_BENCHMARKS.md)** | Performance testing and targets | Engineering, DevOps |
 | **[Detection Rules](DETECTION_RULES.md)** | Security rules and custom rule creation | Security, Developers |
 | **[Integrations](INTEGRATIONS.md)** | Third-party tool integrations | DevOps, Engineering |
 
@@ -44,9 +48,21 @@ New to VibeSec? Start here:
 
 | Document | Description | Audience |
 |----------|-------------|----------|
+| **[Quick Start](QUICK_START.md)** | Step-by-step getting started guide | All Users |
 | **[Contributing](CONTRIBUTING.md)** | How to contribute to VibeSec | Contributors |
 | **[User Testing Guide](USER_TESTING_GUIDE.md)** | Beta testing instructions | Testers |
 | **[User Feedback Form](USER_FEEDBACK_FORM.md)** | Feedback collection template | Testers |
+
+---
+
+### Video Tutorials
+
+| Tutorial | Duration | Description | Audience |
+|----------|----------|-------------|----------|
+| **[Getting Started](tutorials/01-GETTING-STARTED.md)** | 5 min | Install and run your first scan | All Users |
+| **[Plain Language Walkthrough](tutorials/02-PLAIN-LANGUAGE-WALKTHROUGH.md)** | 3 min | Understanding results without technical knowledge | PMs, Designers, Non-technical |
+| **[CI/CD Integration](tutorials/03-CICD-INTEGRATION.md)** | 10 min | Automated scanning in GitHub Actions, GitLab | Developers, DevOps |
+| **[Custom Rules](tutorials/04-CUSTOM-RULES.md)** | 7 min | Creating company-specific detection rules | Developers, Security Engineers |
 
 ---
 
@@ -132,12 +148,22 @@ Each VibeSec component has its own README:
 
 Start with these docs to understand the codebase:
 
-1. [Architecture](ARCHITECTURE.md) - System design
-2. [API Documentation](API.md) - How to use VibeSec
-3. [Contributing](CONTRIBUTING.md) - How to contribute
-4. [Detection Rules](DETECTION_RULES.md) - Rule system
-5. [SOP: Agents](sop/agents.md) - Agent patterns
-6. [SOP: Claude](sop/claude.md) - Claude Code usage
+1. [Quick Start](QUICK_START.md) - Getting started guide
+2. [Architecture](ARCHITECTURE.md) - System design
+3. [Programmatic API](PROGRAMMATIC_API.md) - TypeScript/JavaScript API
+4. [TypeScript API Reference](TYPESCRIPT_API.md) - Type definitions
+5. [Custom Reporters](CUSTOM_REPORTERS.md) - Creating custom output formats
+6. [Performance Benchmarks](PERFORMANCE_BENCHMARKS.md) - Performance testing
+7. [API Documentation](API.md) - CLI reference
+8. [Contributing](CONTRIBUTING.md) - How to contribute
+9. [Detection Rules](DETECTION_RULES.md) - Rule system
+10. [SOP: Agents](sop/agents.md) - Agent patterns
+11. [SOP: Claude](sop/claude.md) - Claude Code usage
+
+**Video Tutorials:**
+- [Getting Started (5 min)](tutorials/01-GETTING-STARTED.md)
+- [CI/CD Integration (10 min)](tutorials/03-CICD-INTEGRATION.md)
+- [Custom Rules (7 min)](tutorials/04-CUSTOM-RULES.md)
 
 ---
 
