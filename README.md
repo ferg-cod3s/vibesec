@@ -205,26 +205,35 @@ output:
 
 ## 🎯 Roadmap
 
-### POC (Weeks 1-2) ✅
-- [x] Core scanner engine
-- [x] Basic detectors (secrets, injection, auth)
-- [x] CLI tool
-- [x] Plain-text reports
+**📋 Active Planning:** [GitHub Project Board](https://github.com/users/ferg-cod3s/projects/4)
 
-### MVP (Weeks 3-8)
-- [ ] AI-specific pattern detection
-- [ ] Snyk/Socket.dev integration
-- [ ] Web dashboard
-- [ ] SARIF output for GitHub Security
-- [ ] One-click fix generation
+### POC (Weeks 1-2) ✅ COMPLETE
+- [x] Core scanner engine with 19 security rules
+- [x] Multi-detector system (secrets, injection, auth, incomplete code, AI-specific)
+- [x] CLI tool with progress indicators
+- [x] Plain-language and stakeholder reporters
+- [x] Security scorecard (0-100 grading)
+- [x] Comprehensive test suite (67 tests, 82% coverage)
+- [x] User testing materials and feedback forms
 
-### Post-MVP
-- [ ] VS Code extension
+### MVP (Weeks 3-8) 🚧 IN PROGRESS
+Track progress on our [GitHub Project](https://github.com/users/ferg-cod3s/projects/4):
+- [ ] Enhanced Scanner (Tree-sitter AST, incremental scanning)
+- [ ] AI-Specific Detection Engine (confidence scoring, heuristics)
+- [ ] Integration Layer (Snyk, Socket.dev, GitHub Actions)
+- [ ] Reporting & UX (HTML/Markdown reports, auto-fix suggestions)
+- [ ] Web Dashboard (optional, React + Express + SQLite)
+- [ ] Polish & Launch (docs, examples, beta testing)
+
+### Post-MVP 🔮
+- [ ] IDE Integrations (VS Code, JetBrains)
+- [ ] Language Expansion (Ruby, PHP, Java, C#, Swift)
+- [ ] AI Chatbot ("Ask VibeSec")
+- [ ] Machine Learning for detection
 - [ ] Community rule marketplace
-- [ ] Enterprise SSO and audit logs
-- [ ] White-label for vibe coding platforms
+- [ ] Enterprise features (SSO, audit logs, white-label)
 
-See [MVP_ROADMAP.md](docs/MVP_ROADMAP.md) for detailed timeline.
+**Planning docs migrated to GitHub Projects for better collaboration.** See [docs/archive/](docs/archive/) for historical planning documents.
 
 ---
 
