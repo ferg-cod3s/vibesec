@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Bun Parser",
+    "duration": {
+      "start": 30,
+      "end": 56,
+      "total_ms": 25.711693
+    },
+    "metrics": {
+      "total_files": 1000,
+      "total_parse_time_ms": 11.06071900000003,
+      "average_parse_time_ms": 0.011060719000000031,
+      "min_parse_time_ms": 0.00664099999999479,
+      "max_parse_time_ms": 0.2478140000000053,
+      "detection_count": 0,
+      "memory_used_mb": 0,
+      "timestamp_ms": 1760745687518
+    }
+  }
+]
