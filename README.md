@@ -1,11 +1,37 @@
 # VibeSec
 
-**Security for Vibe Coders Building with AI**
+**Security Scanner for AI-Generated Code**
 
-VibeSec is a comprehensive security platform specifically designed for developers, PMs, designers, and anyone building products with agentic AI. It detects security vulnerabilities in AI-generated code and provides plain-language fixes that anyone can understand.
+Catches vulnerabilities your AI assistant missed. Integrates directly with Claude Code, Cursor, and Cline via MCP (Model Context Protocol).
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
+```bash
+# 2-minute setup for Claude Code
+echo '{"mcpServers":{"vibesec":{"command":"bun","args":["run","/path/to/vibesec-bun-poc/bin/vibesec-mcp"]}}}' > ~/.claude/mcp.json
+
+# Restart Claude Code - that's it!
+```
+
+## ✨ New: AI Assistant Integration
+
+VibeSec now works **inside** your AI coding assistant through MCP integration:
+
+- 🔍 **Real-time scanning** as Claude/Cursor generates code
+- 🤖 **AI-aware detection** for prompt injection, incomplete implementations, hallucinated APIs
+- ⚡ **Zero friction** - works directly in your existing workflow
+- 🔒 **100% local** - your code never leaves your machine
+
+**Demo:**
+```
+You: "Claude, can you scan this file for security issues using VibeSec?"
+Claude: *uses vibesec_scan tool* "Found 2 critical issues:
+  1. Hardcoded API key on line 23
+  2. SQL injection risk in query builder..."
+```
+
+[See it in action →](./docs/demo.gif)
 
 ---
 

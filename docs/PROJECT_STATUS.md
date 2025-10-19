@@ -1,7 +1,7 @@
 # VibeSec Project Status
 
-**Last Updated**: 2025-10-15
-**Phase**: POC Complete → MVP Development
+**Last Updated**: 2025-10-17
+**Phase**: POC Complete → MVP Development (Priority 2 Complete, P2.5 Starting)
 **GitHub Project**: https://github.com/users/ferg-cod3s/projects/4
 
 ---
@@ -119,7 +119,43 @@
 
 ---
 
-### Priority 3: Enhanced Reporting (24 hours, Weeks 5-6)
+### Priority 2.5: MCP Server - AI-Native Integration (48 hours, Weeks 4.5-6) ⭐ NEW
+
+**🚀 Game-Changer: First AI-Native Security Scanner**
+
+**🎯 P2.5: Model Context Protocol Server** (48h)
+- MCP server implementation with stdio transport
+- 5 AI-accessible tools for real-time security feedback
+- Integration with Claude Code, Cursor, and other AI assistants
+- Automatic vulnerability detection during code generation
+- **Impact: Unique market differentiator - "The only security scanner AI assistants can call natively"**
+
+**Tools to Implement:**
+1. **vibesec_scan** - Scan files for vulnerabilities (16h)
+2. **vibesec_list_rules** - Discover available detection rules (4h)
+3. **vibesec_fix_suggestion** - Get AI-friendly fix recommendations (12h)
+4. **vibesec_validate_fix** - Verify fixes resolve vulnerabilities (8h)
+5. **vibesec_init_config** - Generate project configuration (8h)
+
+**Why This Is Critical:**
+- ✅ Shifts security from post-generation to in-loop
+- ✅ Enables AI assistants to self-correct security issues
+- ✅ Zero manual scanning required for AI-generated code
+- ✅ Unique competitive advantage in market
+- ✅ Positions VibeSec as essential tool for "vibe coding" platforms
+
+**Integration Targets:**
+- Claude Code (stdio MCP - immediate)
+- Cursor (via MCP bridge)
+- Windsurf (future integration)
+- GitHub Copilot (via extension)
+- AutoGPT/AgentGPT (autonomous agents)
+
+**See**: `docs/MCP_SERVER_PROPOSAL.md` for detailed specifications
+
+---
+
+### Priority 3: Enhanced Reporting (24 hours, Weeks 6-7)
 
 **🎯 P3.1: SARIF Reporter** (16h)
 - SARIF 2.1.0 compliance
@@ -172,18 +208,21 @@
 
 ---
 
-## 📈 8-Week MVP Roadmap
+## 📈 9-Week MVP Roadmap (Updated with MCP Server)
 
 | Week | Focus | Effort | Deliverable |
 |------|-------|--------|-------------|
-| 1-2 | Foundation | 38h | AST + Config + Incremental |
-| 3-4 | Integrations | 48h | Snyk + Socket + GitHub Action |
-| 5-6 | Reporting | 24h | SARIF + HTML + Markdown |
-| 7 | Distribution | 24h | NPM + Docker + First-Run |
-| 8 | Launch | 24h | Benchmarks + Docs + Beta |
-| **Total** | **MVP Complete** | **158h** | **v1.0.0 Launch** |
+| 1-2 | Foundation | 38h | AST + Config + Incremental ✅ |
+| 3-4 | Integrations | 48h | Scanner Engine + CLI + Rules + Tests ✅ |
+| 4.5-6 | **MCP Server** ⭐ | **48h** | **AI-Native Integration** 🚧 |
+| 6-7 | Reporting | 24h | SARIF + HTML + Markdown |
+| 7-8 | Distribution | 24h | NPM + Docker + First-Run |
+| 9 | Launch | 24h | Benchmarks + Docs + Beta |
+| **Total** | **MVP Complete** | **206h** | **v1.0.0 Launch** |
 
-**Timeline**: 4-6 weeks with 1 full-time developer (30-40 hrs/week)
+**Timeline**: 5-7 weeks with 1 full-time developer (30-40 hrs/week)
+
+**Note**: Priority 2.5 (MCP Server) added as critical market differentiator
 
 ---
 
