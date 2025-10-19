@@ -21,11 +21,12 @@
     "cli/**/*",
     "scanner/**/*",
     "reporters/**/*",
-    "tests/**/*"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules",
     "dist",
-    "**/*.test.ts"
+    "**/*.test.ts",
+    "tests/**/*"
   ]
 }

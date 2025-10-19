@@ -16,6 +16,7 @@ export interface SentryConfig {
   tracesSampleRate?: number;
   profilesSampleRate?: number;
   release?: string;
+  serverUrl?: string; // For self-hosted Sentry instances
 }
 
 export class SentryIntegration {
@@ -33,8 +34,16 @@ export class SentryIntegration {
       dsn: config.dsn,
       environment: config.environment,
       tracesSampleRate: config.tracesSampleRate || 0.1, // 10% performance traces
-      profilesSampleRate: config.profilesSampleRate || 0.1, // 10% profiling
+      // profilesSampleRate: config.profilesSampleRate || 0.1, // Not supported in @sentry/bun yet
       release: config.release,
+
+      // Self-hosted Sentry support
+      ...(config.serverUrl ? {
+        tunnel: config.serverUrl,
+        transportOptions: {
+          url: config.serverUrl
+        }
+      } : {}),
 
       // Attach context
       beforeSend(event, hint) {
@@ -96,13 +105,16 @@ export class SentryIntegration {
   }
 
   /**
-   * Start transaction for performance monitoring
+   * Start span for performance monitoring (Sentry v8+ API)
    */
-  startTransaction(name: string, op: string): Sentry.Transaction {
-    return Sentry.startTransaction({
-      name,
-      op,
-    });
+  async startSpan<T>(name: string, op: string, callback: () => Promise<T>): Promise<T> {
+    return await Sentry.startSpan(
+      {
+        name,
+        op,
+      },
+      callback
+    );
   }
 
   /**

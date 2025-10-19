@@ -1,0 +1,51 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest"
+      ]
+    },
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ]
+    },
+    "sentry": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "@sentry/mcp-server@latest",
+        "--access-token=YOUR_SENTRY_ACCESS_TOKEN",
+        "--host=YOUR_SENTRY_HOST"
+      ]
+    },
+    "github": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "-e",
+        "GITHUB_PERSONAL_ACCESS_TOKEN=YOUR_GITHUB_PAT",
+        "ghcr.io/github/github-mcp-server"
+      ]
+    },
+    "conexus": {
+      "type": "stdio",
+      "command": "bash",
+      "args": [
+        "-c",
+        "cd /path/to/conexus && ./bin/conexus"
+      ],
+      "env": {
+        "CONEXUS_DB_PATH": "/path/to/conexus/data/conexus.db"
+      }
+    }
+  }
+}

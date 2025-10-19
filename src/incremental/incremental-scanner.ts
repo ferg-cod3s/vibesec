@@ -1,6 +1,6 @@
 import { spawn } from 'child_process';
 import { readFile, writeFile, access } from 'fs/promises';
-import { Finding } from '../scanner/core/types';
+import { Finding } from '../../scanner/core/types';
 
 export interface ScanCache {
   files: Map<string, { hash: string; timestamp: number }>;

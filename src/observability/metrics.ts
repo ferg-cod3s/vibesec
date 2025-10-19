@@ -66,6 +66,13 @@ export class MetricsCollector {
   }
 
   /**
+   * Record histogram value (alias for timing)
+   */
+  histogram(name: string, value: number, tags?: Record<string, string>): void {
+    this.timing(name, value, tags);
+  }
+
+  /**
    * Record memory usage in bytes
    */
   memory(name: string, bytes: number, tags?: Record<string, string>): void {
@@ -179,6 +186,22 @@ export class MetricsCollector {
   reset(): void {
     this.metrics = [];
     this.scanMetrics = {};
+  }
+
+  /**
+   * Flush metrics (export and reset)
+   */
+  async flush(): Promise<void> {
+    // In production, this would send metrics to a monitoring backend
+    // For now, we just reset
+    this.reset();
+  }
+
+  /**
+   * Close metrics collector
+   */
+  async close(): Promise<void> {
+    await this.flush();
   }
 }
 

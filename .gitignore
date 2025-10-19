@@ -40,6 +40,9 @@ htmlcov/
 *.key
 *.pem
 
+# MCP Configuration (contains sensitive tokens)
+.mcp.json
+
 # Logs
 *.log
 logs/

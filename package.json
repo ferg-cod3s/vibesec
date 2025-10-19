@@ -4,13 +4,16 @@
   "description": "Security scanner for AI-generated code - detects vulnerabilities in vibe-coded projects",
   "main": "dist/index.js",
   "bin": {
-    "vibesec": "./dist/cli/index.js"
+    "vibesec": "./dist/cli/index.js",
+    "vibesec-mcp": "./bin/vibesec-mcp"
   },
   "scripts": {
     "build": "tsc && bun copy-assets.js",
     "dev": "bun run cli/index.ts",
+    "mcp": "bun run bin/vibesec-mcp",
     "test": "bun test",
     "test:coverage": "bun test --coverage",
+    "test:mcp": "bun test tests/mcp",
     "benchmark": "bun --expose-gc run scripts/run-benchmarks.ts",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"**/*.{ts,json,md}\"",
@@ -28,6 +31,7 @@
   "author": "VibeSec Team",
   "license": "MIT",
   "dependencies": {
+    "@sentry/bun": "^10.20.0",
     "chalk": "^4.1.2",
     "commander": "^11.1.0",
     "fast-glob": "^3.3.2",

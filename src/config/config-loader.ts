@@ -1,7 +1,7 @@
 import { readFile } from 'fs/promises';
 import { resolve } from 'path';
 
-export interface VibeSec Config {
+export interface VibeSecConfig {
   rules?: {
     enabled?: string[];
     disabled?: string[];
@@ -22,7 +22,7 @@ export interface VibeSec Config {
   };
 }
 
-const DEFAULT_CONFIG: VibeSec Config = {
+const DEFAULT_CONFIG: VibeSecConfig = {
   rules: {
     enabled: [],
     disabled: [],
@@ -44,9 +44,9 @@ const DEFAULT_CONFIG: VibeSec Config = {
 };
 
 export class ConfigLoader {
-  private parseYaml(content: string): VibeSec Config {
+  private parseYaml(content: string): VibeSecConfig {
     const lines = content.split('\n');
-    const config: VibeSec Config = {};
+    const config: VibeSecConfig = {};
     let currentSection: string | null = null;
     let currentKey: string | null = null;
 
@@ -58,14 +58,14 @@ export class ConfigLoader {
 
       if (indent === 0 && trimmed.endsWith(':')) {
         currentSection = trimmed.slice(0, -1);
-        config[currentSection as keyof VibeSec Config] = {} as any;
+        config[currentSection as keyof VibeSecConfig] = {} as any;
         currentKey = null;
       } else if (indent === 2 && currentSection && trimmed.endsWith(':')) {
         currentKey = trimmed.slice(0, -1);
-        (config[currentSection as keyof VibeSec Config] as any)[currentKey] = [];
+        (config[currentSection as keyof VibeSecConfig] as any)[currentKey] = [];
       } else if (indent === 4 && currentSection && currentKey && trimmed.startsWith('-')) {
         const value = trimmed.slice(1).trim();
-        const arr = (config[currentSection as keyof VibeSec Config] as any)[currentKey];
+        const arr = (config[currentSection as keyof VibeSecConfig] as any)[currentKey];
         if (Array.isArray(arr)) {
           arr.push(value.replace(/^['"]|['"]$/g, ''));
         }
@@ -76,14 +76,14 @@ export class ConfigLoader {
                            value === 'false' ? false :
                            /^\d+$/.test(value) ? parseInt(value, 10) :
                            value.replace(/^['"]|['"]$/g, '');
-        (config[currentSection as keyof VibeSec Config] as any)[key.trim()] = parsedValue;
+        (config[currentSection as keyof VibeSecConfig] as any)[key.trim()] = parsedValue;
       }
     }
 
     return config;
   }
 
-  async loadConfig(configPath?: string): Promise<VibeSec Config> {
+  async loadConfig(configPath?: string): Promise<VibeSecConfig> {
     const searchPaths = configPath
       ? [resolve(configPath)]
       : [

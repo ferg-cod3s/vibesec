@@ -20,18 +20,21 @@ export interface LogEntry {
 }
 
 export class Logger {
-  private static instance: Logger;
+  private static instances: Map<string, Logger> = new Map();
   private logLevel: LogLevel = LogLevel.INFO;
   private logs: LogEntry[] = [];
   private maxLogs = 1000;
+  private context: string;
 
-  private constructor() {}
+  constructor(context: string = 'default') {
+    this.context = context;
+  }
 
-  static getInstance(): Logger {
-    if (!Logger.instance) {
-      Logger.instance = new Logger();
+  static getInstance(context: string = 'default'): Logger {
+    if (!Logger.instances.has(context)) {
+      Logger.instances.set(context, new Logger(context));
     }
-    return Logger.instance;
+    return Logger.instances.get(context)!;
   }
 
   setLevel(level: LogLevel): void {
@@ -62,7 +65,7 @@ export class Logger {
     }
 
     // Console output with formatting
-    const prefix = `[${entry.timestamp}] [${level.toUpperCase()}]`;
+    const prefix = `[${entry.timestamp}] [${level.toUpperCase()}] [${this.context}]`;
     const contextStr = context ? ` ${JSON.stringify(context)}` : '';
     const errorStr = error ? `\n  Error: ${error.message}\n  Stack: ${error.stack}` : '';
 
@@ -152,6 +155,17 @@ export class Logger {
    */
   clear(): void {
     this.logs = [];
+  }
+
+  /**
+   * Close logger (flush remaining logs)
+   */
+  async close(): Promise<void> {
+    // In production, this would flush logs to a backend
+    // For now, we just ensure logs are available
+    if (this.logs.length > 0) {
+      this.info('Logger closing', { totalLogs: this.logs.length });
+    }
   }
 }
 
