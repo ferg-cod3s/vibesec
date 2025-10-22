@@ -1,0 +1,77 @@
+# VibeSec .dockerignore
+# Excludes files from Docker build context for faster builds
+
+# Git
+.git
+.gitignore
+.github
+
+# Dependencies
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist
+
+# Environment and secrets
+.env
+.env.*
+*.key
+*.pem
+.mcp.json
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Testing
+tests
+coverage
+*.test.ts
+*.test.js
+**/__tests__
+**/__mocks__
+
+# Development
+poc
+demo-examples
+demo-automation
+benchmark-results
+*.cast
+
+# Documentation (except README)
+docs
+*.md
+!README.md
+
+# Logs
+logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp
+*.tmp
+*.temp
+
+# CI/CD
+.github/workflows
+
+# Reports
+reports/*.json
+reports/*.html
+
+# TypeScript
+*.tsbuildinfo
+tsconfig.json
+
+# Build artifacts that will be created during Docker build
+copy-assets.js
