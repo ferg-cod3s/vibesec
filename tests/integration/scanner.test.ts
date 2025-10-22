@@ -181,11 +181,11 @@ describe('Scanner Integration', () => {
       const result = await scanner.scan();
       
       const { byCategory } = result.summary;
-      
+
       // Calculate total by summing all actual categories (some may be undefined)
       let calculatedTotal = 0;
       for (const category in byCategory) {
-        calculatedTotal += byCategory[category] || 0;
+        calculatedTotal += (byCategory as Record<string, number | undefined>)[category] || 0;
       }
       
       expect(result.summary.total).toBe(calculatedTotal);

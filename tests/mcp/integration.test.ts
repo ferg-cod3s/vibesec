@@ -123,8 +123,10 @@ describe('MCP Server End-to-End Integration', () => {
       const lastResponse = transport.getLastResponse() as MCPResponse;
       expect(lastResponse.id).toBe(1);
       expect(lastResponse.result).toBeTruthy();
-      expect(lastResponse.result.name).toBe('vibesec-test');
-      expect(lastResponse.result.capabilities).toBeTruthy();
+
+      const initResult = lastResponse.result as { name: string, capabilities: any };
+      expect(initResult.name).toBe('vibesec-test');
+      expect(initResult.capabilities).toBeTruthy();
     });
 
     it('should list registered tools', async () => {
@@ -156,10 +158,12 @@ describe('MCP Server End-to-End Integration', () => {
       const lastResponse = transport.getLastResponse() as MCPResponse;
       expect(lastResponse.id).toBe(2);
       expect(lastResponse.result).toBeTruthy();
-      expect(lastResponse.result.tools).toBeInstanceOf(Array);
-      expect(lastResponse.result.tools.length).toBe(2);
 
-      const toolNames = lastResponse.result.tools.map((t: any) => t.name);
+      const toolsListResult = lastResponse.result as { tools: any[] };
+      expect(toolsListResult.tools).toBeInstanceOf(Array);
+      expect(toolsListResult.tools.length).toBe(2);
+
+      const toolNames = toolsListResult.tools.map((t: any) => t.name);
       expect(toolNames).toContain('vibesec_scan');
       expect(toolNames).toContain('vibesec_list_rules');
     });
@@ -200,8 +204,10 @@ describe('MCP Server End-to-End Integration', () => {
       expect(lastResponse.id).toBe(3);
       expect(lastResponse.error).toBeUndefined();
       expect(lastResponse.result).toBeTruthy();
-      expect(lastResponse.result.rules).toBeInstanceOf(Array);
-      expect(lastResponse.result.totalRules).toBeGreaterThanOrEqual(0);
+
+      const listRulesResult = lastResponse.result as { rules: any[], totalRules: number };
+      expect(listRulesResult.rules).toBeInstanceOf(Array);
+      expect(listRulesResult.totalRules).toBeGreaterThanOrEqual(0);
     });
 
     it('should execute vibesec_scan tool', async () => {

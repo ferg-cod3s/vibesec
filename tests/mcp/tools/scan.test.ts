@@ -43,7 +43,7 @@ function authenticateUser(username: string, password: string) {
       expect(vibesecScanTool.inputSchema).toBeTruthy();
       expect(vibesecScanTool.inputSchema.type).toBe('object');
       expect(vibesecScanTool.inputSchema.properties).toBeTruthy();
-      expect(vibesecScanTool.inputSchema.properties.files).toBeTruthy();
+      expect(vibesecScanTool.inputSchema.properties?.files).toBeTruthy();
     });
 
     it('should require files parameter', () => {

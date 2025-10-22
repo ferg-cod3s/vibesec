@@ -24,7 +24,7 @@ describe('vibesec_list_rules MCP Tool', () => {
     it('should have no required parameters', () => {
       const required = vibesecListRulesTool.inputSchema.required;
       expect(required).toBeInstanceOf(Array);
-      expect(required.length).toBe(0);
+      expect(required?.length).toBe(0);
     });
 
     it('should have handler function', () => {
