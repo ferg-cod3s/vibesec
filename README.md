@@ -31,8 +31,6 @@ Claude: *uses vibesec_scan tool* "Found 2 critical issues:
   2. SQL injection risk in query builder..."
 ```
 
-[See it in action →](./docs/demo.gif)
-
 ---
 
 ## 🎯 Why VibeSec?
