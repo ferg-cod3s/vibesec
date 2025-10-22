@@ -2,7 +2,6 @@
  * Tests for vibesec_list_rules MCP tool
  */
 
-import { describe, it, expect } from 'bun:test';
 import { vibesecListRulesTool, handleListRules } from '../../../src/mcp/tools/list-rules';
 
 describe('vibesec_list_rules MCP Tool', () => {

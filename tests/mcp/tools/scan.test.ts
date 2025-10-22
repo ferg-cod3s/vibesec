@@ -2,7 +2,6 @@
  * Tests for vibesec_scan MCP tool
  */
 
-import { describe, it, expect, beforeAll } from 'bun:test';
 import { vibesecScanTool, handleScan } from '../../../src/mcp/tools/scan';
 import { writeFile, mkdir, rm } from 'fs/promises';
 import { join } from 'path';

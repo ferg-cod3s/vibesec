@@ -8,7 +8,6 @@
  * 4. Tool execution (tools/call)
  */
 
-import { describe, it, expect } from 'bun:test';
 import { MCPServer } from '../../src/mcp/server';
 import { BaseTransport } from '../../src/mcp/transport/base';
 import { MCPRequest, MCPResponse, MCPNotification } from '../../src/mcp/types';
@@ -251,10 +250,12 @@ const password = "admin";
       expect(lastResponse.id).toBe(4);
       expect(lastResponse.error).toBeUndefined();
       expect(lastResponse.result).toBeTruthy();
-      expect(lastResponse.result.findings).toBeInstanceOf(Array);
-      expect(lastResponse.result.summary).toBeTruthy();
-      expect(lastResponse.result.scan).toBeTruthy();
-      expect(lastResponse.result.status).toBeTruthy();
+
+      const result = lastResponse.result as { findings: any[], summary: any, scan: any, status: string };
+      expect(result.findings).toBeInstanceOf(Array);
+      expect(result.summary).toBeTruthy();
+      expect(result.scan).toBeTruthy();
+      expect(result.status).toBeTruthy();
     });
   });
 
@@ -284,7 +285,7 @@ const password = "admin";
       const lastResponse = transport.getLastResponse() as MCPResponse;
       expect(lastResponse.id).toBe(5);
       expect(lastResponse.error).toBeTruthy();
-      expect(lastResponse.error.code).toBe(-32601); // Method not found
+      expect(lastResponse.error?.code).toBe(-32601); // Method not found
     });
 
     it('should handle tool not found', async () => {
@@ -315,7 +316,7 @@ const password = "admin";
       const lastResponse = transport.getLastResponse() as MCPResponse;
       expect(lastResponse.id).toBe(6);
       expect(lastResponse.error).toBeTruthy();
-      expect(lastResponse.error.code).toBe(-32002); // Tool not found
+      expect(lastResponse.error?.code).toBe(-32002); // Tool not found
     });
 
     it('should handle invalid tool arguments', async () => {
@@ -400,7 +401,8 @@ const password = "admin";
       await transport.send(response);
 
       const toolsResponse = transport.getLastResponse() as MCPResponse;
-      expect(toolsResponse.result.tools.length).toBe(2);
+      const toolsResult = toolsResponse.result as { tools: any[] };
+      expect(toolsResult.tools.length).toBe(2);
 
       // Step 3: List available security rules
       transport.queueRequest({
@@ -418,7 +420,8 @@ const password = "admin";
       await transport.send(response);
 
       const rulesResponse = transport.getLastResponse() as MCPResponse;
-      expect(rulesResponse.result.rules).toBeTruthy();
+      const rulesResult = rulesResponse.result as { rules: any[] };
+      expect(rulesResult.rules).toBeTruthy();
 
       // Step 4: Scan a file
       await mkdir(testDir, { recursive: true });
@@ -443,9 +446,10 @@ const password = "admin";
       await transport.send(response);
 
       const scanResponse = transport.getLastResponse() as MCPResponse;
-      expect(scanResponse.result.findings).toBeTruthy();
-      expect(scanResponse.result.summary).toBeTruthy();
-      expect(scanResponse.result.status).toBeTruthy();
+      const scanResult = scanResponse.result as { findings: any[], summary: any, status: string };
+      expect(scanResult.findings).toBeTruthy();
+      expect(scanResult.summary).toBeTruthy();
+      expect(scanResult.status).toBeTruthy();
 
       // Verify all 4 requests succeeded
       const allResponses = transport.getAllResponses();

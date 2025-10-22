@@ -1,13 +1,13 @@
 import { JsonReporter } from '../../reporters/json';
 import { PlainTextReporter } from '../../reporters/plaintext';
-import { ScanResult, Finding, Severity } from '../../scanner/core/types';
+import { ScanResult, Finding, Severity, Category } from '../../scanner/core/types';
 
 describe('Reporters', () => {
   const createTestFinding = (overrides: Partial<Finding> = {}): Finding => ({
     id: 'test-finding-1',
     rule: 'test-rule',
     severity: Severity.HIGH,
-    category: 'injection',
+    category: Category.INJECTION,
     title: 'SQL Injection',
     description: 'SQL injection vulnerability detected',
     location: {
@@ -31,12 +31,13 @@ describe('Reporters', () => {
   });
 
   const createTestResult = (findings: Finding[] = []): ScanResult => ({
+    version: '1.0.0',
     scan: {
       path: '/test/path',
-      timestamp: new Date('2025-01-01T00:00:00Z'),
+      timestamp: '2025-01-01T00:00:00Z',
       filesScanned: 10,
-      rulesApplied: 5,
       duration: 1.23,
+      version: '1.0.0',
     },
     summary: {
       total: findings.length,
@@ -47,12 +48,15 @@ describe('Reporters', () => {
         low: findings.filter(f => f.severity === Severity.LOW).length,
       },
       byCategory: {
-        injection: findings.filter(f => f.category === 'injection').length,
-        crypto: findings.filter(f => f.category === 'crypto').length,
-        'auth-authz': findings.filter(f => f.category === 'auth-authz').length,
-        'insecure-config': findings.filter(f => f.category === 'insecure-config').length,
-        'data-exposure': findings.filter(f => f.category === 'data-exposure').length,
-        other: 0,
+        [Category.INJECTION]: findings.filter(f => f.category === Category.INJECTION).length,
+        [Category.SECRETS]: findings.filter(f => f.category === Category.SECRETS).length,
+        [Category.AUTH]: findings.filter(f => f.category === Category.AUTH).length,
+        [Category.INCOMPLETE]: findings.filter(f => f.category === Category.INCOMPLETE).length,
+        [Category.AI_SPECIFIC]: findings.filter(f => f.category === Category.AI_SPECIFIC).length,
+        [Category.DEPENDENCIES]: findings.filter(f => f.category === Category.DEPENDENCIES).length,
+        [Category.WEB_SECURITY]: findings.filter(f => f.category === Category.WEB_SECURITY).length,
+        [Category.CRYPTOGRAPHY]: findings.filter(f => f.category === Category.CRYPTOGRAPHY).length,
+        [Category.CUSTOM]: findings.filter(f => f.category === Category.CUSTOM).length,
       },
     },
     findings,
@@ -78,7 +82,6 @@ describe('Reporters', () => {
       expect(parsed.scan).toBeDefined();
       expect(parsed.scan.path).toBe('/test/path');
       expect(parsed.scan.filesScanned).toBe(10);
-      expect(parsed.scan.rulesApplied).toBe(5);
       expect(parsed.scan.duration).toBe(1.23);
     });
 
