@@ -18,7 +18,9 @@
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"**/*.{ts,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,json,md}\"",
-    "scan": "bun run cli/index.ts scan"
+    "scan": "bun run cli/index.ts scan",
+    "prepublishOnly": "bun run build && bun test",
+    "prepack": "bun run build"
   },
   "keywords": [
     "security",
@@ -30,6 +32,19 @@
   ],
   "author": "VibeSec Team",
   "license": "MIT",
+  "files": [
+    "dist/",
+    "bin/",
+    "rules/",
+    "src/",
+    "cli/",
+    "scanner/",
+    "reporters/",
+    "README.md",
+    "LICENSE",
+    ".env.example",
+    ".mcp.json.example"
+  ],
   "dependencies": {
     "@sentry/bun": "^10.20.0",
     "chalk": "^4.1.2",

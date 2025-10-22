@@ -12,6 +12,7 @@ import {
 import { RuleLoader } from './rule-loader';
 import { RegexAnalyzer } from '../analyzers/regex';
 import { DependencyAnalyzer } from '../analyzers/dependency';
+import { validatePath, validateBaseDirectory, PathValidationError } from '../../lib/path-validator';
 
 export class Scanner {
   private options: ScanOptions;
@@ -96,19 +97,38 @@ export class Scanner {
   }
 
   private async findFiles(): Promise<string[]> {
-    const searchPath = path.resolve(this.options.path);
-    
-    // Check if path is a file
+    // Validate and sanitize the input path to prevent path traversal
+    let searchPath: string;
     try {
-      const stat = await fs.stat(searchPath);
-      if (stat.isFile()) {
-        return [searchPath];
+      // For scan paths, we allow external paths (user may want to scan anywhere)
+      // but we still normalize and validate the path
+      searchPath = validatePath(this.options.path, { allowExternal: true });
+    } catch (error) {
+      if (error instanceof PathValidationError) {
+        throw new Error(`Invalid scan path: ${error.message}`);
       }
-    } catch {
-      throw new Error(`Path not found: ${searchPath}`);
+      throw error;
     }
 
-    // Scan directory
+    // Check if path exists and determine if it's a file or directory
+    let stat;
+    try {
+      stat = await fs.stat(searchPath);
+    } catch (error) {
+      throw new Error(`Path not found or not accessible: ${searchPath}`);
+    }
+
+    // If single file, validate and return it
+    if (stat.isFile()) {
+      return [searchPath];
+    }
+
+    // Ensure it's a directory
+    if (!stat.isDirectory()) {
+      throw new Error(`Path is neither a file nor a directory: ${searchPath}`);
+    }
+
+    // Scan directory with glob patterns
     const patterns = this.options.include || ['**/*.{js,ts,py,jsx,tsx}'];
     const ignore = this.options.exclude || [];
 

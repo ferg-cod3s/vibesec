@@ -1,0 +1,60 @@
+# VibeSec .npmignore
+# This file controls what gets published to npm
+# Unlike .gitignore, we're more selective - only exclude what's not needed
+
+# Development files
+.env
+.env.*
+.mcp.json
+*.log
+
+# Test files
+**/*.test.ts
+**/*.test.js
+**/*.spec.ts
+**/*.spec.js
+tests/
+coverage/
+.nyc_output/
+
+# Build artifacts (temporary)
+*.tsbuildinfo
+.benchmark-temp/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# CI/CD
+.github/
+
+# Documentation (we keep README.md, LICENSE)
+docs/archive/
+docs/sop/
+docs/MCP_SERVER_PROPOSAL.md
+docs/RESEARCH.md
+docs/USER_TESTING_GUIDE.md
+
+# Examples (users can get from GitHub)
+examples/
+demo-automation/
+demo-examples/
+
+# Scripts (keep only necessary ones)
+scripts/
+copy-assets.js
+tsconfig.json
+
+# Node modules (obviously)
+node_modules/
+
+# Temporary benchmark files
+.benchmark-temp/

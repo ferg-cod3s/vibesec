@@ -8,11 +8,18 @@ Catches vulnerabilities your AI assistant missed. Integrates directly with Claud
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 ```bash
-# 2-minute setup for Claude Code
-echo '{"mcpServers":{"vibesec":{"command":"bun","args":["run","/path/to/vibesec-bun-poc/bin/vibesec-mcp"]}}}' > ~/.claude/mcp.json
+# Install VibeSec globally
+npm install -g vibesec
 
-# Restart Claude Code - that's it!
+# Add to Claude Code MCP configuration
+echo '{"mcpServers":{"vibesec":{"command":"vibesec-mcp"}}}' >> ~/.claude/mcp.json
+
+# Restart Claude Code - done!
 ```
+
+**Prerequisites for MCP Server:**
+- Bun runtime (install: `curl -fsSL https://bun.sh/install | bash`)
+- VibeSec installed globally or locally
 
 ## ✨ New: AI Assistant Integration
 
@@ -50,24 +57,74 @@ The rise of vibe coding has democratized software development, but **45% of AI-g
 
 ## 🚀 Quick Start
 
-### For Developers
+### Installation
+
+**Prerequisites:**
+- Node.js 16+ (for CLI)
+- Bun 1.0+ (for MCP server only) - [Install Bun](https://bun.sh/install)
 
 ```bash
-# Install via npm
+# Install globally (recommended)
 npm install -g vibesec
 
-# Or use with Bun (recommended for POC)
-bun install vibesec
+# Or install locally in your project
+npm install --save-dev vibesec
 
+# Verify installation
+vibesec --version
+```
+
+### Basic Usage
+
+```bash
 # Scan your project
 vibesec scan .
 
-# Get plain language help
+# Scan with severity filter
+vibesec scan --severity critical
+
+# Get plain language explanations
 vibesec scan --explain
 
 # Generate stakeholder report
 vibesec scan -f stakeholder -o report.txt
+
+# JSON output for CI/CD
+vibesec scan -f json -o results.json
 ```
+
+### MCP Server Setup (AI Assistant Integration)
+
+**1. Install Bun (if not already installed):**
+```bash
+curl -fsSL https://bun.sh/install | bash
+```
+
+**2. Configure Claude Code:**
+
+Add to `~/.claude/mcp.json`:
+```json
+{
+  "mcpServers": {
+    "vibesec": {
+      "command": "vibesec-mcp"
+    }
+  }
+}
+```
+
+**3. Restart Claude Code**
+
+**4. Test the integration:**
+```
+You: "Claude, what MCP tools do you have?"
+Claude: "I have access to vibesec_scan and vibesec_list_rules..."
+
+You: "Scan this file for security issues"
+Claude: *uses vibesec_scan* "Found 2 critical vulnerabilities..."
+```
+
+For detailed MCP setup, see [docs/MCP_SETUP.md](docs/MCP_SETUP.md)
 
 ### For Non-Technical Users (PMs, Designers, Product Owners)
 
@@ -86,6 +143,66 @@ vibesec scan . --explain
 ```
 
 **First time?** Check out the [Quick Start Guide](docs/QUICK_START.md) for a step-by-step walkthrough.
+
+### Environment Configuration
+
+VibeSec works out of the box with no configuration! However, you can optionally configure:
+
+**Optional Environment Variables:**
+```bash
+# Copy the example file
+cp .env.example .env
+
+# Edit .env to configure (all optional):
+# - SENTRY_DSN: Error monitoring and performance tracking
+# - NODE_ENV: Environment (development, staging, production)
+# - LOG_LEVEL: Logging verbosity (debug, info, warn, error)
+# - ENABLE_METRICS: Performance metrics collection (default: true)
+```
+
+**No environment variables are required!** VibeSec works perfectly without any configuration. See [.env.example](./.env.example) for complete documentation.
+
+### Troubleshooting
+
+**MCP Server not appearing in Claude Code:**
+1. Verify Bun is installed: `bun --version`
+2. Check `~/.claude/mcp.json` is valid JSON
+3. Restart Claude Code completely
+4. Check Claude Code logs for errors
+
+**CLI command not found:**
+```bash
+# If installed globally
+npm list -g vibesec
+
+# If not found, reinstall
+npm install -g vibesec
+
+# Or use npx (no installation)
+npx vibesec scan .
+```
+
+**"Cannot find module" errors:**
+```bash
+# Reinstall dependencies
+npm install
+
+# Or use the binary directly
+node ./dist/cli/index.js scan .
+```
+
+**MCP server won't start:**
+```bash
+# Test MCP server directly
+vibesec-mcp
+
+# Should wait for stdin input (Ctrl+C to exit)
+# If errors occur, check:
+# 1. Bun is installed and in PATH
+# 2. All TypeScript source files exist in src/
+```
+
+For more help, see [docs/MCP_SETUP.md](docs/MCP_SETUP.md) or [open an issue](https://github.com/vibesec/vibesec/issues).
 
 ---
 
