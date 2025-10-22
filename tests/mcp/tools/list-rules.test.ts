@@ -2,6 +2,7 @@
  * Tests for vibesec_list_rules MCP tool
  */
 
+import { describe, it, expect } from 'bun:test';
 import { vibesecListRulesTool, handleListRules } from '../../../src/mcp/tools/list-rules';
 
 describe('vibesec_list_rules MCP Tool', () => {
@@ -24,7 +25,7 @@ describe('vibesec_list_rules MCP Tool', () => {
     it('should have no required parameters', () => {
       const required = vibesecListRulesTool.inputSchema.required;
       expect(required).toBeInstanceOf(Array);
-      expect(required?.length).toBe(0);
+      expect(required.length).toBe(0);
     });
 
     it('should have handler function', () => {

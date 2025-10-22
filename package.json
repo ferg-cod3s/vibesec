@@ -8,14 +8,12 @@
     "vibesec-mcp": "./bin/vibesec-mcp"
   },
   "scripts": {
-    "build": "tsc && node copy-assets.js",
-    "build:bun": "tsc && bun copy-assets.js",
+    "build": "tsc && bun copy-assets.js",
     "dev": "bun run cli/index.ts",
     "mcp": "bun run bin/vibesec-mcp",
-    "test": "jest",
-    "test:bun": "bun test",
-    "test:coverage": "jest --coverage",
-    "test:mcp": "jest tests/mcp",
+    "test": "bun test",
+    "test:coverage": "bun test --coverage",
+    "test:mcp": "bun test tests/mcp",
     "benchmark": "bun --expose-gc run scripts/run-benchmarks.ts",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"**/*.{ts,json,md}\"",

@@ -21,17 +21,12 @@
     "cli/**/*",
     "scanner/**/*",
     "reporters/**/*",
-    "src/**/*",
-    "lib/**/*"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules",
     "dist",
     "**/*.test.ts",
-    "tests/**/*",
-    "poc/**/*",
-    "demo-examples/**/*",
-    "demo-automation/**/*",
-    "benchmark-results/**/*"
+    "tests/**/*"
   ]
 }
