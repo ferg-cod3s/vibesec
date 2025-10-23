@@ -21,54 +21,13 @@ export interface LogEntry {
 
 export class Logger {
   private static instances: Map<string, Logger> = new Map();
-  private logLevel: LogLevel;
+  private logLevel: LogLevel = LogLevel.INFO;
   private logs: LogEntry[] = [];
   private maxLogs = 1000;
   private context: string;
 
   constructor(context: string = 'default') {
     this.context = context;
-
-    // CONFIG-001: Secure logging defaults for production
-    this.logLevel = this.getDefaultLogLevel();
-  }
-
-  /**
-   * Get secure default log level based on environment (CONFIG-001)
-   * Production defaults to WARN to minimize sensitive data exposure
-   * Development/staging defaults to INFO for debugging
-   */
-  private getDefaultLogLevel(): LogLevel {
-    // 1. Check LOG_LEVEL environment variable
-    const envLogLevel = process.env.LOG_LEVEL?.toLowerCase();
-    if (envLogLevel) {
-      const levelMap: Record<string, LogLevel> = {
-        debug: LogLevel.DEBUG,
-        info: LogLevel.INFO,
-        warn: LogLevel.WARN,
-        error: LogLevel.ERROR,
-        fatal: LogLevel.FATAL,
-      };
-      if (levelMap[envLogLevel]) {
-        return levelMap[envLogLevel];
-      }
-    }
-
-    // 2. Check NODE_ENV for environment-specific defaults
-    const nodeEnv = process.env.NODE_ENV?.toLowerCase();
-
-    // Production: Default to WARN (minimize information disclosure)
-    if (nodeEnv === 'production') {
-      return LogLevel.WARN;
-    }
-
-    // Staging: Default to INFO (balance between debugging and security)
-    if (nodeEnv === 'staging') {
-      return LogLevel.INFO;
-    }
-
-    // Development/test/unknown: Default to INFO (helpful for debugging)
-    return LogLevel.INFO;
   }
 
   static getInstance(context: string = 'default'): Logger {

@@ -315,7 +315,7 @@ const password = "admin";
       const lastResponse = transport.getLastResponse() as MCPResponse;
       expect(lastResponse.id).toBe(6);
       expect(lastResponse.error).toBeTruthy();
-      expect(lastResponse.error.code).toBe(-32002); // Tool not found
+      expect(lastResponse.error.code).toBe(-32001); // Tool not found
     });
 
     it('should handle invalid tool arguments', async () => {

@@ -18,9 +18,7 @@
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"**/*.{ts,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,json,md}\"",
-    "scan": "bun run cli/index.ts scan",
-    "prepublishOnly": "bun run build && bun test",
-    "prepack": "bun run build"
+    "scan": "bun run cli/index.ts scan"
   },
   "keywords": [
     "security",
@@ -32,18 +30,16 @@
   ],
   "author": "VibeSec Team",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ferg-cod3s/vibesec-bun-poc.git"
+  },
   "files": [
     "dist/",
     "bin/",
     "rules/",
-    "src/",
-    "cli/",
-    "scanner/",
-    "reporters/",
     "README.md",
-    "LICENSE",
-    ".env.example",
-    ".mcp.json.example"
+    "LICENSE"
   ],
   "dependencies": {
     "@sentry/bun": "^10.20.0",

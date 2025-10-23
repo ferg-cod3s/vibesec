@@ -4,7 +4,6 @@
 /build/
 /dist/
 /bin/
-!bin/vibesec-mcp
 *.exe
 *.dll
 *.so

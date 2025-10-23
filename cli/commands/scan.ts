@@ -5,7 +5,6 @@ import { JsonReporter } from '../../reporters/json';
 import { PlainLanguageReporter } from '../../reporters/plain-language';
 import { StakeholderReporter } from '../../reporters/stakeholder';
 import { FriendlyErrorHandler } from '../../lib/errors/friendly-handler';
-import { validatePath, PathValidationError } from '../../lib/path-validator';
 import ora from 'ora';
 import chalk from 'chalk';
 
@@ -39,55 +38,18 @@ export async function scanCommand(
     const isJson = options.format === 'json';
     const useExplain = options.explain || false;
 
-    // Validate and sanitize the path (INP-001: CLI input validation)
-    let validatedPath: string;
-    try {
-      validatedPath = validatePath(path, { allowExternal: true });
-    } catch (error) {
-      if (error instanceof PathValidationError) {
-        throw new Error(`Invalid scan path: ${error.message}`);
-      }
-      throw error;
-    }
-
-    // Validate severity (INP-001: CLI input validation)
+    // Validate severity
     const severity = validateSeverity(options.severity);
 
-    // Validate output path if provided (INP-001: CLI input validation)
-    let validatedOutput: string | undefined;
-    if (options.output) {
-      try {
-        validatedOutput = validatePath(options.output, { allowExternal: true });
-      } catch (error) {
-        if (error instanceof PathValidationError) {
-          throw new Error(`Invalid output path: ${error.message}`);
-        }
-        throw error;
-      }
-    }
-
-    // Validate rules path if provided (INP-001: CLI input validation)
-    let validatedRulesPath: string | undefined;
-    if (options.rules) {
-      try {
-        validatedRulesPath = validatePath(options.rules, { allowExternal: true });
-      } catch (error) {
-        if (error instanceof PathValidationError) {
-          throw new Error(`Invalid rules path: ${error.message}`);
-        }
-        throw error;
-      }
-    }
-
-    // Build scan options with validated paths
+    // Build scan options
     const scanOptions: ScanOptions = {
-      path: validatedPath,
+      path,
       severity,
       format: options.format as 'text' | 'json',
-      output: validatedOutput,
+      output: options.output,
       exclude: options.exclude,
       include: options.include,
-      rulesPath: validatedRulesPath,
+      rulesPath: options.rules,
       parallel: options.parallel,
       quiet: isJson, // Suppress progress messages for JSON output
     };

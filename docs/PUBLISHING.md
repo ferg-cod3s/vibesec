@@ -1,226 +1,169 @@
-# VibeSec Publishing Guide
+# Publishing Guide
 
-Complete guide for publishing VibeSec to npm.
+This document explains how to publish VibeSec to npm and set up automated publishing.
 
-## ✅ Pre-Publish Checklist
+## Prerequisites
 
-All of these items have been completed and verified:
+1. **npm account** - Create at [npmjs.com](https://www.npmjs.com/signup)
+2. **npm access token** - Generate at [npmjs.com/settings/tokens](https://www.npmjs.com/settings/~/tokens)
+3. **GitHub repository access** - Admin permissions to set secrets
 
-- [x] **Build system configured**
-  - TypeScript compilation working
-  - MCP server compiles to dist/src/mcp/
-  - CLI compiles to dist/cli/
-  - Asset copying (rules/) working
+## One-Time Setup
 
-- [x] **Package configuration**
-  - `files` field in package.json lists all necessary files
-  - `.npmignore` excludes development files
-  - `prepublishOnly` script runs build + tests
-  - `prepack` script runs build
-  - `bin` scripts point to correct files
+### 1. Create npm Access Token
 
-- [x] **Documentation**
-  - README.md has complete installation instructions
-  - CHANGELOG.md created with version 0.1.0 details
-  - .env.example clearly marks REQUIRED vs OPTIONAL variables
-  - MCP setup guide at docs/MCP_SETUP.md
-  - Troubleshooting section in README
+1. Go to [npmjs.com/settings/tokens](https://www.npmjs.com/settings/~/tokens)
+2. Click "Generate New Token" → "Classic Token"
+3. Select "Automation" type (for CI/CD publishing)
+4. Copy the token (starts with `npm_...`)
 
-- [x] **Testing**
-  - All tests pass (46+ tests)
-  - npm pack tested locally
-  - CLI works from packaged tarball
-  - MCP server files present in package
+### 2. Add NPM_TOKEN to GitHub Secrets
 
-## 📦 Package Contents
+1. Go to your GitHub repository
+2. Navigate to Settings → Secrets and variables → Actions
+3. Click "New repository secret"
+4. Name: `NPM_TOKEN`
+5. Value: Paste your npm token
+6. Click "Add secret"
 
-The npm package includes:
+### 3. Verify GitHub Actions is Enabled
 
-```
-vibesec-0.1.0.tgz (153.3 KB)
-├── dist/               # Compiled JavaScript
-│   ├── cli/           # CLI entry point
-│   ├── src/mcp/       # MCP server compiled
-│   ├── scanner/       # Core scanner
-│   ├── reporters/     # Output formatters
-│   ├── rules/         # Detection rules (copied)
-│   └── lib/           # Utilities
-├── bin/               # Executable scripts
-│   └── vibesec-mcp    # Bun-based MCP server
-├── src/               # TypeScript sources (for bun)
-│   ├── mcp/          # MCP server TypeScript
-│   └── observability/
-├── cli/               # CLI TypeScript sources
-├── scanner/           # Scanner TypeScript sources
-├── reporters/         # Reporter TypeScript sources
-├── rules/             # Detection rules (source)
-├── README.md
-├── LICENSE
-├── .env.example
-└── .mcp.json.example
-```
+- Go to Settings → Actions → General
+- Ensure "Allow all actions and reusable workflows" is selected
+- Check "Read and write permissions" for GITHUB_TOKEN
 
-**Total:** 201 files, 816.3 KB unpacked
+## Manual Publishing (First Time)
 
-## 🚀 Publishing Steps
-
-### 1. Version Bump (if needed)
+For the initial 0.1.0 release, publish manually:
 
 ```bash
-# For patch version (0.1.0 -> 0.1.1)
-npm version patch
+# 1. Ensure you're on main branch with latest code
+git checkout main
+git pull origin main
 
-# For minor version (0.1.0 -> 0.2.0)
-npm version minor
-
-# For major version (0.1.0 -> 1.0.0)
-npm version major
-```
-
-### 2. Pre-Publish Verification
-
-```bash
-# Run tests (happens automatically with prepublishOnly)
-bun test
-
-# Build (happens automatically with prepublishOnly)
-bun run build
-
-# Verify dist/ contains all compiled files
-ls -R dist/
-
-# Test package locally
-npm pack
-tar -tzf vibesec-*.tgz | wc -l  # Should show 201 files
-```
-
-### 3. Publish to npm
-
-**First time setup:**
-```bash
-# Login to npm
+# 2. Login to npm (if not already)
 npm login
 
-# Verify you're logged in
-npm whoami
-```
+# 3. Verify everything is ready
+bun test           # All tests pass
+bun run build      # Build succeeds
+npm publish --dry-run  # Preview package
 
-**Publish:**
-```bash
-# Dry run (recommended first)
-npm publish --dry-run
-
-# Publish to npm
-npm publish
-
-# Or for scoped package (if needed)
+# 4. Publish!
 npm publish --access public
-```
 
-### 4. Post-Publish Verification
-
-```bash
-# Install globally to test
-npm install -g vibesec
-
-# Verify version
+# 5. Verify publication
+npm view vibesec
+npm install -g vibesec@0.1.0
 vibesec --version
-
-# Test CLI
-vibesec scan --help
-
-# Test MCP server (requires Bun)
-vibesec-mcp
-# (Ctrl+C to exit)
-
-# Uninstall test installation
-npm uninstall -g vibesec
 ```
 
-### 5. Create GitHub Release
+## Automated Publishing (Subsequent Releases)
+
+After the initial manual publish, GitHub Actions will handle future releases automatically.
+
+### Release Process
+
+1. **Update version** in `package.json`:
+   ```bash
+   # For bug fixes (0.1.0 → 0.1.1)
+   npm version patch
+
+   # For new features (0.1.0 → 0.2.0)
+   npm version minor
+
+   # For breaking changes (0.1.0 → 1.0.0)
+   npm version major
+   ```
+
+2. **Update CHANGELOG.md** with changes in the new version
+
+3. **Commit and push** to main:
+   ```bash
+   git add package.json CHANGELOG.md
+   git commit -m "chore: Release v0.2.0"
+   git push origin main
+   ```
+
+4. **GitHub Actions automatically**:
+   - Detects version change in package.json
+   - Runs tests
+   - Builds the package
+   - Publishes to npm
+   - Creates GitHub release with tag
+
+### Workflow Triggers
+
+The publish workflow (`.github/workflows/publish.yml`) triggers on:
+- Push to `main` branch
+- Changes to: `package.json`, `src/**`, `cli/**`, `bin/**`, `rules/**`
+- Only publishes if package.json version changed
+
+## Troubleshooting
+
+### "Permission denied" error
+- Check NPM_TOKEN secret is set correctly
+- Verify npm token is "Automation" type, not "Read Only"
+- Ensure token hasn't expired
+
+### "Package already exists" error
+- Version in package.json must be unique
+- Can't republish the same version
+- Increment version and try again
+
+### Tests fail in CI
+- Run `bun test` locally first
+- Check GitHub Actions logs for specific error
+- Ensure all dependencies are in package.json
+
+### Build fails
+- Run `bun run build` locally
+- Check for TypeScript errors
+- Verify all source files are committed
+
+## Package Scope
+
+VibeSec is published as **public** package `vibesec` (no scope).
+
+Future: Consider moving to scoped package `@vibesec/cli` for better namespace management.
+
+## Version Strategy
+
+Following [Semantic Versioning](https://semver.org/):
+
+- **MAJOR** (1.0.0): Breaking API changes
+- **MINOR** (0.1.0): New features, backward compatible
+- **PATCH** (0.0.1): Bug fixes, backward compatible
+
+## Publish Checklist
+
+Before publishing manually:
+
+- [ ] All tests pass (`bun test`)
+- [ ] Build succeeds (`bun run build`)
+- [ ] CHANGELOG.md updated
+- [ ] Version bumped in package.json
+- [ ] README.md reflects new features
+- [ ] Git tags created (`git tag v0.1.0`)
+- [ ] Dry-run successful (`npm publish --dry-run`)
+
+## Rollback
+
+If you publish a broken version:
 
 ```bash
-# Tag the release
-git tag v0.1.0
+# Deprecate the broken version
+npm deprecate vibesec@0.1.1 "Broken release, use 0.1.2 instead"
 
-# Push tag
-git push origin v0.1.0
-
-# Create GitHub release
-gh release create v0.1.0 \
-  --title "v0.1.0 - Initial Release" \
-  --notes-file CHANGELOG.md
+# Publish a fix as new version
+npm version patch
+npm publish
 ```
 
-## 🔄 Update Process
+**Never unpublish** packages unless they contain security vulnerabilities or secrets. Use deprecation instead.
 
-For subsequent releases:
+## Support
 
-1. **Update version in package.json**: `npm version [patch|minor|major]`
-2. **Update CHANGELOG.md**: Add new version section
-3. **Commit changes**: `git commit -am "chore: bump version to X.Y.Z"`
-4. **Publish**: `npm publish`
-5. **Tag and release**: `git tag vX.Y.Z && git push --tags`
-
-## 📊 Package Statistics
-
-**Current Package:**
-- Size: 153.3 kB (tarball)
-- Unpacked: 816.3 kB
-- Files: 201
-- Dependencies: 6 production dependencies
-  - @sentry/bun
-  - chalk
-  - commander
-  - fast-glob
-  - js-yaml
-  - ora
-
-## 🛡️ Security
-
-**Before Publishing:**
-- No .env files in package ✅
-- No .mcp.json files in package ✅
-- No credentials in code ✅
-- .npmignore properly configured ✅
-
-**Credentials Management:**
-- Use `.env` for local development
-- Never commit `.env` to git
-- Environment variables documented in `.env.example`
-
-## 🐛 Common Issues
-
-### "npm ERR! 402 Payment Required"
-- You're trying to publish to a scope that requires payment
-- Use `npm publish --access public` for scoped packages
-
-### "npm ERR! 403 Forbidden"
-- Not logged in: `npm login`
-- Wrong permissions: Verify you own the package name
-
-### "Module not found" after publishing
-- Verify `files` field in package.json includes all necessary files
-- Check that `dist/` is included
-- Test with `npm pack` before publishing
-
-### Package too large
-- Current size (153.3 kB) is acceptable
-- If it grows, exclude unnecessary files in .npmignore
-
-## 📞 Support
-
-**Issues:**
-- GitHub Issues: https://github.com/vibesec/vibesec/issues
-- Email: support@vibesec.dev
-
-**Documentation:**
-- Main README: /README.md
-- MCP Setup: /docs/MCP_SETUP.md
-- Changelog: /CHANGELOG.md
-
----
-
-**Last Updated:** 2025-10-21
-**Package Version:** 0.1.0
-**Maintainer:** VibeSec Team
+- **npm package**: https://www.npmjs.com/package/vibesec
+- **GitHub releases**: https://github.com/ferg-cod3s/vibesec-bun-poc/releases
+- **Issues**: https://github.com/ferg-cod3s/vibesec-bun-poc/issues

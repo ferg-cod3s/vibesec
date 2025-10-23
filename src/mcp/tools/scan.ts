@@ -8,7 +8,6 @@
 import { Scanner } from '../../../scanner/core/engine';
 import { Finding, Severity, ScanResult as CoreScanResult } from '../../../scanner/core/types';
 import { MCPTool } from '../types';
-import { validatePath, PathValidationError } from '../../../lib/path-validator';
 
 /**
  * Input parameters for vibesec_scan tool
@@ -118,22 +117,10 @@ export async function handleScan(params: unknown): Promise<ScanToolResult> {
   // Validate and parse parameters
   const scanParams = validateScanParams(params);
 
-  // Determine and validate scan path (single file or directory)
-  let scanPath: string;
-  try {
-    const inputPath = scanParams.basePath || process.cwd();
-    // Validate the path to prevent path traversal attacks
-    // We allow external paths for MCP since AI assistants may need to scan anywhere
-    // but we still sanitize and normalize the path
-    scanPath = validatePath(inputPath, { allowExternal: true });
-  } catch (error) {
-    if (error instanceof PathValidationError) {
-      throw new Error(`Invalid base path: ${error.message}`);
-    }
-    throw error;
-  }
+  // Determine scan path (single file or directory)
+  const scanPath = scanParams.basePath || process.cwd();
 
-  // Create scanner with validated options
+  // Create scanner with options
   const scanner = new Scanner({
     path: scanPath,
     severity: scanParams.severity ? (scanParams.severity.toLowerCase() as Severity) : Severity.LOW,
