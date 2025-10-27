@@ -122,7 +122,7 @@ rules:
       - go
     enabled: true
     patterns:
-      - regex: "exec\\.Command\\s*\\(\\s*[\"']sh[\"']\\s*,\\s*[\"\'](-c|/c)[\"']"
+      - regex: "exec\\.Command\\s*\\(\\s*[\"']sh[\"']\\s*,\\s*[\"'](-c|/c)[\"']"
         flags: gi
       - regex: "exec\\.Command\\s*\\([^,)]*\\+[^)]*\\)"
         flags: gi
