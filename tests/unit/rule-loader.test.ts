@@ -77,10 +77,10 @@ metadata:
       const loader = new RuleLoader(testRulesPath);
       const rules = await loader.load();
 
-      expect(rules[0].metadata.cwe).toBe('CWE-79');
-      expect(rules[0].metadata.owasp).toBe('A7:2017');
-      expect(rules[0].metadata.tags).toContain('xss');
-      expect(rules[0].metadata.tags).toContain('injection');
+      expect(rules[0].metadata?.cwe).toBe('CWE-79');
+      expect(rules[0].metadata?.owasp).toBe('A7:2017');
+      expect(rules[0].metadata?.tags).toContain('xss');
+      expect(rules[0].metadata?.tags).toContain('injection');
     });
 
     it('should parse metadata from top-level fields (backward compatibility)', async () => {
@@ -102,9 +102,9 @@ tags:
       const loader = new RuleLoader(testRulesPath);
       const rules = await loader.load();
 
-      expect(rules[0].metadata.cwe).toBe('CWE-95');
-      expect(rules[0].metadata.owasp).toBe('A1:2021');
-      expect(rules[0].metadata.tags).toContain('eval');
+      expect(rules[0].metadata?.cwe).toBe('CWE-95');
+      expect(rules[0].metadata?.owasp).toBe('A1:2021');
+      expect(rules[0].metadata?.tags).toContain('eval');
     });
 
     it('should convert string patterns to Pattern objects', async () => {
@@ -313,7 +313,7 @@ name: Incomplete Rule
       // Verify at least one known rule exists
       const sqlInjectionRule = rules.find(r => r.id.includes('sql-injection'));
       expect(sqlInjectionRule).toBeDefined();
-      expect(sqlInjectionRule?.metadata.cwe).toBeDefined();
+      expect(sqlInjectionRule?.metadata?.cwe).toBeDefined();
     });
   });
 });
