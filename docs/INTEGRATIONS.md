@@ -65,12 +65,12 @@ Add to `.vibesec.yaml`:
 integrations:
   snyk:
     enabled: true
-    token: ${SNYK_TOKEN}  # Use environment variable
+    token: ${SNYK_TOKEN} # Use environment variable
 
     # Optional settings
-    severity_threshold: high  # Only report high/critical
-    fail_on_issues: true      # Fail scan if Snyk finds issues
-    organization: my-org      # Snyk organization slug
+    severity_threshold: high # Only report high/critical
+    fail_on_issues: true # Fail scan if Snyk finds issues
+    organization: my-org # Snyk organization slug
 ```
 
 **3. Set Environment Variable**
@@ -150,9 +150,9 @@ integrations:
     token: ${SOCKET_TOKEN}
 
     # Optional settings
-    block_malicious: true     # Block scan on malicious packages
-    check_licenses: true      # Check license compatibility
-    alert_on_changes: true    # Alert on dependency changes
+    block_malicious: true # Block scan on malicious packages
+    check_licenses: true # Check license compatibility
+    alert_on_changes: true # Alert on dependency changes
 ```
 
 **3. Set Environment Variable**
@@ -181,10 +181,7 @@ Socket.dev findings include supply chain risk scores:
       "severity": "high",
       "package": "malicious-package@1.0.0",
       "risk_score": 85,
-      "issues": [
-        "Contains obfuscated code",
-        "Makes network requests to suspicious domains"
-      ],
+      "issues": ["Contains obfuscated code", "Makes network requests to suspicious domains"],
       "fix": {
         "recommendation": "Remove this package and find an alternative"
       }
@@ -215,7 +212,7 @@ Create `.github/workflows/vibesec.yml`:
 name: VibeSec Security Scan
 on:
   push:
-    branches: [main, develop]
+    branches: [main, dev]
   pull_request:
     branches: [main]
 
@@ -246,19 +243,19 @@ jobs:
 
 #### Action Inputs
 
-| Input | Required | Default | Description |
-|-------|----------|---------|-------------|
-| `fail-on` | No | `none` | Severity level to fail on |
-| `integrations` | No | `[]` | Comma-separated integrations |
-| `output-format` | No | `sarif` | Output format |
-| `config-path` | No | `.vibesec.yaml` | Config file path |
-| `exclude` | No | `[]` | Patterns to exclude |
+| Input           | Required | Default         | Description                  |
+| --------------- | -------- | --------------- | ---------------------------- |
+| `fail-on`       | No       | `none`          | Severity level to fail on    |
+| `integrations`  | No       | `[]`            | Comma-separated integrations |
+| `output-format` | No       | `sarif`         | Output format                |
+| `config-path`   | No       | `.vibesec.yaml` | Config file path             |
+| `exclude`       | No       | `[]`            | Patterns to exclude          |
 
 #### PR Annotations
 
 VibeSec automatically adds inline comments to pull requests:
 
-```markdown
+````markdown
 ⚠️ **Security Issue Found** (High)
 
 **Hardcoded API Key Detected**
@@ -268,17 +265,21 @@ API keys should be stored in environment variables, not hardcoded.
 📍 Location: `src/config/api.ts:12`
 
 🔧 **Fix:**
+
 ```typescript
 // Before
-const API_KEY = "sk_live_abc123";
+const API_KEY = 'sk_live_abc123';
 
 // After
 const API_KEY = process.env.API_KEY;
 ```
+````
 
 🔗 References:
+
 - [OWASP A3:2017](https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure)
-```
+
+````
 
 #### Security Tab Integration
 
@@ -320,7 +321,7 @@ vibesec:
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-```
+````
 
 #### Security Dashboard Integration
 
@@ -337,6 +338,7 @@ vibesec:
 ```
 
 Findings appear in:
+
 - Merge Request Security Widget
 - Security Dashboard
 - Vulnerability Report
@@ -445,6 +447,7 @@ pipeline {
 #### Jenkins Plugin (Future)
 
 Coming soon: Native Jenkins plugin with:
+
 - Dashboard widget
 - Trend analysis
 - Build failure thresholds
@@ -469,7 +472,7 @@ Coming soon: Native Jenkins plugin with:
 
 ```typescript
 // Extension will highlight issues inline:
-const apiKey = "sk_live_abc123";  // ⚠️ Hardcoded API key detected
+const apiKey = 'sk_live_abc123'; // ⚠️ Hardcoded API key detected
 ```
 
 ---
@@ -513,7 +516,7 @@ integrations:
     webhook_url: ${SLACK_WEBHOOK_URL}
 
     # Optional settings
-    channel: "#security-alerts"
+    channel: '#security-alerts'
     notify_on:
       - critical
       - high
@@ -574,13 +577,14 @@ integrations:
     notify_on:
       - critical
       - high
-    username: "VibeSec Bot"
-    avatar_url: "https://vibesec.dev/logo.png"
+    username: 'VibeSec Bot'
+    avatar_url: 'https://vibesec.dev/logo.png'
 ```
 
 #### Notification Format
 
 Rich embeds with:
+
 - Color-coded severity
 - Finding details
 - Links to reports
@@ -681,8 +685,8 @@ on('scan:complete', async (results) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       findings: results.findings,
-      summary: results.summary
-    })
+      summary: results.summary,
+    }),
   });
 
   // Send email notifications
@@ -690,7 +694,7 @@ on('scan:complete', async (results) => {
     await sendEmail({
       to: '[email protected]',
       subject: `CRITICAL: ${results.summary.critical} security issues found`,
-      body: formatFindings(results.findings)
+      body: formatFindings(results.findings),
     });
   }
 });
@@ -775,6 +779,7 @@ Error: Snyk authentication failed
 ```
 
 **Solution:**
+
 - Verify `SNYK_TOKEN` is set correctly
 - Check token hasn't expired
 - Ensure token has appropriate permissions
@@ -788,6 +793,7 @@ Error: Socket.dev rate limit exceeded
 ```
 
 **Solution:**
+
 - Wait for rate limit to reset
 - Upgrade to higher tier
 - Reduce scan frequency
@@ -801,6 +807,7 @@ Error: GitHub Action timed out
 ```
 
 **Solution:**
+
 - Increase timeout: `timeout-minutes: 15`
 - Optimize scan with excludes
 - Use incremental scanning
@@ -814,6 +821,7 @@ Error: Slack webhook returned 404
 ```
 
 **Solution:**
+
 - Regenerate webhook URL
 - Check webhook wasn't deleted
 - Verify channel exists
@@ -823,6 +831,7 @@ Error: Slack webhook returned 404
 ## Integration Roadmap
 
 ### Q1 2026
+
 - ✅ Snyk
 - ✅ Socket.dev
 - ✅ GitHub Actions
@@ -831,18 +840,21 @@ Error: Slack webhook returned 404
 - ✅ Discord
 
 ### Q2 2026
+
 - 🔄 VS Code extension
 - 🔄 CircleCI orb
 - 🔄 Jenkins plugin
 - 🔄 JIRA integration
 
 ### Q3 2026
+
 - ⏳ JetBrains plugin
 - ⏳ Linear integration
 - ⏳ Azure DevOps
 - ⏳ Bitbucket Pipelines
 
 ### Q4 2026
+
 - ⏳ Enterprise SSO integrations
 - ⏳ Custom webhook transformations
 - ⏳ Advanced notification rules
