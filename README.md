@@ -201,6 +201,19 @@ output:
 - **[Tech Stack](docs/TECH_STACK.md)** - TypeScript/Bun implementation details
 - **[API Documentation](docs/API.md)** - CLI and programmatic usage
 
+### MCP Integration (AI Assistant Setup)
+
+**[📖 MCP Installation Guide](docs/MCP_INSTALLATION_GUIDE.md)** - Complete setup for all platforms
+
+Choose your platform:
+
+- **[OpenCode Quick Start](docs/QUICKSTART_OPENCODE.md)** - Terminal users (2 min setup)
+- **[Claude Desktop Quick Start](docs/QUICKSTART_CLAUDE_DESKTOP.md)** - Desktop app users (2 min setup)
+- **[Cursor Quick Start](docs/QUICKSTART_CURSOR.md)** - IDE users (2 min setup)
+- **[Quick Start Index](docs/QUICKSTART_INDEX.md)** - All platforms overview
+
+**Status**: ✅ Live on Cloudflare Workers at `wss://vibesec.vibesec.workers.dev`
+
 ### Core Documentation
 
 - **[Architecture](docs/ARCHITECTURE.md)** - System design and components
