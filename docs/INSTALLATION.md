@@ -19,7 +19,7 @@ vibesec --version
 
 ```bash
 # Clone the repository
-git clone https://github.com/vibesec/vibesec.git
+git clone https://github.com/ferg-cod3s/vibesec.git
 cd vibesec
 
 # Install dependencies
@@ -315,7 +315,7 @@ After updating, restart your AI assistant to load the new version.
 
 ### Community
 
-- **GitHub Issues**: [Create an issue](https://github.com/vibesec/vibesec/issues)
+- **GitHub Issues**: [Create an issue](https://github.com/ferg-cod3s/vibesec/issues)
 - **Discord**: [Join our community](https://discord.gg/vibesec)
 - **Twitter**: [@vibesec_dev](https://twitter.com/vibesec_dev)
 

@@ -867,7 +867,7 @@ Error: Slack webhook returned 404
 Need help with integrations?
 
 - **Documentation:** [docs.vibesec.dev/integrations](https://docs.vibesec.dev/integrations)
-- **GitHub Issues:** [github.com/vibesec/vibesec/issues](https://github.com/vibesec/vibesec/issues)
+- **GitHub Issues:** [github.com/ferg-cod3s/vibesec/issues](https://github.com/ferg-cod3s/vibesec/issues)
 - **Discord:** [discord.gg/vibesec](https://discord.gg/vibesec)
 - **Email:** [email protected]
 

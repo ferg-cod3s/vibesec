@@ -9,6 +9,7 @@ No security expertise required. VibeSec speaks plain language.
 ## 📋 What You'll Learn
 
 By the end of this guide, you'll know how to:
+
 1. Install VibeSec on your machine
 2. Run your first security scan
 3. Understand the results
@@ -69,11 +70,13 @@ vibesec scan .
 ```
 
 **What happens:**
+
 - VibeSec scans all code files in the current directory
 - Looks for security vulnerabilities
 - Shows results in your terminal
 
 **Example output:**
+
 ```
 ✔ Scan complete!
 
@@ -156,24 +159,26 @@ Security Score:
 
 ### What the Scores Mean
 
-| Score | Grade | Meaning |
-|-------|-------|---------|
-| 98-100 | A+ | Excellent - Outstanding security |
-| 90-97 | A | Very Good - Strong security posture |
-| 80-89 | B | Good - Some improvements needed |
-| 70-79 | C | Fair - Security needs attention |
-| 60-69 | D | Poor - Significant concerns |
-| 0-59 | F | Critical - Immediate action required |
+| Score  | Grade | Meaning                              |
+| ------ | ----- | ------------------------------------ |
+| 98-100 | A+    | Excellent - Outstanding security     |
+| 90-97  | A     | Very Good - Strong security posture  |
+| 80-89  | B     | Good - Some improvements needed      |
+| 70-79  | C     | Fair - Security needs attention      |
+| 60-69  | D     | Poor - Significant concerns          |
+| 0-59   | F     | Critical - Immediate action required |
 
 ### How Scores Are Calculated
 
 VibeSec deducts points based on severity:
+
 - **Critical issue** = -25 points
 - **High issue** = -10 points
 - **Medium issue** = -5 points
 - **Low issue** = -2 points
 
 **Example:** If you have 2 critical issues and 1 high issue:
+
 - Start: 100 points
 - 2 critical × 25 = -50 points
 - 1 high × 10 = -10 points
@@ -192,6 +197,7 @@ vibesec scan -f stakeholder -o security-report.txt
 ```
 
 This creates a board-ready report with:
+
 - ✅ Executive summary
 - ✅ Security score with benchmark
 - ✅ Risk assessment (HIGH/MODERATE/LOW)
@@ -262,6 +268,7 @@ NO_COLOR=1 vibesec scan .
 ```
 
 This removes all color codes, making output friendly for:
+
 - Screen readers
 - Terminals without color support
 - Screen recording tools
@@ -426,7 +433,7 @@ vibesec scan prototype/ --explain
 
 ```javascript
 // ❌ BAD
-const apiKey = "sk_live_1234567890";
+const apiKey = 'sk_live_1234567890';
 
 // ✅ GOOD
 const apiKey = process.env.API_KEY;
@@ -473,11 +480,13 @@ res.send(`<div>${sanitized}</div>`);
 ### Something Not Working?
 
 1. **Check the version:**
+
    ```bash
    vibesec --version
    ```
 
 2. **View all options:**
+
    ```bash
    vibesec scan --help
    ```
@@ -490,15 +499,19 @@ res.send(`<div>${sanitized}</div>`);
 ### Common Issues
 
 **"vibesec: command not found"**
+
 - Solution: Install VibeSec first: `npm install -g vibesec`
 
 **"Cannot find path"**
+
 - Solution: Check you're in the right directory: `pwd`
 
 **"No files to scan"**
+
 - Solution: Make sure you're in a code directory with .js/.ts files
 
 **Colors not working**
+
 - Solution: Use `--no-color` flag
 
 ---
@@ -517,7 +530,7 @@ After completing this guide, you can:
 
 3. **Contribute**
    - [Contributing Guide](CONTRIBUTING.md) - Help improve VibeSec
-   - Report issues on [GitHub](https://github.com/vibesec/vibesec)
+   - Report issues on [GitHub](https://github.com/ferg-cod3s/vibesec)
 
 ---
 
@@ -553,6 +566,7 @@ vibesec scan --help
 ## 🎉 You're Ready!
 
 Congratulations! You now know how to:
+
 - ✅ Run security scans
 - ✅ Read plain language reports
 - ✅ Generate stakeholder reports

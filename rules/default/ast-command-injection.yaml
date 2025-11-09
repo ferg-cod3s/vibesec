@@ -1,0 +1,142 @@
+id: ast-command-injection
+name: AST-Based Command Injection Detection
+description: |
+  Detects command injection vulnerabilities by tracking user input through
+  variable assignments to dangerous function calls (exec, spawn, shell, etc.).
+  Uses AST analysis to follow data flow patterns that simple regex might miss,
+  including multi-step variable manipulation before execution.
+
+severity: critical
+category: injection
+languages:
+  - javascript
+  - typescript
+  - python
+
+patterns:
+  - type: ast
+    pattern: |
+      (CallExpr
+        function: /(exec|spawn|execSync|spawnSync|child_process\.exec|child_process\.spawn)/
+        arguments: [
+          (BinaryExpr
+            operator: "+"
+            left: (Identifier
+              name: (VariableRef
+                source: (Parameter
+                  name: /(req|request|user|input|data|cmd|command)/
+                )
+              )
+            )
+            right: (StringLiteral)
+          )
+        ]
+      )
+
+  - type: ast
+    pattern: |
+      (TemplateLiteral
+        expressions: [
+          (Identifier
+            name: (VariableRef
+              source: (Parameter
+                name: /(req|request|user|input|data|cmd|command)/
+              )
+            )
+          )
+        ]
+        containing: (CallExpr
+          function: /(exec|spawn|execSync|spawnSync|child_process\.|os\.exec)/
+        )
+      )
+
+  - type: ast
+    pattern: |
+      (FunctionDecl
+        body: [
+          (VariableDecl
+            name: /(cmd|command|query)/
+            value: (BinaryExpr
+              left: (Identifier
+                name: (VariableRef
+                  source: (Parameter
+                    name: /(req|request|user|input)/
+                  )
+                )
+              )
+            )
+          )
+          (CallExpr
+            function: /(exec|spawn|execSync)/
+            arguments: [(Identifier name: /(cmd|command|query)/)]
+          )
+        ]
+      )
+
+confidence: 0.95
+
+fix:
+  recommendation: |
+    ## How to Fix Command Injection Vulnerabilities
+
+    ### 1. Use Safe APIs with Argument Arrays
+    ```javascript
+    // ❌ Vulnerable - String concatenation
+    const command = "ls " + userDirectory;
+    exec(command);
+
+    // ✅ Secure - Argument array
+    exec("ls", [userDirectory]);
+    ```
+
+    ### 2. Input Validation and Sanitization
+    ```javascript
+    // ✅ Validate input format
+    const allowedDirs = ['home', 'documents', 'downloads'];
+    if (!allowedDirs.includes(userDirectory)) {
+      throw new Error('Invalid directory');
+    }
+
+    // ✅ Sanitize input
+    const sanitizedDir = userDirectory.replace(/[^a-zA-Z0-9_-]/g, '');
+    ```
+
+    ### 3. Use Specific Functions Instead of Shell Commands
+    ```javascript
+    // ❌ Vulnerable - Shell execution
+    exec(`rm -rf ${userPath}`);
+
+    // ✅ Secure - Node.js fs module
+    fs.rmSync(userPath, { recursive: true });
+    ```
+
+    ### 4. Whitelist Approach
+    ```javascript
+    const allowedCommands = {
+      'list': 'ls',
+      'size': 'du',
+      'count': 'wc'
+    };
+
+    if (!allowedCommands[userCommand]) {
+      throw new Error('Command not allowed');
+    }
+    ```
+
+    ### Time Estimate: 30-60 minutes per occurrence
+    ### Who can fix: Any developer with system-level programming knowledge
+
+references:
+  - https://owasp.org/www-community/attacks/Command_Injection
+  - https://cwe.mitre.org/data/definitions/78.html
+  - https://portswigger.net/web-security/os-command-injection
+
+metadata:
+  cwe: 'CWE-78'
+  owasp: 'A03:2021'
+  tags:
+    - production-blocker
+    - ai-prone
+
+author: 'VibeSec Security Team'
+date: '2025-01-27'

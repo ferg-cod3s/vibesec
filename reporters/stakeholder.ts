@@ -1,8 +1,8 @@
-import chalk from 'chalk';
 import { ScanResult, Finding, Severity } from '../scanner/core/types';
 import {
   calculateSecurityScore,
   getBenchmarkComparison,
+  SecurityScore,
 } from '../lib/utils/security-score';
 
 /**
@@ -24,10 +24,7 @@ export class StakeholderReporter {
    */
   generate(result: ScanResult): string {
     const securityScore = calculateSecurityScore(result);
-    const benchmark = getBenchmarkComparison(
-      securityScore.score,
-      result.scan.filesScanned
-    );
+    const benchmark = getBenchmarkComparison(securityScore.score, result.scan.filesScanned);
 
     const lines: string[] = [];
 
@@ -137,10 +134,7 @@ export class StakeholderReporter {
   /**
    * Format risk assessment
    */
-  private formatRiskAssessment(
-    result: ScanResult,
-    securityScore: any
-  ): string {
+  private formatRiskAssessment(result: ScanResult, securityScore: SecurityScore): string {
     const { bySeverity } = result.summary;
     const lines: string[] = [];
 
@@ -166,7 +160,9 @@ export class StakeholderReporter {
 
     if (bySeverity.critical > 0) {
       lines.push('');
-      lines.push(`⚠️  CRITICAL: ${bySeverity.critical} critical issue${bySeverity.critical > 1 ? 's' : ''} require immediate remediation.`);
+      lines.push(
+        `⚠️  CRITICAL: ${bySeverity.critical} critical issue${bySeverity.critical > 1 ? 's' : ''} require immediate remediation.`
+      );
     }
 
     return lines.join('\n');
@@ -177,9 +173,7 @@ export class StakeholderReporter {
    */
   private formatKeyIssues(result: ScanResult): string {
     const keyFindings = result.findings
-      .filter(
-        (f) => f.severity === Severity.CRITICAL || f.severity === Severity.HIGH
-      )
+      .filter((f) => f.severity === Severity.CRITICAL || f.severity === Severity.HIGH)
       .slice(0, 5); // Top 5 issues
 
     const lines: string[] = [];
@@ -231,14 +225,10 @@ export class StakeholderReporter {
       actionNumber++;
     }
 
-    lines.push(
-      `  ${actionNumber}. Conduct follow-up scan after remediation to verify fixes`
-    );
+    lines.push(`  ${actionNumber}. Conduct follow-up scan after remediation to verify fixes`);
     actionNumber++;
 
-    lines.push(
-      `  ${actionNumber}. Implement regular security scanning in development workflow`
-    );
+    lines.push(`  ${actionNumber}. Implement regular security scanning in development workflow`);
 
     return lines.join('\n');
   }
@@ -246,10 +236,7 @@ export class StakeholderReporter {
   /**
    * Format business impact assessment
    */
-  private formatBusinessImpact(
-    result: ScanResult,
-    securityScore: any
-  ): string {
+  private formatBusinessImpact(result: ScanResult, _securityScore: SecurityScore): string {
     const { bySeverity } = result.summary;
     const lines: string[] = [];
 
@@ -283,9 +270,7 @@ export class StakeholderReporter {
     lines.push('');
     lines.push('Cost of Remediation:');
     const estimatedHours = this.estimateRemediationHours(result);
-    lines.push(
-      `  Estimated engineering time: ${estimatedHours.min}-${estimatedHours.max} hours`
-    );
+    lines.push(`  Estimated engineering time: ${estimatedHours.min}-${estimatedHours.max} hours`);
 
     return lines.join('\n');
   }

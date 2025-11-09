@@ -1,0 +1,168 @@
+id: ast-xss
+name: AST-Based Cross-Site Scripting (XSS) Detection
+description: |
+  Detects XSS vulnerabilities by tracking user input from request parameters
+  to HTML rendering points using AST analysis. Catches complex patterns where
+  user data flows through variables before being rendered without proper escaping.
+
+severity: high
+category: injection
+languages:
+  - javascript
+  - typescript
+
+patterns:
+  - type: ast
+    pattern: |
+      (CallExpr
+        function: /(innerHTML|outerHTML|document\.write|document\.writeln)/
+        arguments: [
+          (Identifier
+            name: (VariableRef
+              source: (Parameter
+                name: /(req|request|user|input|data|comment|message)/
+              )
+            )
+          )
+        ]
+      )
+
+  - type: ast
+    pattern: |
+      (CallExpr
+        function: /(html|text|append|prepend|before|after)/
+        arguments: [
+          (TemplateLiteral
+            expressions: [
+              (Identifier
+                name: (VariableRef
+                  source: (Parameter
+                    name: /(req|request|user|input|data)/
+                  )
+                )
+              )
+            ]
+          )
+        ]
+        object: (Identifier name: /\$/)
+      )
+
+  - type: ast
+    pattern: |
+      (FunctionDecl
+        body: [
+          (VariableDecl
+            name: /(content|html|output)/
+            value: (Identifier
+              name: (VariableRef
+                source: (Parameter
+                  name: /(req|request|user|input)/
+                )
+              )
+            )
+          )
+          (CallExpr
+            function: /(innerHTML|outerHTML|document\.write)/
+            arguments: [(Identifier name: /(content|html|output)/)]
+          )
+        ]
+      )
+
+  - type: ast
+    pattern: |
+      (ReturnStmt
+        value: (TemplateLiteral
+          expressions: [
+            (Identifier
+              name: (VariableRef
+                source: (Parameter
+                  name: /(req|request|user|input|data)/
+                )
+              )
+            )
+          ]
+          containing: (FunctionDecl
+            name: /(render|template|view)/
+          )
+        )
+      )
+
+confidence: 0.85
+
+fix:
+  recommendation: |
+    ## How to Fix XSS Vulnerabilities
+
+    ### 1. Use Text Content Instead of HTML
+    ```javascript
+    // ❌ Vulnerable - Direct HTML insertion
+    element.innerHTML = userInput;
+
+    // ✅ Secure - Text content only
+    element.textContent = userInput;
+    ```
+
+    ### 2. Proper HTML Escaping
+    ```javascript
+    // ✅ Escape HTML entities
+    function escapeHtml(unsafe) {
+      return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    element.innerHTML = escapeHtml(userInput);
+    ```
+
+    ### 3. Use Security-Focused Libraries
+    ```javascript
+    // ✅ Use DOMPurify for HTML sanitization
+    import DOMPurify from 'dompurify';
+    element.innerHTML = DOMPurify.sanitize(userInput);
+
+    // ✅ Use template engines with auto-escaping
+    // React, Vue, Angular automatically escape content
+    const message = { text: userInput };
+    <div>{message.text}</div> // Auto-escaped in React
+    ```
+
+    ### 4. Content Security Policy (CSP)
+    ```javascript
+    // ✅ Add CSP headers
+    app.use((req, res, next) => {
+      res.setHeader(
+        'Content-Security-Policy',
+        "default-src 'self'; script-src 'self' 'unsafe-inline'"
+      );
+      next();
+    });
+    ```
+
+    ### 5. Validate Input Types
+    ```javascript
+    // ✅ Validate expected input format
+    if (typeof userInput !== 'string' || userInput.length > 1000) {
+      throw new Error('Invalid input');
+    }
+    ```
+
+    ### Time Estimate: 20-45 minutes per occurrence
+    ### Who can fix: Frontend developer or full-stack developer
+
+references:
+  - https://owasp.org/www-community/attacks/xss/
+  - https://cwe.mitre.org/data/definitions/79.html
+  - https://portswigger.net/web-security/cross-site-scripting
+
+metadata:
+  cwe: 'CWE-79'
+  owasp: 'A03:2021'
+  tags:
+    - production-blocker
+    - ai-prone
+
+author: 'VibeSec Security Team'
+date: '2025-01-27'

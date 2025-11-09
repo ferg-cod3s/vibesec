@@ -9,8 +9,23 @@ export interface ScanCache {
 }
 
 export class IncrementalScanner {
+  private gitQueue: Promise<void> = Promise.resolve();
+  private readonly MAX_CONCURRENT_GIT_PROCESSES = 5;
+  private gitProcessCount = 0;
+
   private async execGit(args: string[], cwd: string): Promise<string> {
     return new Promise((resolve, reject) => {
+      // Wait for available slot
+      const waitForSlot = () => {
+        if (this.gitProcessCount < this.MAX_CONCURRENT_GIT_PROCESSES) {
+          this.gitProcessCount++;
+          return;
+        }
+        setTimeout(waitForSlot, 10);
+      };
+
+      waitForSlot();
+
       const proc = spawn('git', args, { cwd });
       let stdout = '';
       let stderr = '';
@@ -19,18 +34,50 @@ export class IncrementalScanner {
       proc.stderr.on('data', (data) => (stderr += data.toString()));
 
       proc.on('close', (code) => {
+        this.gitProcessCount--;
         if (code !== 0) reject(new Error(stderr));
         else resolve(stdout.trim());
+      });
+
+      proc.on('error', (error) => {
+        this.gitProcessCount--;
+        reject(error);
       });
     });
   }
 
+  async batchGitHashes(filePaths: string[], cwd: string): Promise<Map<string, string>> {
+    const results = new Map<string, string>();
+    const batchSize = 10;
+
+    for (let i = 0; i < filePaths.length; i += batchSize) {
+      const batch = filePaths.slice(i, i + batchSize);
+      const batchPromises = batch.map(async (filePath) => {
+        try {
+          const hash = await this.execGit(['hash-object', filePath], cwd);
+          return { filePath, hash };
+        } catch {
+          return { filePath, hash: '' };
+        }
+      });
+
+      const batchResults = await Promise.all(batchPromises);
+      batchResults.forEach(({ filePath, hash }) => {
+        if (hash) results.set(filePath, hash);
+      });
+
+      // Small delay between batches to prevent overwhelming the system
+      if (i + batchSize < filePaths.length) {
+        await new Promise((resolve) => setTimeout(resolve, 50));
+      }
+    }
+
+    return results;
+  }
+
   async getChangedFiles(cwd: string, baseBranch = 'main'): Promise<string[]> {
     try {
-      const output = await this.execGit(
-        ['diff', '--name-only', baseBranch, 'HEAD'],
-        cwd
-      );
+      const output = await this.execGit(['diff', '--name-only', baseBranch, 'HEAD'], cwd);
       return output ? output.split('\n').filter((f) => f.length > 0) : [];
     } catch {
       return [];
@@ -45,10 +92,7 @@ export class IncrementalScanner {
     }
   }
 
-  getCachedResults(
-    cache: ScanCache,
-    fileHash: string
-  ): Finding[] | undefined {
+  getCachedResults(cache: ScanCache, fileHash: string): Finding[] | undefined {
     for (const [hash, results] of cache.results.entries()) {
       if (hash === fileHash) return results;
     }

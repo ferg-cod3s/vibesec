@@ -1,0 +1,194 @@
+id: ast-path-traversal
+name: AST-Based Path Traversal Detection
+description: |
+  Detects path traversal vulnerabilities by tracking user input through
+  file system operations. Uses AST analysis to follow data flow from
+  request parameters to file access functions, catching complex patterns
+  that involve variable manipulation before file operations.
+
+severity: high
+category: injection
+languages:
+  - javascript
+  - typescript
+  - python
+
+patterns:
+  - type: ast
+    pattern: |
+      (CallExpr
+        function: /(readFile|writeFile|unlink|readdir|stat|existsSync|readFileSync)/
+        arguments: [
+          (BinaryExpr
+            operator: "+"
+            left: (StringLiteral value: /(\/|\\|\.\/)/)
+            right: (Identifier
+              name: (VariableRef
+                source: (Parameter
+                  name: /(req|request|user|input|data|file|path|filename)/
+                )
+              )
+            )
+          )
+        ]
+      )
+
+  - type: ast
+    pattern: |
+      (CallExpr
+        function: /(readFile|writeFile|unlink|readdir|stat|existsSync|readFileSync)/
+        arguments: [
+          (TemplateLiteral
+            expressions: [
+              (Identifier
+                name: (VariableRef
+                  source: (Parameter
+                    name: /(req|request|user|input|data|file|path|filename)/
+                  )
+                )
+              )
+            ]
+            containing: (StringLiteral value: /\.\./)
+          )
+        ]
+      )
+
+  - type: ast
+    pattern: |
+      (FunctionDecl
+        body: [
+          (VariableDecl
+            name: /(filePath|fileName|path)/
+            value: (BinaryExpr
+              left: (StringLiteral value: /(\/|\\|\.\/)/)
+              right: (Identifier
+                name: (VariableRef
+                  source: (Parameter
+                    name: /(req|request|user|input|data|file)/
+                  )
+                )
+              )
+            )
+          )
+          (CallExpr
+            function: /(readFile|writeFile|unlink|readdir|stat)/
+            arguments: [(Identifier name: /(filePath|fileName|path)/)]
+          )
+        ]
+      )
+
+  - type: ast
+    pattern: |
+      (CallExpr
+        function: /(fs\.|path\.join|path\.resolve)/
+        arguments: [
+          (Identifier
+            name: (VariableRef
+              source: (Parameter
+                name: /(req|request|user|input|data|file|path)/
+              )
+            )
+          )
+        ]
+        containing: (CallExpr
+          function: /(readFile|writeFile|unlink|readdir)/
+        )
+      )
+
+confidence: 0.9
+
+fix:
+  recommendation: |
+    ## How to Fix Path Traversal Vulnerabilities
+
+    ### 1. Input Validation and Sanitization
+    ```javascript
+    // ❌ Vulnerable - Direct use of user input
+    const filePath = '/uploads/' + req.body.filename;
+    fs.readFile(filePath, callback);
+
+    // ✅ Secure - Input validation
+    const filename = req.body.filename;
+    if (!/^[a-zA-Z0-9._-]+$/.test(filename)) {
+      throw new Error('Invalid filename');
+    }
+    const filePath = path.join('/uploads', filename);
+    ```
+
+    ### 2. Path Normalization and Validation
+    ```javascript
+    // ✅ Normalize and validate path
+    const userPath = req.body.path;
+    const normalizedPath = path.normalize(userPath);
+    const fullPath = path.join('/safe/directory', normalizedPath);
+
+    // Ensure path stays within allowed directory
+    if (!fullPath.startsWith('/safe/directory/')) {
+      throw new Error('Path traversal attempt detected');
+    }
+    ```
+
+    ### 3. Whitelist Approach
+    ```javascript
+    // ✅ Use whitelist of allowed files
+    const allowedFiles = ['profile.jpg', 'document.pdf', 'data.json'];
+    const filename = req.body.filename;
+
+    if (!allowedFiles.includes(filename)) {
+      throw new Error('File not allowed');
+    }
+
+    const filePath = path.join('/uploads', filename);
+    ```
+
+    ### 4. Use Safe File Access Patterns
+    ```javascript
+    // ✅ Extract filename, ignore path
+    const userPath = req.body.path;
+    const filename = path.basename(userPath); // Only get filename
+    const safePath = path.join('/uploads', filename);
+
+    // ✅ Additional validation
+    if (safePath !== path.join('/uploads', filename)) {
+      throw new Error('Invalid path');
+    }
+    ```
+
+    ### 5. Python Specific Fixes
+    ```python
+    # ❌ Vulnerable
+    filename = request.args.get('file')
+    with open('/uploads/' + filename, 'r') as f:
+        content = f.read()
+
+    # ✅ Secure
+    import os
+    filename = request.args.get('file')
+    if not filename or '/' in filename or '\\' in filename:
+        raise ValueError('Invalid filename')
+
+    safe_path = os.path.join('/uploads', filename)
+    if not safe_path.startswith('/uploads/'):
+        raise ValueError('Path traversal detected')
+
+    with open(safe_path, 'r') as f:
+        content = f.read()
+    ```
+
+    ### Time Estimate: 30-60 minutes per occurrence
+    ### Who can fix: Backend developer or full-stack developer
+
+references:
+  - https://owasp.org/www-community/attacks/Path_Traversal
+  - https://cwe.mitre.org/data/definitions/22.html
+  - https://portswigger.net/web-security/file-path-traversal
+
+metadata:
+  cwe: 'CWE-22'
+  owasp: 'A01:2021'
+  tags:
+    - production-blocker
+    - ai-prone
+
+author: 'VibeSec Security Team'
+date: '2025-01-27'

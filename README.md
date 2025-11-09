@@ -9,7 +9,7 @@ Catches vulnerabilities your AI assistant missed. Integrates directly with Claud
 
 ```bash
 # 2-minute setup for Claude Code
-git clone https://github.com/vibesec/vibesec.git
+git clone https://github.com/ferg-cod3s/vibesec.git
 cd vibesec
 npm install
 npm run build

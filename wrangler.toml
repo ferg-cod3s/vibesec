@@ -1,0 +1,26 @@
+name = "vibesec-mcp"
+main = "dist-cf/src/mcp/cloudflare-worker.js"
+compatibility_date = "2024-01-01"
+
+[build]
+command = "npm run build:cloudflare"
+
+# Environment variables (optional)
+[vars]
+# Add any environment variables your MCP server needs
+
+# Durable Objects (if needed for state management)
+# [[durable_objects.bindings]]
+# name = "MY_DURABLE_OBJECT"
+# class_name = "MyDurableObject"
+
+# KV storage (if needed for caching)
+# [[kv_namespaces]]
+# binding = "MY_KV"
+# id = "your_kv_namespace_id"
+
+# D1 database (if needed for persistent storage)
+# [[d1_databases]]
+# binding = "MY_DB"
+# database_name = "vibesec-db"
+# database_id = "your_database_id"

@@ -1,0 +1,88 @@
+rules:
+  - id: ast-sql-injection
+    name: SQL Injection Detected
+    description: SQL injection vulnerabilities detected in query construction
+    severity: critical
+    category: injection
+    languages:
+      - javascript
+      - typescript
+      - python
+    enabled: true
+    patterns:
+      - regex: "SELECT.*FROM.*WHERE.*\\$\\{.*\\}"
+        flags: gm
+      - regex: "`.*\\$\\{.*\\}.*`"
+        flags: gm
+      - regex: "SELECT.*FROM.*WHERE.*id.*=.*[\"'].*\\+.*[\"']"
+        flags: gm
+    fix:
+      template: Use parameterized queries or prepared statements instead of string concatenation
+      references:
+        - https://owasp.org/www-community/attacks/SQL_Injection
+        - https://cwe.mitre.org/data/definitions/89.html
+    metadata:
+      cwe: CWE-89
+      owasp: 'A03:2021'
+      tags:
+        - injection
+        - sql
+
+  - id: hardcoded-password
+    name: Hardcoded Password Detected
+    description: Passwords should never be hardcoded in source code. Store them securely in environment variables or secure credential stores.
+    severity: critical
+    category: secrets
+    languages:
+      - javascript
+      - typescript
+      - python
+      - go
+    enabled: true
+    patterns:
+      - regex: "(password|passwd|pwd)\\s*[=:]\\s*[\"'][^\"']{8,}[\"']"
+        flags: gi
+      - regex: "DB_PASSWORD\\s*=\\s*[\"'][^\"']+[\"']"
+        flags: gi
+    fix:
+      template: Store passwords in environment variables (e.g., process.env.DB_PASSWORD) or use a secure credential management system
+      references:
+        - https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure
+        - https://cwe.mitre.org/data/definitions/798.html
+    metadata:
+      cwe: CWE-798
+      owasp: 'A3:2017'
+      tags:
+        - secrets
+        - credentials
+        - passwords
+
+  - id: aws-credentials
+    name: AWS Credentials Detected
+    description: AWS credentials should never be hardcoded. Use IAM roles or environment variables.
+    severity: critical
+    category: secrets
+    languages:
+      - javascript
+      - typescript
+      - python
+      - go
+    enabled: true
+    patterns:
+      - regex: 'AKIA[0-9A-Z]{16}'
+        flags: g
+      - regex: "(aws[_-]?access[_-]?key[_-]?id|aws[_-]?secret[_-]?access[_-]?key)\\s*[=:]\\s*[\"'][A-Za-z0-9/+=]{20,}[\"']"
+        flags: gi
+    fix:
+      template: Use AWS IAM roles or store credentials in ~/.aws/credentials or environment variables
+      references:
+        - https://docs.aws.amazon.com/general/latest/gr/aws-access-keys-best-practices.html
+        - https://cwe.mitre.org/data/definitions/798.html
+    metadata:
+      cwe: CWE-798
+      owasp: 'A3:2017'
+      tags:
+        - secrets
+        - aws
+        - cloud
+        - credentials

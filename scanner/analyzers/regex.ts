@@ -1,11 +1,16 @@
-import { Finding, Rule, Location, FixRecommendation } from '../core/types';
+import { Finding, Rule, Location, FixRecommendation, Pattern } from '../core/types';
 
 export class RegexAnalyzer {
   async analyze(filePath: string, content: string, rule: Rule): Promise<Finding[]> {
     const findings: Finding[] = [];
 
-    for (const pattern of rule.patterns) {
-      const regex = new RegExp(pattern.regex, pattern.flags || 'g');
+    for (const p of rule.patterns as Pattern[]) {
+      // Support only regex-like patterns here
+      const regexSource = (p as any).regex ?? (p as any).pattern;
+      const flags = (p as any).flags || 'g';
+      if (!regexSource || (p as any).type === 'ast') continue;
+
+      const regex = new RegExp(regexSource as string, flags as string);
       const lines = content.split('\n');
 
       for (let i = 0; i < lines.length; i++) {
@@ -39,7 +44,7 @@ export class RegexAnalyzer {
             snippet,
             fix,
             metadata: {
-              confidence: this.calculateConfidence(match[0], pattern.regex),
+              confidence: this.calculateConfidence(match[0], String(regexSource)),
               cwe: rule.metadata?.cwe,
               owasp: rule.metadata?.owasp,
             },
@@ -56,7 +61,7 @@ export class RegexAnalyzer {
   private getSnippet(lines: string[], lineIndex: number, context: number = 2): string {
     const start = Math.max(0, lineIndex - context);
     const end = Math.min(lines.length, lineIndex + context + 1);
-    
+
     return lines
       .slice(start, end)
       .map((line, i) => {

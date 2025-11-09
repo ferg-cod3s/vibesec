@@ -7,6 +7,8 @@ import { StakeholderReporter } from '../../reporters/stakeholder';
 import { FriendlyErrorHandler } from '../../lib/errors/friendly-handler';
 import ora from 'ora';
 import chalk from 'chalk';
+import { ConfigLoader } from '../../src/config/config-loader';
+import { initCommand } from './init';
 
 // Check if colors should be disabled
 const NO_COLOR = process.env.NO_COLOR !== undefined || process.argv.includes('--no-color');
@@ -26,20 +28,61 @@ interface ScanCommandOptions {
   color?: boolean;
   rules?: string;
   parallel: boolean;
+  config?: string;
+  init?: boolean;
+  incremental?: boolean;
+  full?: boolean;
 }
 
-export async function scanCommand(
-  path: string,
-  options: ScanCommandOptions
-): Promise<void> {
+export async function scanCommand(path: string, options: ScanCommandOptions): Promise<void> {
   const errorHandler = new FriendlyErrorHandler();
 
   try {
     const isJson = options.format === 'json';
     const useExplain = options.explain || false;
 
+    // If user requested init wizard from scan
+    if (options.init) {
+      await initCommand({ config: options.config });
+      return;
+    }
+
+    // Validate flag combinations
+    if (options.incremental && options.full) {
+      throw new Error(
+        '--incremental and --full flags are mutually exclusive. Use one or the other.'
+      );
+    }
+
+    // Validate config file exists if specified
+    if (options.config) {
+      const fs = await import('fs').then((m) => m.promises);
+      try {
+        await fs.access(options.config);
+      } catch {
+        throw new Error(`Config file not found: ${options.config}`);
+      }
+    }
+
     // Validate severity
     const severity = validateSeverity(options.severity);
+
+    // Check if incremental mode is valid
+    if (options.incremental) {
+      const { execSync } = await import('child_process');
+      try {
+        execSync('git rev-parse --git-dir', { stdio: 'ignore' });
+      } catch {
+        console.warn(
+          '⚠️  Warning: --incremental mode requires a git repository. Falling back to full scan.'
+        );
+        options.incremental = false;
+      }
+    }
+
+    // Load config first and merge with CLI (CLI takes precedence)
+    const loader = new ConfigLoader();
+    const { config, source } = await loader.loadConfigWithSource(options.config);
 
     // Build scan options
     const scanOptions: ScanOptions = {
@@ -47,11 +90,21 @@ export async function scanCommand(
       severity,
       format: options.format as 'text' | 'json',
       output: options.output,
-      exclude: options.exclude,
-      include: options.include,
-      rulesPath: options.rules,
-      parallel: options.parallel,
+      exclude: options.exclude || config.scan?.exclude,
+      include: options.include || config.scan?.include,
+      rulesPath: options.rules || (config.rules?.custom && config.rules.custom[0]) || undefined,
+      parallel: options.parallel ?? config.performance?.parallel ?? true,
+      maxFileSize: config.scan?.maxFileSize,
       quiet: isJson, // Suppress progress messages for JSON output
+      configPath: source !== 'default' ? source : undefined,
+      incremental: options.incremental || false,
+      full: options.full || false,
+      cacheDir: config.performance?.cacheDir || '.vibesec-cache',
+      onAstParse: !isJson
+        ? (file: string) => {
+            if (spinner) spinner.text = `Parsing AST: ${file}`;
+          }
+        : undefined,
     };
 
     // Create scanner
@@ -61,6 +114,17 @@ export async function scanCommand(
     const spinner = !isJson ? ora('Initializing scan...').start() : null;
 
     try {
+      // Show config source
+      if (!isJson) {
+        if (source !== 'default') {
+          console.error(chalk.gray(`Using config: ${source}`));
+          if (spinner) spinner.text = `Using config from ${source}`;
+        } else {
+          console.error(chalk.gray('Using default configuration'));
+          if (spinner) spinner.text = 'Using default configuration';
+        }
+      }
+
       // Run scan with progress updates
       const startTime = Date.now();
 
@@ -118,11 +182,23 @@ export async function scanCommand(
         } else {
           // Show helpful next steps based on findings
           if (bySeverity.critical > 0) {
-            console.error(chalk.red.bold(`⚠️  Action needed: ${bySeverity.critical} critical issue${bySeverity.critical > 1 ? 's' : ''} found`));
+            console.error(
+              chalk.red.bold(
+                `⚠️  Action needed: ${bySeverity.critical} critical issue${bySeverity.critical > 1 ? 's' : ''} found`
+              )
+            );
           } else if (bySeverity.high > 0) {
-            console.error(chalk.yellow.bold(`⚠️  ${bySeverity.high} important issue${bySeverity.high > 1 ? 's' : ''} found`));
+            console.error(
+              chalk.yellow.bold(
+                `⚠️  ${bySeverity.high} important issue${bySeverity.high > 1 ? 's' : ''} found`
+              )
+            );
           } else {
-            console.error(chalk.blue.bold(`ℹ️  ${result.summary.total} issue${result.summary.total > 1 ? 's' : ''} found`));
+            console.error(
+              chalk.blue.bold(
+                `ℹ️  ${result.summary.total} issue${result.summary.total > 1 ? 's' : ''} found`
+              )
+            );
           }
           console.error('');
 
@@ -131,9 +207,17 @@ export async function scanCommand(
             console.error(chalk.red(`   1. Fix critical issues immediately`));
           }
           if (!useExplain) {
-            console.error(chalk.cyan(`   ${bySeverity.critical > 0 ? '2' : '1'}. Try running with --explain for plain language help`));
+            console.error(
+              chalk.cyan(
+                `   ${bySeverity.critical > 0 ? '2' : '1'}. Try running with --explain for plain language help`
+              )
+            );
           }
-          console.error(chalk.gray(`   ${bySeverity.critical > 0 ? (useExplain ? '2' : '3') : (useExplain ? '1' : '2')}. Run scan again after making fixes`));
+          console.error(
+            chalk.gray(
+              `   ${bySeverity.critical > 0 ? (useExplain ? '2' : '3') : useExplain ? '1' : '2'}. Run scan again after making fixes`
+            )
+          );
           console.error('');
         }
       }
@@ -161,9 +245,7 @@ export async function scanCommand(
 function validateSeverity(severity: string): Severity {
   const validSeverities = ['critical', 'high', 'medium', 'low'];
   if (!validSeverities.includes(severity.toLowerCase())) {
-    throw new Error(
-      `Invalid severity: ${severity}. Must be one of: ${validSeverities.join(', ')}`
-    );
+    throw new Error(`Invalid severity: ${severity}. Must be one of: ${validSeverities.join(', ')}`);
   }
   return severity.toLowerCase() as Severity;
 }

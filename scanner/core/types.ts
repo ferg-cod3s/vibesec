@@ -77,7 +77,30 @@ export interface Finding {
 /**
  * Pattern matching configuration for a rule
  */
-export interface Pattern {
+export type Pattern = RegexPattern | AstPattern | EqlPattern | LegacyRegexPattern;
+
+export interface RegexPattern {
+  // Legacy rules may omit type and use `regex` or `pattern`
+  type?: 'regex';
+  regex?: string;
+  pattern?: string; // Some schemas use `pattern` for regex
+  flags?: string;
+  multiline?: boolean;
+}
+
+export interface AstPattern {
+  type: 'ast';
+  query: string; // Simplified AST query string
+}
+
+export interface EqlPattern {
+  type: 'eql';
+  query: string; // EQL query string
+}
+
+// Internal compatibility to support legacy string patterns normalized by RuleLoader
+export interface LegacyRegexPattern {
+  // normalized to regex + flags in RuleLoader; keep for typing compatibility
   regex: string;
   flags?: string;
   multiline?: boolean;
@@ -95,6 +118,7 @@ export interface Rule {
   patterns: Pattern[];
   languages: string[];
   enabled: boolean;
+  confidence?: number; // optional top-level default confidence
   fix?: {
     template: string;
     references: string[];
@@ -157,4 +181,10 @@ export interface ScanOptions {
   parallel?: boolean;
   maxFileSize?: number; // bytes
   quiet?: boolean; // Suppress progress messages
+  // P2.2 additions
+  configPath?: string; // explicit config file path
+  incremental?: boolean; // only scan changed files
+  full?: boolean; // ignore cache and scan all files
+  cacheDir?: string; // cache directory path
+  onAstParse?: (file: string) => void; // optional progress callback
 }

@@ -3,8 +3,8 @@
 import { Command } from 'commander';
 import { scanCommand } from './commands/scan';
 import { benchmarkCommand } from './commands/benchmark';
+import { initCommand } from './commands/init';
 import { initSentryFromEnv } from '../src/observability/integrations/sentry';
-import { Logger } from '../src/observability/logger';
 
 // Initialize observability (Sentry logging and error tracking)
 try {
@@ -15,14 +15,9 @@ try {
   console.error('Failed to initialize Sentry:', error);
 }
 
-const logger = new Logger('vibesec-cli');
-
 const program = new Command();
 
-program
-  .name('vibesec')
-  .description('Security scanner for AI-generated code')
-  .version('0.1.0');
+program.name('vibesec').description('Security scanner for AI-generated code').version('0.1.0');
 
 program
   .command('scan')
@@ -37,6 +32,10 @@ program
   .option('--no-color', 'Disable colored output')
   .option('--rules <path>', 'Custom rules directory path')
   .option('--no-parallel', 'Disable parallel scanning')
+  .option('-c, --config <path>', 'Path to config file (.vibesec.yaml)')
+  .option('--init', 'Run interactive config wizard and exit')
+  .option('--incremental', 'Scan only changed files based on git diff')
+  .option('--full', 'Force full scan and ignore cache')
   .addHelpText(
     'after',
     `
@@ -85,5 +84,19 @@ Target Performance:
 `
   )
   .action(benchmarkCommand);
+
+program
+  .command('init')
+  .description('Initialize a .vibesec.yaml config via interactive wizard')
+  .option('-c, --config <path>', 'Output path for config file', '.vibesec.yaml')
+  .addHelpText(
+    'after',
+    `
+Examples:
+  $ vibesec init                       Create .vibesec.yaml with defaults
+  $ vibesec init -c ./config/vibesec.yaml
+`
+  )
+  .action(initCommand);
 
 program.parse();
