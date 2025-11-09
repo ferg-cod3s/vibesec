@@ -5,7 +5,6 @@
  * Accepts code strings directly instead of file paths for Cloudflare Workers deployment.
  */
 
-import { Scanner } from '../../../scanner/core/engine';
 import {
   Finding,
   Severity,
@@ -419,11 +418,11 @@ class InMemoryScanner {
 
   private scanForPathTraversal(): Finding[] {
     const findings: Finding[] = [];
-    const { code, filename, language } = this.options;
+    const { code, filename } = this.options;
 
     // Path traversal patterns
     const pathPatterns = [
-      { regex: /\.\.[\/\\]/g, type: 'Path Traversal', severity: Severity.HIGH },
+      { regex: /\.\.[/\\]/g, type: 'Path Traversal', severity: Severity.HIGH },
       { regex: /\.\.%2f/gi, type: 'URL Encoded Path Traversal', severity: Severity.HIGH },
       { regex: /\/\.\.\//g, type: 'Directory Traversal', severity: Severity.MEDIUM },
     ];
