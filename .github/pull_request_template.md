@@ -6,13 +6,15 @@
 
 ## Type of Change
 
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] Documentation update
-- [ ] Performance improvement
-- [ ] Code refactoring
-- [ ] CI/CD or infrastructure change
+**⚠️ IMPORTANT: Add a version label to enable auto-versioning!** See [VERSIONING.md](../docs/VERSIONING.md)
+
+- [ ] 🐛 **Bug fix** → Add label: `patch` or `fix`
+- [ ] ✨ **New feature** → Add label: `minor` or `feature`
+- [ ] 💥 **Breaking change** → Add label: `major` or `breaking`
+- [ ] 📝 **Documentation** → Add label: `patch`
+- [ ] ⚡ **Performance** → Add label: `patch`
+- [ ] 🔧 **Refactoring** → Add label: `patch`
+- [ ] 🚀 **CI/CD or infrastructure** → Add label: `patch`
 
 ## Testing
 
