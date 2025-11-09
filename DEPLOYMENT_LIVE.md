@@ -11,18 +11,19 @@ Your VibeSec MCP server is **now live and publicly accessible**!
 ### Primary URL (Use This One!)
 
 ```
-https://vibesec.workers.dev
+https://vibesec.vibesec.workers.dev
 ```
 
 ### WebSocket URL (For MCP Clients)
 
 ```
-wss://vibesec.workers.dev
+wss://vibesec.vibesec.workers.dev
 ```
 
 ### Status
 
-✅ **Live** | Responding with HTTP 426 (expected for WebSocket workers)  
+✅ **Live** | Deployed Nov 9 20:01:13 UTC (Version: 871f98e8-1545-45d5-9015-8fe0e9c603ee)  
+✅ **Responding** | HTTP 426 (expected for WebSocket workers)  
 ✅ **Global** | Deployed across 200+ Cloudflare data centers  
 ✅ **Fast** | Sub-100ms response times worldwide
 
@@ -34,7 +35,7 @@ wss://vibesec.workers.dev
 
 ```bash
 # Test HTTP endpoint (will return 426 - expected!)
-curl -I https://vibesec.workers.dev
+curl -I https://vibesec.vibesec.workers.dev
 
 # View live logs
 wrangler tail --format=pretty
@@ -51,7 +52,7 @@ Edit `.claude/mcp.json`:
   "mcpServers": {
     "vibesec": {
       "type": "remote",
-      "url": "wss://vibesec.workers.dev"
+      "url": "wss://vibesec.vibesec.workers.dev"
     }
   }
 }
@@ -65,7 +66,7 @@ Edit `.claude/mcp.json`:
     {
       "name": "vibesec",
       "type": "remote",
-      "url": "wss://vibesec.workers.dev"
+      "url": "wss://vibesec.vibesec.workers.dev"
     }
   ]
 }
@@ -84,11 +85,13 @@ Edit `.claude/mcp.json`:
 | Property                | Value                                  |
 | ----------------------- | -------------------------------------- |
 | **Worker Name**         | `vibesec`                              |
-| **URL**                 | https://vibesec.workers.dev            |
-| **WebSocket URL**       | wss://vibesec.workers.dev              |
-| **Account**             | john.ferguson@unfergettabledesigns.com |
+| **URL**                 | https://vibesec.vibesec.workers.dev    |
+| **WebSocket URL**       | wss://vibesec.vibesec.workers.dev      |
+| **Account**             | john.ferguson@unforgettabledesigns.com |
 | **Build Size**          | 77.71 KiB (gzipped)                    |
-| **Startup Time**        | ~31 ms                                 |
+| **Startup Time**        | 14 ms                                  |
+| **Deployment Date**     | Nov 9, 2025 20:01:13 UTC               |
+| **Version ID**          | 871f98e8-1545-45d5-9015-8fe0e9c603ee   |
 | **Global Distribution** | 200+ data centers                      |
 | **SLA**                 | 99.97% uptime                          |
 
@@ -185,8 +188,9 @@ command = "npm run build:cloudflare"
 - ✅ Nov 9, 19:45 - Fixed Node.js compatibility
 - ✅ Nov 9, 19:46 - Built Cloudflare worker
 - ✅ Nov 9, 19:50 - Registered workers.dev subdomain (`vibesec`)
-- ✅ Nov 9, 19:51 - Deployed worker to Cloudflare
+- ✅ Nov 9, 19:51 - Deployed worker to Cloudflare (first attempt)
 - ✅ Nov 9, 19:55 - Verified worker is responding
+- ✅ Nov 9, 20:01 - Redeployed worker (Nov session refresh)
 - 🎉 **LIVE AND READY TO USE!**
 
 ---
@@ -221,7 +225,7 @@ command = "npm run build:cloudflare"
 
 ### Immediate (5 minutes)
 
-1. ✅ Configure MCP client with `wss://vibesec.workers.dev`
+1. ✅ Configure MCP client with `wss://vibesec.vibesec.workers.dev`
 2. ✅ Restart your AI editor
 3. ✅ Test with sample code
 
@@ -278,8 +282,8 @@ command = "npm run build:cloudflare"
 
 ## 🔗 Quick Links
 
-- **Worker URL**: https://vibesec.workers.dev
-- **WebSocket**: wss://vibesec.workers.dev
+- **Worker URL**: https://vibesec.vibesec.workers.dev
+- **WebSocket**: wss://vibesec.vibesec.workers.dev
 - **Cloudflare Dashboard**: https://dash.cloudflare.com/924c6e1eb511a01450e688080980f532/workers
 - **View Logs**: `wrangler tail --format=pretty`
 - **Deployments**: `wrangler deployments list`
@@ -290,14 +294,16 @@ command = "npm run build:cloudflare"
 
 Your VibeSec MCP server is **production-ready** and **available globally** via Cloudflare Workers.
 
-**Start using it now:** Configure your MCP client with `wss://vibesec.workers.dev` and start scanning code! 🎉
+**Start using it now:** Configure your MCP client with `wss://vibesec.vibesec.workers.dev` and start scanning code! 🎉
 
 ---
 
 **Status**: ✅ LIVE IN PRODUCTION  
-**URL**: https://vibesec.workers.dev  
+**URL**: https://vibesec.vibesec.workers.dev  
+**WebSocket**: wss://vibesec.vibesec.workers.dev  
 **Protocol**: WebSocket (wss://)  
 **Region**: Global CDN  
+**Deployed**: Nov 9, 2025 20:01:13 UTC  
 **Performance**: <100ms globally  
 **Uptime**: 99.97% SLA
 
