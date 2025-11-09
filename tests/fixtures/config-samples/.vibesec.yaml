@@ -1,0 +1,29 @@
+# Test configuration file for integration tests
+rules:
+  enabled:
+    - sql-injection
+    - xss
+    - command-injection
+  disabled:
+    - weak-auth
+  custom:
+    - ./custom-rules/test-rule.yaml
+
+scan:
+  exclude:
+    - node_modules
+    - dist
+    - build
+    - .git
+    - tests/fixtures
+  include:
+    - '**/*.{js,ts,jsx,tsx}'
+  maxFileSize: 2097152 # 2MB
+
+output:
+  format: text
+  report: true
+
+performance:
+  parallel: true
+  cacheDir: .vibesec-cache
