@@ -1,4 +1,4 @@
-import { ScanResult, Severity } from '../../scanner/core/types';
+import { ScanResult } from '../../scanner/core/types';
 
 /**
  * Security Score Calculator

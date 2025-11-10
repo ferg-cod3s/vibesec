@@ -262,19 +262,19 @@ Why it's a false positive: [your explanation]
 Rank the following (1 = Most Important, 5 = Least Important):
 
 - [ ] **IDE integrations** (VS Code, IntelliJ)  
-      Rank: **\_\_**
+       Rank: **\_\_**
 
 - [ ] **CI/CD integrations** (GitHub Actions, GitLab CI)  
-      Rank: **\_\_**
+       Rank: **\_\_**
 
 - [ ] **More programming languages** (Java, Go, Ruby, etc.)  
-      Rank: **\_\_**
+       Rank: **\_\_**
 
 - [ ] **Custom rule creation** (define your own security rules)  
-      Rank: **\_\_**
+       Rank: **\_\_**
 
 - [ ] **Fix suggestions with code diffs** (show before/after)  
-      Rank: **\_\_**
+       Rank: **\_\_**
 
 ### Q20. What would make VibeSec more useful for you?
 
@@ -346,7 +346,7 @@ https://github.com/your-org/vibesec/issues/new?labels=user-feedback
 ☐ Yes, you can contact me for clarification  
 ☐ No, please keep my feedback anonymous
 
-**Email** (optional): **********\_\_**********
+**Email** (optional): ****\*\*****\_\_****\*\*****
 
 ---
 

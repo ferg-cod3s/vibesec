@@ -302,10 +302,8 @@ _Add notes during main testing (Oct 17-30)_
 
 _Add unexpected feedback or patterns_
 
--
+- ***
 
----
-
-**Last Updated**: 2025-10-10  
-**Next Review**: After pilot testing (Oct 13)  
-**Owner**: VibeSec Core Team
+  **Last Updated**: 2025-10-10  
+  **Next Review**: After pilot testing (Oct 13)  
+  **Owner**: VibeSec Core Team

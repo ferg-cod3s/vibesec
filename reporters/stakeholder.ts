@@ -1,4 +1,3 @@
-import chalk from 'chalk';
 import { ScanResult, Finding, Severity } from '../scanner/core/types';
 import { calculateSecurityScore, getBenchmarkComparison } from '../lib/utils/security-score';
 
@@ -233,7 +232,7 @@ export class StakeholderReporter {
   /**
    * Format business impact assessment
    */
-  private formatBusinessImpact(result: ScanResult, securityScore: any): string {
+  private formatBusinessImpact(result: ScanResult, _securityScore: any): string {
     const { bySeverity } = result.summary;
     const lines: string[] = [];
 

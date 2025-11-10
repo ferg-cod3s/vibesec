@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as fs from 'fs/promises';
 import fg from 'fast-glob';
-import { ScanOptions, ScanResult, Finding, ScanSummary, Category, Severity } from './types';
+import { ScanOptions, ScanResult, Finding, ScanSummary, Severity } from './types';
 import { RuleLoader } from './rule-loader';
 import { RegexAnalyzer } from '../analyzers/regex';
 import { DependencyAnalyzer } from '../analyzers/dependency';

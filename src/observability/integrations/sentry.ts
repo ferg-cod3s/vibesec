@@ -7,7 +7,7 @@
  */
 
 import * as Sentry from '@sentry/bun'; // or @sentry/node
-import { errorReporter, ErrorCategory } from '../error-reporter';
+import { ErrorCategory } from '../error-reporter';
 import { metrics } from '../metrics';
 
 export interface SentryConfig {
@@ -48,7 +48,7 @@ export class SentryIntegration {
         : {}),
 
       // Attach context
-      beforeSend(event, hint) {
+      beforeSend(event, _hint) {
         // Add scan metrics to error context
         const scanMetrics = metrics.getScanMetrics();
         event.contexts = {
