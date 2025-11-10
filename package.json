@@ -34,6 +34,17 @@
   ],
   "author": "VibeSec Team",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ferg-cod3s/vibesec-bun-poc.git"
+  },
+  "files": [
+    "dist/",
+    "bin/",
+    "rules/",
+    "README.md",
+    "LICENSE"
+  ],
   "dependencies": {
     "@sentry/bun": "^10.20.0",
     "chalk": "^4.1.2",
