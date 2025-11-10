@@ -121,10 +121,20 @@ The following secrets must be configured in your GitHub repository settings for 
 | `NPM_TOKEN` | Publish to npm registry | Create at [npmjs.com/settings/tokens](https://www.npmjs.com/settings/tokens) (Automation token) |
 | `DOCKERHUB_USERNAME` | Docker Hub login | Your Docker Hub username |
 | `DOCKERHUB_TOKEN` | Docker Hub authentication | Create at [hub.docker.com/settings/security](https://hub.docker.com/settings/security) |
-| `CLOUDFLARE_API_TOKEN` | Deploy to Cloudflare Workers | Create at [dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens) (Workers write permission) |
-| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account identifier | Find in Cloudflare dashboard URL or Workers overview |
+| `CLOUDFLARE_API_TOKEN` | Deploy to Cloudflare Workers | Create at [dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens) (Edit Cloudflare Workers permission) |
+
+**Note:** The Cloudflare account ID is already configured in `wrangler.toml`, so you only need to add the API token as a secret.
 
 **To add secrets:** Go to your repository → Settings → Secrets and variables → Actions → New repository secret
+
+### Setting up Cloudflare API Token
+
+1. Go to [Cloudflare Dashboard](https://dash.cloudflare.com) → My Profile → API Tokens
+2. Click "Create Token"
+3. Use "Edit Cloudflare Workers" template or create custom token with:
+   - **Permissions:** Account > Cloudflare Workers Scripts > Edit
+   - **Account Resources:** Include > Your Account
+4. Copy the token and add it to GitHub Secrets as `CLOUDFLARE_API_TOKEN`
 
 ## Release Checklist
 
