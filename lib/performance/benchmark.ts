@@ -192,7 +192,6 @@ export class PerformanceBenchmark {
    * Check if performance meets target (< 2min for 10K files)
    */
   static meetsTarget(result: BenchmarkResult): boolean {
-    const filesPerMinute = result.filesPerSecond * 60;
     const projectedTimeFor10K = (10000 / result.filesPerSecond) * 1000; // ms
 
     // Target: 10K files in < 2 minutes (120,000 ms)
