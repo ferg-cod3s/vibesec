@@ -2,7 +2,7 @@ name = "vibesec"
 main = "dist-cf/src/mcp/cloudflare-worker.js"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
-account_id = "924c6e1eb511a01450e688080980f532"
+account_id = "$CLOUDFLARE_ACCOUNT_ID"
 workers_dev = true
 preview_urls = true
 
