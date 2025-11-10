@@ -30,7 +30,9 @@ graph LR
     H --> I[Runs tests]
     I --> J[Builds package]
     J --> K[Publishes to npm]
-    K --> L[Creates GitHub Release]
+    K --> L[Publishes to Docker Hub]
+    L --> M[Deploys to Cloudflare Workers]
+    M --> N[Creates GitHub Release]
 ```
 
 ### Workflow Steps
@@ -46,6 +48,8 @@ graph LR
    - Runs full test suite
    - Builds the package
    - Publishes to npm with provenance
+   - Publishes Docker images to Docker Hub
+   - Deploys to Cloudflare Workers (production)
    - Creates GitHub Release with notes
 
 ## For Contributors
@@ -81,6 +85,8 @@ git push origin feature/new-detector
 #    - Version bumps from 0.1.0 → 0.2.0
 #    - Tag v0.2.0 created
 #    - Published to npm as vibesec@0.2.0
+#    - Published to Docker Hub as vibesec:0.2.0
+#    - Deployed to Cloudflare Workers (production)
 #    - GitHub Release created
 ```
 
@@ -105,6 +111,20 @@ gh release create v0.x.x --generate-notes
 ## Version History
 
 See [CHANGELOG.md](../CHANGELOG.md) for complete version history.
+
+## Required Secrets
+
+The following secrets must be configured in your GitHub repository settings for automated releases to work:
+
+| Secret Name | Purpose | How to Obtain |
+|-------------|---------|---------------|
+| `NPM_TOKEN` | Publish to npm registry | Create at [npmjs.com/settings/tokens](https://www.npmjs.com/settings/tokens) (Automation token) |
+| `DOCKERHUB_USERNAME` | Docker Hub login | Your Docker Hub username |
+| `DOCKERHUB_TOKEN` | Docker Hub authentication | Create at [hub.docker.com/settings/security](https://hub.docker.com/settings/security) |
+| `CLOUDFLARE_API_TOKEN` | Deploy to Cloudflare Workers | Create at [dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens) (Workers write permission) |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account identifier | Find in Cloudflare dashboard URL or Workers overview |
+
+**To add secrets:** Go to your repository → Settings → Secrets and variables → Actions → New repository secret
 
 ## Release Checklist
 

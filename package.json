@@ -10,6 +10,7 @@
   "scripts": {
     "build": "tsc && node copy-assets.js",
     "build:bun": "tsc && bun copy-assets.js",
+    "build:cloudflare": "tsc -p tsconfig.cloudflare.json",
     "dev": "bun run cli/index.ts",
     "mcp": "bun run bin/vibesec-mcp",
     "test": "jest",
@@ -20,7 +21,8 @@
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"**/*.{ts,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,json,md}\"",
-    "scan": "bun run cli/index.ts scan"
+    "scan": "bun run cli/index.ts scan",
+    "deploy:cloudflare": "npm run build:cloudflare && wrangler deploy"
   },
   "keywords": [
     "security",

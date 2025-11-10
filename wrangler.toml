@@ -1,0 +1,10 @@
+name = "vibesec"
+main = "dist-cf/src/mcp/cloudflare-worker.js"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+account_id = "924c6e1eb511a01450e688080980f532"
+workers_dev = true
+preview_urls = true
+
+[build]
+command = "npm run build:cloudflare"
