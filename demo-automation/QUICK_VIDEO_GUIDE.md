@@ -3,6 +3,7 @@
 **Goal:** Generate a professional demo video without any manual screen recording.
 
 **Two versions available:**
+
 - **Quick Demo** (90 sec) - Pure vulnerability showcase
 - **Full Demo** (3 min) - Includes complete setup walkthrough
 
@@ -25,6 +26,7 @@ asciinema upload demo-automation/vibesec-demo-full.cast
 **Result:** Shareable demo URL like `https://asciinema.org/a/xxxxx`
 
 **Don't want to upload?** Just preview them:
+
 ```bash
 asciinema play demo-automation/vibesec-demo.cast       # Quick (90s)
 asciinema play demo-automation/vibesec-demo-full.cast  # Full (3min)
@@ -35,7 +37,9 @@ asciinema play demo-automation/vibesec-demo-full.cast  # Full (3min)
 ## 🎯 Which Demo Should You Use?
 
 ### Quick Demo (90 seconds) - `vibesec-demo.cast`
+
 **Use for:**
+
 - Twitter/X posts
 - Reddit quick showcases
 - GitHub README
@@ -44,7 +48,9 @@ asciinema play demo-automation/vibesec-demo-full.cast  # Full (3min)
 **Shows:** Vulnerability detection only (no installation)
 
 ### Full Demo (3 minutes) - `vibesec-demo-full.cast`
+
 **Use for:**
+
 - YouTube tutorials
 - Blog post walkthroughs
 - LinkedIn professional posts
@@ -59,12 +65,14 @@ asciinema play demo-automation/vibesec-demo-full.cast  # Full (3min)
 ## 🎬 GIF for Social Media (5 minutes)
 
 ### Requirements
+
 ```bash
 # Install agg (one-time setup)
 cargo install agg
 ```
 
 ### Create GIF
+
 ```bash
 # Quick demo (for Twitter/README)
 agg demo-automation/vibesec-demo.cast quick-demo.gif
@@ -79,6 +87,7 @@ gifsicle -O3 --colors 256 quick-demo.gif -o quick-optimized.gif
 **Result:** Animated GIF ready for Twitter, Reddit, GitHub README
 
 **File size:**
+
 - Quick demo: ~3-5 MB (optimized)
 - Full demo: ~8-12 MB (optimized)
 
@@ -87,6 +96,7 @@ gifsicle -O3 --colors 256 quick-demo.gif -o quick-optimized.gif
 ## 📺 MP4 for YouTube/Twitter (7 minutes)
 
 ### Requirements
+
 ```bash
 # Install ffmpeg (one-time setup)
 brew install ffmpeg  # macOS
@@ -94,6 +104,7 @@ sudo apt install ffmpeg  # Ubuntu/Debian
 ```
 
 ### Create MP4
+
 ```bash
 # Quick demo (for Twitter)
 agg demo-automation/vibesec-demo.cast temp-quick.gif
@@ -114,6 +125,7 @@ rm temp-*.gif
 **Result:** MP4 video ready for YouTube, Twitter, LinkedIn
 
 **File size:**
+
 - Quick demo: ~2-5 MB
 - Full demo: ~8-15 MB
 
@@ -167,12 +179,14 @@ python3 demo-automation/generate-demo-video.py --width 60 --height 20
 ### Twitter/X
 
 **Specs:**
+
 - Format: GIF or MP4
 - Max size: 512 MB
 - Recommended: 30-60 seconds
 - Aspect ratio: 16:9 or 1:1
 
 **Command:**
+
 ```bash
 # Generate short demo
 python3 demo-automation/generate-demo-video.py
@@ -192,11 +206,13 @@ ffmpeg -i demo-automation/twitter.gif \
 ### YouTube
 
 **Specs:**
+
 - Format: MP4
 - Recommended: 1920x1080
 - Minimum: 1280x720
 
 **Command:**
+
 ```bash
 # Generate high-quality MP4
 python3 demo-automation/generate-demo-video.py --width 100 --height 30
@@ -214,11 +230,13 @@ ffmpeg -i demo-automation/temp.gif \
 ### GitHub README
 
 **Specs:**
+
 - Format: GIF or SVG
 - Max size: 10 MB (for fast loading)
 - Recommended: 800-1000px wide
 
 **Command:**
+
 ```bash
 # Generate optimized GIF
 python3 demo-automation/generate-demo-video.py
@@ -230,6 +248,7 @@ gifsicle -O3 --colors 128 --resize-width 800 \
 ```
 
 **Embed in README:**
+
 ```markdown
 ![VibeSec Demo](./demo-automation/vibesec-demo-readme.gif)
 ```
@@ -318,6 +337,7 @@ ffmpeg -i input.gif -c:v libx264 -crf 28 output.mp4  # Lower quality, smaller fi
 Copy-paste these for instant results:
 
 ### Quick Share (asciinema.org)
+
 ```bash
 # Quick demo
 asciinema upload demo-automation/vibesec-demo.cast
@@ -327,12 +347,14 @@ asciinema upload demo-automation/vibesec-demo-full.cast
 ```
 
 ### Twitter GIF (Quick Demo)
+
 ```bash
 agg demo-automation/vibesec-demo.cast twitter.gif && \
 gifsicle -O3 --colors 256 twitter.gif -o twitter-optimized.gif
 ```
 
 ### GitHub README (Quick Demo)
+
 ```bash
 agg demo-automation/vibesec-demo.cast readme.gif && \
 gifsicle -O3 --colors 128 --resize-width 800 \
@@ -340,6 +362,7 @@ gifsicle -O3 --colors 128 --resize-width 800 \
 ```
 
 ### YouTube MP4 (Full Demo)
+
 ```bash
 agg demo-automation/vibesec-demo-full.cast temp.gif && \
 ffmpeg -i temp.gif -c:v libx264 -preset slow -crf 18 \
@@ -348,6 +371,7 @@ rm temp.gif
 ```
 
 ### Blog Post GIF (Full Demo)
+
 ```bash
 agg demo-automation/vibesec-demo-full.cast blog.gif && \
 gifsicle -O3 --colors 256 blog.gif -o blog-optimized.gif

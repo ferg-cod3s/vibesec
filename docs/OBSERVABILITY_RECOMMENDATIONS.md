@@ -11,6 +11,7 @@ VibeSec requires comprehensive observability for production use. This document o
 ### 🏆 Recommended: Sentry
 
 **Why Sentry?**
+
 - ✅ Excellent TypeScript/Node.js/Bun support
 - ✅ Real-time error tracking with stack traces
 - ✅ Performance monitoring (APM)
@@ -21,6 +22,7 @@ VibeSec requires comprehensive observability for production use. This document o
 - ✅ Team collaboration features
 
 **Setup:**
+
 ```bash
 bun add @sentry/bun
 # or
@@ -35,6 +37,7 @@ initSentryFromEnv();
 ```
 
 **Environment Variables:**
+
 ```bash
 SENTRY_DSN=https://xxx@sentry.io/xxx
 NODE_ENV=production
@@ -44,11 +47,13 @@ SENTRY_PROFILES_SAMPLE_RATE=0.1
 ```
 
 **Pricing:**
+
 - Free: 5K errors/month
 - Team: $26/month (50K errors)
 - Business: $80/month (250K errors)
 
 **Best for:**
+
 - ✅ Production error tracking
 - ✅ Stack trace analysis
 - ✅ Performance monitoring
@@ -59,20 +64,24 @@ SENTRY_PROFILES_SAMPLE_RATE=0.1
 ### Alternative: Rollbar
 
 **Why Rollbar?**
+
 - Similar feature set to Sentry
 - Slightly better GitHub/Jira integration
 - Real User Monitoring (RUM)
 
 **Setup:**
+
 ```bash
 npm install rollbar
 ```
 
 **Pricing:**
+
 - Free: 5K errors/month
 - Essentials: $25/month (40K errors)
 
 **Best for:**
+
 - Teams using Jira heavily
 - Organizations already on Rollbar
 
@@ -81,27 +90,32 @@ npm install rollbar
 ### Alternative: Datadog Error Tracking
 
 **Why Datadog?**
+
 - All-in-one observability platform
 - Logs + Metrics + Traces + Errors
 - Powerful analytics and dashboards
 - APM with distributed tracing
 
 **Setup:**
+
 ```bash
 npm install dd-trace
 ```
 
 **Pricing:**
+
 - APM: $31/host/month
 - Infrastructure: $15/host/month
 - Full platform: Higher cost
 
 **Best for:**
+
 - ✅ Enterprises with existing Datadog
 - ✅ Teams needing full observability stack
 - ✅ Complex distributed systems
 
 **Drawback:**
+
 - ❌ More expensive than Sentry/Rollbar
 - ❌ Overkill for simple CLI tools
 
@@ -112,6 +126,7 @@ npm install dd-trace
 ### 🏆 Recommended: Prometheus + Grafana (Open Source)
 
 **Why Prometheus?**
+
 - ✅ Industry standard for metrics
 - ✅ Efficient time-series database
 - ✅ Pull-based metric collection
@@ -119,6 +134,7 @@ npm install dd-trace
 - ✅ **100% free and open source**
 
 **Setup:**
+
 ```typescript
 // Already built into VibeSec!
 import { metrics } from './observability/metrics';
@@ -130,6 +146,7 @@ app.get('/metrics', (req, res) => {
 ```
 
 **Docker Compose:**
+
 ```yaml
 version: '3'
 services:
@@ -138,17 +155,18 @@ services:
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
-      - "9090:9090"
+      - '9090:9090'
 
   grafana:
     image: grafana/grafana
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
 ```
 
 **Best for:**
+
 - ✅ Self-hosted metrics
 - ✅ Cost-conscious teams
 - ✅ Long-term metric retention
@@ -167,16 +185,19 @@ services:
 ### Alternative: New Relic
 
 **Why New Relic?**
+
 - Full-stack observability
 - Application performance monitoring
 - Real-time dashboards
 
 **Pricing:**
+
 - Free: 100GB/month data
 - Standard: $0.30/GB ingestion
 - Pro: $0.35/GB + features
 
 **Best for:**
+
 - Enterprise observability
 - Complex application monitoring
 
@@ -201,28 +222,35 @@ const logs = logger.exportLogs();
 **For production, forward logs to:**
 
 #### Option 1: Datadog Logs (if using Datadog)
+
 ```bash
 npm install datadog-winston
 ```
 
 #### Option 2: Papertrail (Simple SaaS)
+
 ```bash
 npm install winston-papertrail
 ```
+
 - Free: 50MB/month
 - $7/month: 1GB/month
 
 #### Option 3: Logtail (by Better Stack)
+
 ```bash
 npm install @logtail/node
 ```
+
 - Free: 1GB/month
 - Modern UI and great search
 
 #### Option 4: CloudWatch Logs (if on AWS)
+
 ```bash
 npm install winston-cloudwatch
 ```
+
 - Pay per GB ingested (~$0.50/GB)
 
 ---
@@ -230,6 +258,7 @@ npm install winston-cloudwatch
 ## Recommended Stack by Use Case
 
 ### 1. CLI Tool / Open Source Project
+
 **Focus: Simple, low cost**
 
 - **Errors**: Sentry (free tier)
@@ -238,6 +267,7 @@ npm install winston-cloudwatch
 - **Cost**: $0/month (free tiers)
 
 ### 2. SaaS / Startup
+
 **Focus: Fast setup, scalable**
 
 - **Errors**: Sentry Team ($26/month)
@@ -246,6 +276,7 @@ npm install winston-cloudwatch
 - **Cost**: ~$41/month (scales with usage)
 
 ### 3. Enterprise
+
 **Focus: Comprehensive observability**
 
 - **All-in-One**: Datadog Full Platform
@@ -257,18 +288,21 @@ npm install winston-cloudwatch
 ## Implementation Roadmap
 
 ### Phase 1: MVP (Now)
+
 ✅ Built-in structured logging
 ✅ Built-in metrics collection
 ✅ Built-in error reporting
 ✅ Export to JSON/Prometheus format
 
 ### Phase 2: Production (Week 6-7)
+
 - [ ] Integrate Sentry for error tracking
 - [ ] Set up Prometheus + Grafana (Docker)
 - [ ] Add health check endpoints
 - [ ] Add `/metrics` endpoint for Prometheus
 
 ### Phase 3: Scale (Post-MVP)
+
 - [ ] Add distributed tracing (OpenTelemetry)
 - [ ] Set up alerting rules
 - [ ] Create Grafana dashboards
@@ -279,6 +313,7 @@ npm install winston-cloudwatch
 ## Sample Configuration
 
 ### `.env.production`
+
 ```bash
 # Error Monitoring
 SENTRY_DSN=https://xxx@sentry.io/xxx
@@ -295,6 +330,7 @@ METRICS_PORT=9090
 ```
 
 ### `prometheus.yml`
+
 ```yaml
 global:
   scrape_interval: 15s
@@ -309,16 +345,17 @@ scrape_configs:
 
 ## Cost Summary
 
-| Solution | Free Tier | Paid (Small Team) | Paid (Medium Team) |
-|----------|-----------|-------------------|-------------------|
-| **Sentry** | 5K errors | $26/month | $80/month |
-| **Rollbar** | 5K errors | $25/month | - |
-| **Datadog** | Limited | $46/month | $200+/month |
-| **Prometheus** | ∞ (self-hosted) | $0 | $0 |
-| **Grafana** | ∞ (self-hosted) | $0 | $0 |
-| **Papertrail** | 50MB/month | $7/month | $35/month |
+| Solution       | Free Tier       | Paid (Small Team) | Paid (Medium Team) |
+| -------------- | --------------- | ----------------- | ------------------ |
+| **Sentry**     | 5K errors       | $26/month         | $80/month          |
+| **Rollbar**    | 5K errors       | $25/month         | -                  |
+| **Datadog**    | Limited         | $46/month         | $200+/month        |
+| **Prometheus** | ∞ (self-hosted) | $0                | $0                 |
+| **Grafana**    | ∞ (self-hosted) | $0                | $0                 |
+| **Papertrail** | 50MB/month      | $7/month          | $35/month          |
 
 **Recommended Starter Stack Cost: $0-$33/month**
+
 - Sentry free tier
 - Prometheus + Grafana (self-hosted)
 - Built-in logging
@@ -337,6 +374,7 @@ scrape_configs:
 **Recommendation**: Start with **Sentry (free) + Prometheus/Grafana (self-hosted)**
 
 This gives you:
+
 - Real-time error tracking
 - Performance monitoring
 - Custom metrics and dashboards

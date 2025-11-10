@@ -15,11 +15,13 @@ This document outlines the strategy for collecting, organizing, and analyzing us
 ## Target Audience
 
 ### Primary Testers (Priority)
+
 - **Junior Developers** (0-2 years experience)
   - Target: 5-10 testers
   - Rationale: Primary target audience for comprehension validation
 
 ### Secondary Testers (Valuable perspective)
+
 - **Mid-level Developers** (2-5 years experience)
   - Target: 3-5 testers
   - Rationale: Can compare to other tools, identify workflow integration gaps
@@ -31,6 +33,7 @@ This document outlines the strategy for collecting, organizing, and analyzing us
 ## Recruitment Strategy
 
 ### Internal Recruitment
+
 1. **Company/Team Members**
    - Reach out to development teams
    - Offer early access incentive
@@ -47,6 +50,7 @@ This document outlines the strategy for collecting, organizing, and analyzing us
    - Twitter/X: Developer hashtags (#100DaysOfCode, #DevCommunity)
 
 ### Incentives
+
 - 🏆 **Early Access**: VibeSec Pro features (when available)
 - 🎖️ **Contributor Badge**: Public recognition on website/README
 - 📚 **Security Resources**: Free security learning materials
@@ -55,39 +59,49 @@ This document outlines the strategy for collecting, organizing, and analyzing us
 ## Feedback Collection Tools
 
 ### Option 1: Google Forms (Recommended)
+
 **Pros:**
+
 - Free, familiar interface
 - Built-in analytics and charts
 - Easy CSV export for analysis
 - Mobile-friendly
 
 **Setup:**
+
 1. Create Google Form based on `USER_FEEDBACK_FORM.md`
 2. Enable response collection
 3. Set up email notifications for new responses
 4. Configure branching logic (skip questions based on answers)
 
 **URL Structure:**
+
 - Short URL: `forms.gle/vibesec-feedback`
 - Custom domain: `feedback.vibesec.dev`
 
 ### Option 2: Typeform
+
 **Pros:**
+
 - Better UX, conversational interface
 - Logic jumps and conditional questions
 - Built-in analytics
 
 **Cons:**
+
 - Free tier limits to 10 questions (we have 24)
 - Paid plan required: ~$25/month
 
 ### Option 3: GitHub Issues
+
 **Pros:**
+
 - Developer-friendly
 - Public feedback visible to community
 - Free and integrated with project
 
 **Cons:**
+
 - Less structured data
 - Harder to analyze quantitatively
 - May discourage honest negative feedback
@@ -97,6 +111,7 @@ This document outlines the strategy for collecting, organizing, and analyzing us
 ## Data Collection Timeline
 
 ### Week 1: Preparation (Current Phase)
+
 - ✅ Create USER_TESTING_GUIDE.md
 - ✅ Create USER_FEEDBACK_FORM.md
 - ✅ Create sample-api with vulnerabilities
@@ -105,18 +120,21 @@ This document outlines the strategy for collecting, organizing, and analyzing us
 - ⏳ Identify tester candidates
 
 ### Week 2: Pilot Testing (3-5 testers)
+
 - Send to small group of trusted testers
 - Monitor for confusion or technical issues
 - Iterate on guide/form based on early feedback
 - Verify sample-api works as expected
 
 ### Week 3-4: Main Testing (15-20 testers)
+
 - Broader recruitment push
 - Weekly reminder emails
 - Address technical support questions
 - Monitor response rate (target: 70%+)
 
 ### Week 5: Analysis & Iteration
+
 - Close form to new responses
 - Analyze quantitative data
 - Identify themes in qualitative feedback
@@ -126,7 +144,9 @@ This document outlines the strategy for collecting, organizing, and analyzing us
 ## Feedback Form Distribution
 
 ### Embedding in Documentation
+
 Add to `README.md`:
+
 ```markdown
 ## 🧪 Help Us Improve - Beta Testing
 
@@ -139,12 +159,13 @@ As a thank you, beta testers get early access to Pro features! 🎁
 ```
 
 ### Email Template (for direct outreach)
+
 ```
 Subject: Help Test VibeSec - Security Scanner for Developers (15 min)
 
 Hi [Name],
 
-I'm working on VibeSec, a security scanner designed to make vulnerability 
+I'm working on VibeSec, a security scanner designed to make vulnerability
 detection clearer and more actionable for developers.
 
 Would you be willing to test it and share feedback? It takes ~15 minutes:
@@ -167,6 +188,7 @@ Best,
 ```
 
 ### Social Media Post Template
+
 ```
 🧪 Calling all developers! Help test VibeSec, a security scanner built for clarity.
 
@@ -185,27 +207,33 @@ Guide: [link]
 ### Quantitative Metrics
 
 **Installation Success Rate**
+
 - Target: >90% successful installations
-- Formula: (successful_installs / total_attempts) * 100
+- Formula: (successful_installs / total_attempts) \* 100
 
 **Comprehension Score** (Avg of Q4, Q5, Q6 ratings)
+
 - Target: >7.5/10 average
-- Formula: (sum_of_ratings / num_responses) 
+- Formula: (sum_of_ratings / num_responses)
 
 **Usability Score** (Avg of Q1, Q8, Q10 ratings)
+
 - Target: >7.0/10 average
 
 **Accuracy Metrics**
-- False Positive Rate: (false_positives / total_findings) * 100
+
+- False Positive Rate: (false_positives / total_findings) \* 100
   - Target: <10%
-- False Negative Rate: (missed_vulns / total_vulns) * 100
+- False Negative Rate: (missed_vulns / total_vulns) \* 100
   - Target: <5%
 
 **Performance Satisfaction**
+
 - Scan time: % responding "Excellent" or "Good"
   - Target: >80%
 
 **Recommendation Score** (Net Promoter Score - Q21)
+
 - Promoters (9-10): Likely to recommend
 - Passives (7-8): Neutral
 - Detractors (1-6): Unlikely to recommend
@@ -215,6 +243,7 @@ Guide: [link]
 ### Qualitative Analysis
 
 **Thematic Coding** (for open-ended responses):
+
 1. Read all responses for Q22, Q23, Q24
 2. Identify recurring themes/patterns
 3. Tag with categories:
@@ -227,14 +256,15 @@ Guide: [link]
 **Priority Matrix**:
 | Impact | Effort | Priority |
 |--------|--------|----------|
-| High   | Low    | P0 (Do first) |
-| High   | High   | P1 (Plan carefully) |
-| Low    | Low    | P2 (Nice to have) |
-| Low    | High   | P3 (Defer) |
+| High | Low | P0 (Do first) |
+| High | High | P1 (Plan carefully) |
+| Low | Low | P2 (Nice to have) |
+| Low | High | P3 (Defer) |
 
 ### Report Generation
 
 Create `docs/PHASE4_TESTING_REPORT.md` with:
+
 1. **Executive Summary**
    - Key findings (3-5 bullets)
    - Overall success metrics
@@ -268,17 +298,20 @@ Create `docs/PHASE4_TESTING_REPORT.md` with:
 ## Data Storage & Privacy
 
 ### Response Storage
+
 - **Google Forms**: Responses stored in Google Sheets
 - **Export**: Weekly CSV backups to local `data/feedback/`
 - **Backup**: Git-ignored, not committed to public repo
 
 ### Privacy Compliance
+
 - **Anonymization**: Remove emails before sharing results
 - **Consent**: Form includes "Can we follow up?" opt-in
 - **Retention**: Delete responses after 90 days (post-POC)
 - **GDPR**: Provide email for data deletion requests
 
 ### Access Control
+
 - Form admin: Core team only (2-3 people)
 - Analysis access: Development team
 - Public sharing: Aggregated data only, no PII
@@ -288,17 +321,20 @@ Create `docs/PHASE4_TESTING_REPORT.md` with:
 To proceed to Phase 5 (POC Finalization), we need:
 
 ### Must-Have (Go/No-Go)
+
 - ✅ **10+ completed responses** from target audience
 - ✅ **Comprehension Score >7.0/10** (findings are clear)
 - ✅ **Installation Success >80%** (setup works)
 - ✅ **No critical bugs** blocking usage
 
 ### Should-Have (Proceed with iteration)
+
 - ✅ **Usability Score >7.0/10** (tool is usable)
 - ✅ **False Positive Rate <15%** (acceptable accuracy)
 - ✅ **NPS >0** (more promoters than detractors)
 
 ### Nice-to-Have (Bonus validation)
+
 - 🎯 20+ responses
 - 🎯 Comparison data from security engineers
 - 🎯 Tests on real-world codebases (beyond sample-api)
@@ -306,23 +342,27 @@ To proceed to Phase 5 (POC Finalization), we need:
 ## Contingency Plans
 
 ### Low Response Rate (<10 responses)
+
 - Extend testing period by 1 week
 - Increase incentive (higher gift card value)
 - Direct 1-on-1 outreach to developers
 - Lower recruitment standards (accept any dev experience level)
 
 ### High False Positive Rate (>20%)
+
 - Pause Phase 5
 - Analyze specific false positive patterns
 - Adjust detection rules
 - Re-test with subset of users
 
 ### Negative Feedback Themes
+
 - Triage by severity: blocking vs. annoying
 - Quick wins: Fix documentation issues immediately
 - Roadmap items: Defer major features to post-POC
 
 ### Technical Issues (install failures, crashes)
+
 - Provide direct support via Discord/email
 - Document common issues in troubleshooting guide
 - Hot-fix critical bugs and re-deploy
@@ -355,18 +395,22 @@ To proceed to Phase 5 (POC Finalization), we need:
 ## Tools & Resources
 
 ### Analysis Tools
+
 - **Google Sheets**: Basic stats, pivot tables
 - **Python + Pandas**: Advanced analysis (if needed)
 - **Chart.js / Plotly**: Visualization for report
 - **Wordcloud**: Thematic visualization (optional)
 
 ### Templates
+
 - Recruitment email: See above
 - Reminder email: "Just checking in on VibeSec testing..."
 - Thank you email: "Your feedback on VibeSec was invaluable..."
 
 ### Monitoring Dashboard (Optional)
+
 Create simple dashboard showing:
+
 - Total responses: 15 / 20 target
 - Avg comprehension score: 8.2 / 10
 - Avg usability score: 7.5 / 10
@@ -375,17 +419,21 @@ Create simple dashboard showing:
 ## Contact & Support During Testing
 
 ### Support Channels
+
 - **Email**: support@vibesec.dev (or personal email during POC)
 - **GitHub Issues**: For bug reports
 - **Discord/Slack**: Real-time help (if available)
 
 ### Response Time Commitment
+
 - **Install issues**: <24 hours (critical)
 - **Feedback questions**: <48 hours
 - **Feature requests**: Acknowledge within 1 week
 
 ### FAQ (Pre-emptive)
+
 Maintain `docs/TESTING_FAQ.md` with common questions:
+
 - "What Node.js version do I need?" → 18+
 - "Can I test on my own code?" → Yes, please do!
 - "What if I find a real vulnerability?" → Great! Include in feedback
@@ -396,6 +444,7 @@ Maintain `docs/TESTING_FAQ.md` with common questions:
 ## Appendix: Checklist
 
 ### Pre-Testing
+
 - [ ] Create Google Form from USER_FEEDBACK_FORM.md
 - [ ] Test form submission end-to-end
 - [ ] Set up response notifications
@@ -407,6 +456,7 @@ Maintain `docs/TESTING_FAQ.md` with common questions:
 - [ ] Create testing FAQ
 
 ### During Testing
+
 - [ ] Send pilot invitations (3-5 testers)
 - [ ] Monitor pilot responses, iterate guide if needed
 - [ ] Send main wave invitations (15-20 testers)
@@ -417,6 +467,7 @@ Maintain `docs/TESTING_FAQ.md` with common questions:
 - [ ] Celebrate milestones (10 responses, 20 responses)
 
 ### Post-Testing
+
 - [ ] Close form to new responses
 - [ ] Export CSV data
 - [ ] Run quantitative analysis

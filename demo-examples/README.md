@@ -9,6 +9,7 @@ This directory contains intentionally vulnerable code examples for demonstrating
 ## Purpose
 
 These examples demonstrate common security issues found in AI-generated code:
+
 - Hardcoded secrets and API keys
 - SQL and command injection vulnerabilities
 - Incomplete or weak authentication
@@ -16,6 +17,7 @@ These examples demonstrate common security issues found in AI-generated code:
 - Placeholder TODOs for security features
 
 Use these files for:
+
 - Creating demo videos
 - Testing VibeSec functionality
 - Training developers on AI code security
@@ -28,11 +30,13 @@ Use these files for:
 ### 1. `vulnerable-api.ts` - Injection Vulnerabilities
 
 **Contains:**
+
 - SQL injection via string concatenation
 - Command injection in file conversion
 - Missing authentication (TODO placeholder)
 
 **Expected VibeSec Findings:**
+
 ```
 ✗ SQL Injection via String Concatenation (CRITICAL)
   File: vulnerable-api.ts:14
@@ -48,6 +52,7 @@ Use these files for:
 ```
 
 **How to Demo:**
+
 1. Show the SQL query concatenation (line 14)
 2. Explain: "An attacker could inject: `' OR '1'='1`"
 3. Scan with VibeSec: `vibesec scan demo-examples/vulnerable-api.ts`
@@ -58,6 +63,7 @@ Use these files for:
 ### 2. `vulnerable-secrets.ts` - Hardcoded Secrets
 
 **Contains:**
+
 - OpenAI API key
 - Database credentials
 - JWT secret
@@ -67,6 +73,7 @@ Use these files for:
 - Stripe secret key
 
 **Expected VibeSec Findings:**
+
 ```
 ✗ Hardcoded API Key Detected (CRITICAL)
   File: vulnerable-secrets.ts:11
@@ -98,6 +105,7 @@ Use these files for:
 ```
 
 **How to Demo:**
+
 1. Show the config object with multiple secrets
 2. Explain: "AI assistants often generate test credentials and forget to remove them"
 3. Scan with VibeSec
@@ -108,6 +116,7 @@ Use these files for:
 ### 3. `vulnerable-auth.ts` - Authentication Issues
 
 **Contains:**
+
 - Missing authentication on admin endpoints
 - Weak password validation
 - Insecure JWT implementation
@@ -117,6 +126,7 @@ Use these files for:
 - Authorization bypass
 
 **Expected VibeSec Findings:**
+
 ```
 ✗ Missing Authentication (HIGH)
   File: vulnerable-auth.ts:13
@@ -144,6 +154,7 @@ Use these files for:
 ```
 
 **How to Demo:**
+
 1. Show the admin endpoint without auth (line 13)
 2. Point out the TODO comment that never got implemented
 3. Scan with VibeSec
@@ -154,6 +165,7 @@ Use these files for:
 ## Using in Demos
 
 ### Quick Demo (2 minutes)
+
 ```bash
 # Scan all examples
 vibesec scan demo-examples/
@@ -162,6 +174,7 @@ vibesec scan demo-examples/
 ```
 
 ### Interactive Demo with Claude Code (5 minutes)
+
 1. Open Claude Code
 2. Show vulnerable-secrets.ts
 3. Ask Claude: "Can you review this configuration file?"
@@ -172,6 +185,7 @@ vibesec scan demo-examples/
 8. Emphasize: "VibeSec caught what the AI missed"
 
 ### Deep Dive Demo (15 minutes)
+
 1. **Setup** - Show MCP configuration
 2. **Example 1** - vulnerable-secrets.ts (hardcoded keys)
 3. **Example 2** - vulnerable-api.ts (injection attacks)
@@ -193,6 +207,7 @@ When creating additional demo files:
 5. **Document expected findings** - List what VibeSec should catch
 
 ### Template:
+
 ```typescript
 /**
  * Demo Example: [Vulnerability Type]
@@ -211,18 +226,21 @@ export function example() {
 ## Recording Tips
 
 ### Screen Recording
+
 - **Terminal font size:** 16-18pt minimum
 - **Color scheme:** High contrast (light background recommended)
 - **Window size:** 1920x1080 or larger
 - **Cursor highlighting:** Enable for visibility
 
 ### Narration
+
 - Speak at moderate pace
 - Pause after showing each vulnerability
 - Emphasize key phrases: "Notice here...", "VibeSec caught..."
 - Keep technical jargon minimal
 
 ### Editing
+
 - Trim dead time (waiting for scans)
 - Add text overlays for key findings
 - Zoom in on important code sections
@@ -271,6 +289,7 @@ Before going live with a demo:
 ### Contributing Examples
 
 If you create additional examples:
+
 1. Follow the naming convention: `vulnerable-[category].ts`
 2. Add comprehensive comments
 3. Document expected findings in this README

@@ -1,7 +1,7 @@
 ---
 title: "I Scanned 9 Popular AI Coding Tools for Security Issues. Here's What Every Developer Should Know."
 published: true
-description: "Security scanning that fits your workflow - catch vulnerabilities before they reach production, without leaving your terminal"
+description: 'Security scanning that fits your workflow - catch vulnerabilities before they reach production, without leaving your terminal'
 tags: security, ai, javascript, devtools
 cover_image:
 canonical_url:
@@ -20,9 +20,10 @@ Look, I love AI coding tools. ChatGPT writes my boilerplate. Claude refactors my
 
 But I had this nagging question nobody wants to ask:
 
-*How many security vulnerabilities am I shipping?*
+_How many security vulnerabilities am I shipping?_
 
 Traditional security tools? They interrupt your flow:
+
 - ❌ Run them in CI/CD only (by the time you see issues, you've moved on)
 - ❌ Require a security PhD to understand
 - ❌ Generate massive reports you'll never read
@@ -56,14 +57,15 @@ Quick note on scoring before we get into results - it's intentionally simple:
 
 Every project starts at **100 points** (perfect security). Issues deduct points based on severity:
 
-| Severity | Point Deduction | What It Means |
-|----------|-----------------|---------------|
-| **CRITICAL** | -25 points | Immediate exploitation risk (RCE, data breach) |
-| **HIGH** | -10 points | Serious vulnerability (authentication bypass, XSS) |
-| **MEDIUM** | -5 points | Should be fixed soon (missing headers, weak config) |
-| **LOW** | -2 points | Best practice violation (information disclosure) |
+| Severity     | Point Deduction | What It Means                                       |
+| ------------ | --------------- | --------------------------------------------------- |
+| **CRITICAL** | -25 points      | Immediate exploitation risk (RCE, data breach)      |
+| **HIGH**     | -10 points      | Serious vulnerability (authentication bypass, XSS)  |
+| **MEDIUM**   | -5 points       | Should be fixed soon (missing headers, weak config) |
+| **LOW**      | -2 points       | Best practice violation (information disclosure)    |
 
 **Example Calculation:**
+
 ```
 Project with:
 - 2 critical issues (2 × -25 = -50 points)
@@ -97,11 +99,13 @@ Okay, now the interesting part - what did I actually find?
 ## The Projects I Scanned
 
 ### Major AI Coding Tools
+
 1. **Google Gemini CLI** (78K stars) - TypeScript
 2. **OpenCode** (26K stars) - TypeScript
 3. **Claude-code** (37K stars) - TypeScript
 
 ### AI-Generated/Assisted Projects
+
 4. **Plandex AI** - Go/TypeScript AI assistant
 5. **Chatbot UI** - Next.js AI chat interface
 6. **Elia** - Python ChatGPT terminal client
@@ -115,13 +119,13 @@ All real, actively-maintained projects with thousands of stars and actual users.
 
 ### Overall Stats
 
-| Metric | Result |
-|--------|--------|
-| **Average Security Score** | **16/100 (F)** |
-| **Projects with Critical Issues** | 89% (8/9) |
-| **Perfect Scores** | 11% (1/9) |
-| **Total Issues Found** | 435 |
-| **Most Common Issue** | Missing Security Headers (29%) |
+| Metric                            | Result                         |
+| --------------------------------- | ------------------------------ |
+| **Average Security Score**        | **16/100 (F)**                 |
+| **Projects with Critical Issues** | 89% (8/9)                      |
+| **Perfect Scores**                | 11% (1/9)                      |
+| **Total Issues Found**            | 435                            |
+| **Most Common Issue**             | Missing Security Headers (29%) |
 
 ### Score Distribution
 
@@ -133,20 +137,21 @@ All real, actively-maintained projects with thousands of stars and actual users.
 
 ### Complete Project Scores
 
-| Project | Score | Grade | Critical | High | Medium | Low | Total | Files Scanned |
-|---------|-------|-------|----------|------|--------|-----|-------|---------------|
-| **Autodoc** | 100/100 | A+ ✨ | 0 | 0 | 0 | 0 | 0 | 20 |
-| **Plandex AI** | 48/100 | D- | 1 | 2 | 1 | 1 | 5 | 353 |
-| **Gemini CLI** | 0/100 | F 🚨 | 8 | 33 | 60 | 36 | 137 | 894 |
-| **OpenCode** | 0/100 | F | 2 | 2 | 37 | 7 | 48 | 322 |
-| **Chatbot UI** | 0/100 | F | 5 | 3 | 10 | 0 | 18 | 261 |
-| **Elia** | 0/100 | F | 2 | 11 | 0 | 0 | 13 | 12 |
-| **BuilderBot** | 0/100 | F | 20 | 14 | 22 | 21 | 77 | 192 |
-| **CodePrism** | 0/100 | F | 7 | 39 | 39 | 49 | 134 | 58 |
-| **Claude-code** | 0/100 | F | 3 | 0 | 0 | 0 | 3 | 2 |
-| **AVERAGE** | **16/100** | **F** | **5.3** | **11.6** | **18.8** | **12.7** | **48.3** | **235** |
+| Project         | Score      | Grade | Critical | High     | Medium   | Low      | Total    | Files Scanned |
+| --------------- | ---------- | ----- | -------- | -------- | -------- | -------- | -------- | ------------- |
+| **Autodoc**     | 100/100    | A+ ✨ | 0        | 0        | 0        | 0        | 0        | 20            |
+| **Plandex AI**  | 48/100     | D-    | 1        | 2        | 1        | 1        | 5        | 353           |
+| **Gemini CLI**  | 0/100      | F 🚨  | 8        | 33       | 60       | 36       | 137      | 894           |
+| **OpenCode**    | 0/100      | F     | 2        | 2        | 37       | 7        | 48       | 322           |
+| **Chatbot UI**  | 0/100      | F     | 5        | 3        | 10       | 0        | 18       | 261           |
+| **Elia**        | 0/100      | F     | 2        | 11       | 0        | 0        | 13       | 12            |
+| **BuilderBot**  | 0/100      | F     | 20       | 14       | 22       | 21       | 77       | 192           |
+| **CodePrism**   | 0/100      | F     | 7        | 39       | 39       | 49       | 134      | 58            |
+| **Claude-code** | 0/100      | F     | 3        | 0        | 0        | 0        | 3        | 2             |
+| **AVERAGE**     | **16/100** | **F** | **5.3**  | **11.6** | **18.8** | **12.7** | **48.3** | **235**       |
 
 **What this means:**
+
 - Only **1 project** out of 9 passed (that's 11%)
 - **8 out of 9** had critical vulnerabilities
 - Google's Gemini CLI? **137 issues** across 894 files
@@ -164,6 +169,7 @@ All real, actively-maintained projects with thousands of stars and actual users.
 **8 Critical Issues Found**, including:
 
 **Command Injection in Sandbox:**
+
 ```typescript
 // packages/cli/src/utils/sandbox.ts
 exec(`some-command ${userInput}`); // ❌ CRITICAL
@@ -226,7 +232,7 @@ db.query(`SELECT * FROM users WHERE id = ${userId}`);
 fs.readFile(`./data/${req.params.file}`);
 
 // Hardcoded Secrets (8 instances)
-const apiKey = "sk_live_1234567890";
+const apiKey = 'sk_live_1234567890';
 ```
 
 **This is the danger zone.** When you prioritize "just make it work" over "make it secure."
@@ -254,8 +260,8 @@ Found **45 instances** of hardcoded API keys:
 
 ```javascript
 // ❌ The Pattern
-const apiKey = "sk_live_xxx";
-const password = "admin123";
+const apiKey = 'sk_live_xxx';
+const password = 'admin123';
 
 // ✅ The Fix (10 seconds)
 const apiKey = process.env.OPENAI_API_KEY;
@@ -282,17 +288,20 @@ Here's what I learned: **Security checks should feel like linting, not like home
 ### The Better Workflow
 
 **1. Write Code (with AI assistance)**
+
 ```bash
 # You're in your flow, shipping features
 git add .
 ```
 
 **2. Quick Security Check (2 seconds)**
+
 ```bash
 vibesec scan .
 ```
 
 **3. Get Instant, Actionable Feedback**
+
 ```bash
 🔴 CRITICAL: Command Injection in src/api/index.js:42
 
@@ -312,6 +321,7 @@ execFile('git', ['clone', repo]);
 ```
 
 **4. Apply the Fix (30 seconds)**
+
 ```javascript
 // Copy-paste the working code
 const { execFile } = require('child_process');
@@ -319,6 +329,7 @@ execFile('git', ['clone', repo]);
 ```
 
 **5. Re-scan & Commit**
+
 ```bash
 vibesec scan .
 
@@ -342,21 +353,25 @@ git commit -m "Add clone endpoint (security verified)"
 ## Why This Approach Works
 
 ### ✅ Fast Feedback Loop
+
 - Scan completes in seconds
 - Issues shown immediately
 - Fix while context is fresh
 
 ### ✅ Plain Language
+
 - No security PhD required
 - Explains the actual risk
 - Shows working code fixes
 
 ### ✅ Stays Local
+
 - Runs in your terminal
 - No code leaves your machine
 - Works offline
 
 ### ✅ Integrates Everywhere
+
 ```bash
 # Pre-commit hook
 vibesec scan --staged
@@ -375,29 +390,30 @@ vibesec scan --diff main
 
 ### What We Found Across All 9 Projects
 
-| Severity | Count | % of Total | Impact |
-|----------|-------|------------|--------|
-| **Critical** | 52 | 12% | Immediate exploitation risk |
-| **High** | 73 | 17% | Serious security concerns |
-| **Medium** | 165 | 38% | Should be fixed soon |
-| **Low** | 145 | 33% | Best practice violations |
-| **TOTAL** | **435** | 100% | — |
+| Severity     | Count   | % of Total | Impact                      |
+| ------------ | ------- | ---------- | --------------------------- |
+| **Critical** | 52      | 12%        | Immediate exploitation risk |
+| **High**     | 73      | 17%        | Serious security concerns   |
+| **Medium**   | 165     | 38%        | Should be fixed soon        |
+| **Low**      | 145     | 33%        | Best practice violations    |
+| **TOTAL**    | **435** | 100%       | —                           |
 
 ### Top 5 Issue Categories
 
-| Category | Count | Quick Fix? |
-|----------|-------|------------|
-| 1. Missing Security Headers | 126 | ✅ Yes (5 sec) |
-| 2. Injection Vulnerabilities | 84 | ✅ Yes (30 sec) |
-| 3. Hardcoded Secrets | 45 | ✅ Yes (10 sec) |
-| 4. CSRF/CORS Issues | 38 | ✅ Yes (1 min) |
-| 5. Weak Cryptography | 27 | ⚠️ Moderate (5 min) |
+| Category                     | Count | Quick Fix?          |
+| ---------------------------- | ----- | ------------------- |
+| 1. Missing Security Headers  | 126   | ✅ Yes (5 sec)      |
+| 2. Injection Vulnerabilities | 84    | ✅ Yes (30 sec)     |
+| 3. Hardcoded Secrets         | 45    | ✅ Yes (10 sec)     |
+| 4. CSRF/CORS Issues          | 38    | ✅ Yes (1 min)      |
+| 5. Weak Cryptography         | 27    | ⚠️ Moderate (5 min) |
 
 **The good news?** Most issues have **10-30 second fixes**. You don't need a security team - you just need to know they're there.
 
 ## Real Developer Workflows
 
 ### Workflow 1: Pre-Commit Check
+
 ```bash
 # .git/hooks/pre-commit
 #!/bin/sh
@@ -409,6 +425,7 @@ vibesec scan --staged --fail-on critical
 ```
 
 ### Workflow 2: PR Review
+
 ```bash
 # In your CI/CD
 - name: Security Scan
@@ -421,6 +438,7 @@ vibesec scan --staged --fail-on critical
 ```
 
 ### Workflow 3: Development Watch Mode
+
 ```bash
 # While you code
 vibesec watch .
@@ -431,6 +449,7 @@ vibesec watch .
 ```
 
 ### Workflow 4: Quick Spot Check
+
 ```bash
 # Before pushing
 vibesec scan src/
@@ -461,7 +480,7 @@ From our scans:
 
 ### But Here's the Thing...
 
-AI code isn't *inherently* less secure. It's just **faster to write**, which means:
+AI code isn't _inherently_ less secure. It's just **faster to write**, which means:
 
 - More code shipped = more potential issues
 - Less time for security review
@@ -471,7 +490,7 @@ AI code isn't *inherently* less secure. It's just **faster to write**, which mea
 
 ## How VibeSec is Different
 
-You might be thinking: *"We already have SonarQube/Snyk/GitHub Security. Why do we need another security tool?"*
+You might be thinking: _"We already have SonarQube/Snyk/GitHub Security. Why do we need another security tool?"_
 
 **Fair question.** Here's the honest answer:
 
@@ -480,21 +499,25 @@ You might be thinking: *"We already have SonarQube/Snyk/GitHub Security. Why do 
 Look, SonarQube and Snyk are **excellent** at what they do. Enterprise-grade, comprehensive analysis. But they weren't built for how we actually code with AI:
 
 **❌ They're too slow**
+
 - SonarQube: 5-15 minute scans (plus you need to set up a server)
 - Snyk: 3-10 minutes (uploads your code to the cloud)
 - GitHub Security: CI/CD only (so you find out after you've already moved on)
 - **VibeSec: 2 seconds, runs locally**
 
 **❌ They break your flow**
+
 - Write code → commit → push → wait 10 minutes → check dashboard in browser → try to remember what you were doing → fix → repeat
 - **VibeSec: Scan right there in your terminal while you still remember what you wrote**
 
 **❌ They speak security-ese**
+
 - "CWE-78: Improper Neutralization of Special Elements used in an OS Command"
-- Me: *googles what that means*
+- Me: _googles what that means_
 - **VibeSec: "Attackers can run any command. Here's the fix: [3 lines of code]"**
 
 **❌ They're not built for AI code**
+
 - Generic rules that miss AI-specific patterns
 - Don't catch the copy-paste mistakes AI tools make
 - **VibeSec: Built specifically for catching AI-generated vulnerabilities**
@@ -518,6 +541,7 @@ Catch 80%           Catch remaining 15%     Monitor 5%
 Let's say Copilot just helped you write a file upload endpoint:
 
 #### Traditional Workflow (SonarQube/Snyk)
+
 ```bash
 # 1. Write code with AI
 [GitHub Copilot suggests upload code]
@@ -554,6 +578,7 @@ git add . && git commit -m "Fix security issue" && git push
 **Total time:** 20-40 minutes + you've completely lost your flow
 
 #### VibeSec Workflow
+
 ```bash
 # 1. Write code with AI
 [Copilot suggests upload code]
@@ -593,26 +618,27 @@ git add . && git commit -m "Add secure upload"
 
 ### Feature Comparison
 
-| Feature | VibeSec | SonarQube | Snyk | GitHub Security |
-|---------|---------|-----------|------|-----------------|
-| **Scan Speed** | 2 seconds | 5-15 minutes | 3-10 minutes | CI/CD only |
-| **Where it runs** | Local terminal | Server/Cloud | Cloud | GitHub Cloud |
-| **Setup required** | `npm install -g` | Docker + config | Account + integration | Enable in repo settings |
-| **Privacy** | Code never leaves machine | Uploaded to server | Uploaded to cloud | Uploaded to GitHub |
-| **Output format** | Plain English + fixes | Technical (CWE/CVE) | Technical + guidance | Technical |
-| **Fix suggestions** | Copy-paste ready code | Links to docs | General guidance | Links to docs |
-| **Workflow integration** | Pre-commit, watch mode | CI/CD only | CI/CD + IDE plugin | CI/CD only |
-| **AI code patterns** | ✅ Specialized | ❌ Generic | ❌ Generic | ❌ Generic |
-| **Dependency scanning** | ❌ (code only) | ✅ | ✅✅ (best) | ✅ |
-| **License compliance** | ❌ | ✅ | ✅ | ✅ |
-| **Custom rules** | ✅ YAML-based | ✅ Complex | ⚠️ Limited | ❌ |
-| **Team management** | ❌ (local tool) | ✅✅ Enterprise | ✅ | ✅ |
-| **Historical tracking** | ❌ (per-scan) | ✅✅ | ✅ | ✅ |
-| **Price** | Free (open source) | $$$$ (enterprise) | $$ (per developer) | $$$ (per seat) |
+| Feature                  | VibeSec                   | SonarQube           | Snyk                  | GitHub Security         |
+| ------------------------ | ------------------------- | ------------------- | --------------------- | ----------------------- |
+| **Scan Speed**           | 2 seconds                 | 5-15 minutes        | 3-10 minutes          | CI/CD only              |
+| **Where it runs**        | Local terminal            | Server/Cloud        | Cloud                 | GitHub Cloud            |
+| **Setup required**       | `npm install -g`          | Docker + config     | Account + integration | Enable in repo settings |
+| **Privacy**              | Code never leaves machine | Uploaded to server  | Uploaded to cloud     | Uploaded to GitHub      |
+| **Output format**        | Plain English + fixes     | Technical (CWE/CVE) | Technical + guidance  | Technical               |
+| **Fix suggestions**      | Copy-paste ready code     | Links to docs       | General guidance      | Links to docs           |
+| **Workflow integration** | Pre-commit, watch mode    | CI/CD only          | CI/CD + IDE plugin    | CI/CD only              |
+| **AI code patterns**     | ✅ Specialized            | ❌ Generic          | ❌ Generic            | ❌ Generic              |
+| **Dependency scanning**  | ❌ (code only)            | ✅                  | ✅✅ (best)           | ✅                      |
+| **License compliance**   | ❌                        | ✅                  | ✅                    | ✅                      |
+| **Custom rules**         | ✅ YAML-based             | ✅ Complex          | ⚠️ Limited            | ❌                      |
+| **Team management**      | ❌ (local tool)           | ✅✅ Enterprise     | ✅                    | ✅                      |
+| **Historical tracking**  | ❌ (per-scan)             | ✅✅                | ✅                    | ✅                      |
+| **Price**                | Free (open source)        | $$$$ (enterprise)   | $$ (per developer)    | $$$ (per seat)          |
 
 ### When to Use What
 
 **Use VibeSec when:**
+
 - ✅ Coding with AI assistance (Copilot, Claude, ChatGPT)
 - ✅ You want instant feedback (during development)
 - ✅ You need plain language explanations
@@ -621,6 +647,7 @@ git add . && git commit -m "Add secure upload"
 - ✅ You want to catch issues before committing
 
 **Use SonarQube when:**
+
 - ✅ You need enterprise-grade reporting
 - ✅ You want team dashboards and metrics
 - ✅ You need historical trend analysis
@@ -628,12 +655,14 @@ git add . && git commit -m "Add secure upload"
 - ✅ You have a large monorepo (1M+ lines)
 
 **Use Snyk when:**
+
 - ✅ Dependency vulnerabilities are your main concern
 - ✅ You need container/IaC scanning
 - ✅ You want automated dependency PRs
 - ✅ License compliance is critical
 
 **Use GitHub Advanced Security when:**
+
 - ✅ You're all-in on GitHub
 - ✅ You want CodeQL for deep analysis
 - ✅ Secret scanning is priority
@@ -664,6 +693,7 @@ git add . && git commit -m "Add secure upload"
 ```
 
 **Result:**
+
 - 80% of issues caught in development (VibeSec - 2 seconds)
 - 15% caught in CI/CD (SonarQube - 5 minutes)
 - 5% caught in production (Snyk - monitoring)
@@ -675,6 +705,7 @@ git add . && git commit -m "Add secure upload"
 Security tools only work **if you actually use them.**
 
 **Real developer behavior** (be honest):
+
 - ✅ **Will run:** 2-second tool every commit
 - ⚠️ **Might run:** 5-minute tool before pushing
 - ❌ **Won't run:** 15-minute tool manually
@@ -686,7 +717,7 @@ VibeSec is designed to be **faster than running your tests** - so fast you don't
 
 ### Real User Quote
 
-> *"SonarQube is for code review. Snyk is for dependencies. VibeSec is for right now while I'm coding. Completely different use cases."*
+> _"SonarQube is for code review. Snyk is for dependencies. VibeSec is for right now while I'm coding. Completely different use cases."_
 >
 > — Developer who uses all three
 
@@ -695,6 +726,7 @@ VibeSec is designed to be **faster than running your tests** - so fast you don't
 **Autodoc** - TypeScript documentation generator
 
 **Why it scored 100/100:**
+
 - No hardcoded secrets
 - Proper input validation
 - Safe file operations
@@ -702,6 +734,7 @@ VibeSec is designed to be **faster than running your tests** - so fast you don't
 - No dangerous patterns (eval, exec, etc.)
 
 **What I learned from this:**
+
 - Security isn't rocket science
 - It's just **consistent habits**
 - Automated checks catch what you miss at 2am
@@ -709,6 +742,7 @@ VibeSec is designed to be **faster than running your tests** - so fast you don't
 ## How to Get Started
 
 ### Step 1: Install VibeSec
+
 ```bash
 npm install -g vibesec
 # or
@@ -716,12 +750,14 @@ bun install -g vibesec
 ```
 
 ### Step 2: Scan Your Project
+
 ```bash
 cd your-project
 vibesec scan .
 ```
 
 ### Step 3: Fix Critical Issues First
+
 ```bash
 # Focus on what matters
 vibesec scan . --severity critical
@@ -731,6 +767,7 @@ vibesec scan . --explain
 ```
 
 ### Step 4: Add to Your Workflow
+
 ```bash
 # Pre-commit hook
 vibesec install-hooks
@@ -747,6 +784,7 @@ vibesec scan . --fail-on high --output json
 **93 Security Rules** across 16 categories:
 
 ### Critical Issues
+
 - ✅ Command Injection (exec, spawn, system)
 - ✅ SQL Injection (string concatenation)
 - ✅ Path Traversal (user input in file paths)
@@ -754,6 +792,7 @@ vibesec scan . --fail-on high --output json
 - ✅ Insecure Deserialization (pickle, unserialize)
 
 ### High Severity
+
 - ✅ XSS Vulnerabilities (innerHTML, eval)
 - ✅ CSRF Protection (missing tokens)
 - ✅ SSRF (server-side requests)
@@ -761,6 +800,7 @@ vibesec scan . --fail-on high --output json
 - ✅ Authentication Issues (weak passwords, no rate limiting)
 
 ### Best Practices
+
 - ✅ Security Headers (CSP, HSTS, X-Frame-Options)
 - ✅ CORS Configuration
 - ✅ Prototype Pollution (JavaScript)
@@ -776,6 +816,7 @@ vibesec scan . --fail-on high --output json
 Remember when we didn't have ESLint? Code quality was subjective. Style was inconsistent. Bugs slipped through.
 
 Then ESLint made quality **automatic and fast**:
+
 - ⚡ Instant feedback
 - 🎯 Clear rules
 - 🔧 Auto-fix suggestions
@@ -792,6 +833,7 @@ According to IBM Security, the average cost of a data breach in 2024:
 - **277 days** average time to identify and contain
 
 Compare that to:
+
 - **2 seconds** to run a security scan
 - **30 seconds** to fix a command injection
 - **$0** cost to prevent the breach
@@ -799,6 +841,7 @@ Compare that to:
 ### The Reality
 
 Every project we scanned was:
+
 - ✅ Functional and working
 - ✅ Passing all tests
 - ✅ Used by thousands of users
@@ -809,18 +852,23 @@ Every project we scanned was:
 ## Key Takeaways for Developers
 
 ### 1. Fast Tools Win
+
 Security that interrupts flow doesn't get used. Make it **faster than your test suite**.
 
 ### 2. Plain Language Wins
+
 "CWE-78" means nothing. "Attackers can execute any command" is clear. **Explain like I'm coding at 2am.**
 
 ### 3. Fixes Win Over Findings
+
 Don't just point out issues. **Show the working code fix.** Copy-paste ready.
 
 ### 4. Local First Wins
+
 Code never leaves your machine. No security review needed to use the tool. **Privacy matters.**
 
 ### 5. AI Code Needs More Scrutiny
+
 It's not that AI code is less secure - it's that **we generate it faster**. More code = more surface area. Scan accordingly.
 
 ## The Challenge
@@ -832,6 +880,7 @@ Okay, here's my challenge:
 Not "I'll do it tomorrow." Not "next sprint." **Now.**
 
 I bet you'll find:
+
 - At least one hardcoded API key you forgot about
 - Missing security headers
 - A SQL injection vulnerability somewhere
@@ -862,6 +911,7 @@ vibesec scan .
 ## What's Next
 
 I'm working on:
+
 - **IDE plugins** (VSCode, Cursor, Neovim)
 - **Real-time scanning** (as you type)
 - **AI-powered fix suggestions** (not just templates)
@@ -883,6 +933,7 @@ Some might be context-dependent (e.g., CSP headers on CLI tools), but the critic
 ### "Can I customize the scoring?"
 
 Yes! You can:
+
 - Adjust severity weights in config
 - Disable rules that don't apply to your project type
 - Create custom rules for your team's standards
@@ -892,12 +943,12 @@ Yes! You can:
 
 **Short answer:** VibeSec is designed for **development workflow**, not CI/CD or production monitoring.
 
-| Use Case | Best Tool |
-|----------|-----------|
-| **While coding** (instant feedback) | VibeSec ⚡ |
-| **CI/CD** (comprehensive analysis) | SonarQube, Snyk |
-| **Dependencies** (CVE monitoring) | Snyk, GitHub Security |
-| **Production** (runtime monitoring) | Snyk, AppSec tools |
+| Use Case                            | Best Tool             |
+| ----------------------------------- | --------------------- |
+| **While coding** (instant feedback) | VibeSec ⚡            |
+| **CI/CD** (comprehensive analysis)  | SonarQube, Snyk       |
+| **Dependencies** (CVE monitoring)   | Snyk, GitHub Security |
+| **Production** (runtime monitoring) | Snyk, AppSec tools    |
 
 **Detailed comparison:** See the [How VibeSec is Different](#how-vibesec-is-different) section above for workflow examples, feature matrices, and when to use each tool.
 
@@ -932,6 +983,7 @@ What's your workflow for catching security issues? Scan before commits? Rely on 
 Let me know in the comments. I'm genuinely curious.
 
 And if this was useful:
+
 - ⭐ Star [VibeSec on GitHub](https://github.com/ferg-cod3s/vibesec)
 - 🔗 Share with your team
 - 💬 Follow for more posts about security + AI code
@@ -943,6 +995,7 @@ And if this was useful:
 VibeSec is an open-source security scanner designed for developers who code with AI assistance. It runs in your terminal, speaks plain language, and fits your workflow.
 
 **Features:**
+
 - 93 security rules (OWASP Top 10 coverage)
 - JavaScript, TypeScript, Python, PHP, Java, Go support
 - Plain language explanations
@@ -951,12 +1004,13 @@ VibeSec is an open-source security scanner designed for developers who code with
 - Local-first (your code never leaves your machine)
 
 **Connect:**
+
 - GitHub: [@ferg-cod3s](https://github.com/ferg-cod3s)
 - Twitter: [@f3rg_codes](https://twitter.com/f3rg_codes)
 - Website: [vibesec.dev](https://vibesec.dev) _(coming soon)_
 
 ---
 
-*All projects scanned are open-source and publicly available. Issues have been responsibly disclosed to project maintainers.*
+_All projects scanned are open-source and publicly available. Issues have been responsibly disclosed to project maintainers._
 
 #security #ai #javascript #typescript #devtools #opensource #workflow #devsecops

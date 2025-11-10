@@ -183,6 +183,7 @@ Create a custom color scheme in `terminal-theme.json`:
 ### Modify Demo Script
 
 Edit `record-demo.sh` or `generate-demo-video.py` to customize:
+
 - Timing (pause durations)
 - Content (which demos to show)
 - Colors and formatting
@@ -195,6 +196,7 @@ Edit `record-demo.sh` or `generate-demo-video.py` to customize:
 ### For Social Media
 
 **Twitter/X:**
+
 - Format: GIF or MP4
 - Max size: 512 MB (GIF), 512 MB (video)
 - Aspect ratio: 1:1 (square) or 16:9
@@ -202,6 +204,7 @@ Edit `record-demo.sh` or `generate-demo-video.py` to customize:
 - Resolution: 1280x720 or 1920x1080
 
 **LinkedIn:**
+
 - Format: MP4
 - Max size: 200 MB
 - Aspect ratio: 16:9 or 1:1
@@ -209,6 +212,7 @@ Edit `record-demo.sh` or `generate-demo-video.py` to customize:
 - Resolution: 1920x1080
 
 **Reddit:**
+
 - Format: GIF or MP4
 - Max size: 100 MB (GIF), 1 GB (video)
 - Duration: 60-120 seconds
@@ -217,12 +221,14 @@ Edit `record-demo.sh` or `generate-demo-video.py` to customize:
 ### For Documentation
 
 **GitHub README:**
+
 - Format: GIF or SVG
 - Max size: 10 MB (for fast loading)
 - Width: 800-1000px
 - Duration: 30-60 seconds
 
 **Website/Blog:**
+
 - Format: SVG (best) or optimized GIF
 - Max size: 5 MB
 - Responsive sizing
@@ -357,6 +363,7 @@ asciinema upload vibesec-demo.cast
 ```
 
 **Result:**
+
 - `vibesec-demo.gif` - For GitHub README (5-10 MB)
 - `vibesec-demo.mp4` - For Twitter/YouTube (2-5 MB)
 - `vibesec-demo.svg` - For website embedding (1-2 MB)
@@ -369,6 +376,7 @@ asciinema upload vibesec-demo.cast
 ### Asciinema.org (Recommended for technical audiences)
 
 **Pros:**
+
 - Free hosting
 - Perfect quality
 - Easy sharing
@@ -376,12 +384,14 @@ asciinema upload vibesec-demo.cast
 - Supports copy-paste from recording
 
 **How to use:**
+
 ```bash
 asciinema upload vibesec-demo.cast
 # Returns shareable URL
 ```
 
 **Embed in README:**
+
 ```markdown
 [![asciicast](https://asciinema.org/a/xxx.svg)](https://asciinema.org/a/xxx)
 ```
@@ -391,12 +401,14 @@ asciinema upload vibesec-demo.cast
 ### YouTube (Best for reach)
 
 **Pros:**
+
 - Massive reach
 - SEO benefits
 - Comments and engagement
 - Analytics
 
 **How to prepare:**
+
 ```bash
 # Convert to MP4 with high quality
 ffmpeg -i vibesec-demo.gif -c:v libx264 -preset slow \
@@ -411,11 +423,13 @@ ffmpeg -i vibesec-demo.gif -c:v libx264 -preset slow \
 ### Twitter/X
 
 **Pros:**
+
 - Viral potential
 - Immediate engagement
 - Easy sharing
 
 **How to prepare:**
+
 ```bash
 # Keep under 512 MB
 # 30-60 seconds max
@@ -428,15 +442,18 @@ ffmpeg -i input.gif -t 60 vibesec-twitter.mp4
 ### GitHub README
 
 **Pros:**
+
 - Always visible
 - No external dependencies
 - Loads with README
 
 **How to embed:**
+
 ```markdown
 ![VibeSec Demo](./demo-automation/vibesec-demo.gif)
 
 <!-- Or use SVG for better quality -->
+
 ![VibeSec Demo](./demo-automation/vibesec-demo.svg)
 ```
 
@@ -481,13 +498,13 @@ ffmpeg -i vibesec-demo.mp4 -vf subtitles=subtitles.srt \
 
 Typical sizes for 60-second demo:
 
-| Format | Size | Best For |
-|--------|------|----------|
-| .cast (source) | 50 KB | Sharing, archiving |
-| .svg | 500 KB - 2 MB | Web embedding |
-| .gif (optimized) | 3-8 MB | GitHub, social |
-| .mp4 (720p) | 2-5 MB | Twitter, YouTube |
-| .mp4 (1080p) | 5-15 MB | YouTube, LinkedIn |
+| Format           | Size          | Best For           |
+| ---------------- | ------------- | ------------------ |
+| .cast (source)   | 50 KB         | Sharing, archiving |
+| .svg             | 500 KB - 2 MB | Web embedding      |
+| .gif (optimized) | 3-8 MB        | GitHub, social     |
+| .mp4 (720p)      | 2-5 MB        | Twitter, YouTube   |
+| .mp4 (1080p)     | 5-15 MB       | YouTube, LinkedIn  |
 
 ---
 
@@ -527,6 +544,7 @@ asciinema upload vibesec-demo.cast
 ## 🎯 Next Steps
 
 1. **Generate your first demo:**
+
    ```bash
    python3 demo-automation/generate-demo-video.py
    ```

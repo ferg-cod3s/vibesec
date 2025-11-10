@@ -11,12 +11,14 @@
 **VibeSec is currently invisible to AI coding assistants.**
 
 ### Current Reality
+
 - ✅ VibeSec can scan AI-generated code
 - ❌ AI assistants can't call VibeSec
 - ❌ AI assistants don't know about vulnerabilities
 - ❌ Manual feedback loop (slow, error-prone)
 
 ### Impact
+
 - Developers must manually run scans
 - AI generates vulnerable code without feedback
 - No integration with "vibe coding" workflows
@@ -27,6 +29,7 @@
 ## Solution: VibeSec as MCP Server
 
 Implement Model Context Protocol server so AI assistants can:
+
 1. **Scan code directly** during generation
 2. **Receive vulnerability reports** in real-time
 3. **Iterate automatically** until code is secure
@@ -37,6 +40,7 @@ Implement Model Context Protocol server so AI assistants can:
 ## Proposed MCP Tools
 
 ### 1. `vibesec_scan`
+
 **Scan files for security vulnerabilities**
 
 ```typescript
@@ -64,6 +68,7 @@ Implement Model Context Protocol server so AI assistants can:
 ```
 
 ### 2. `vibesec_fix_suggestion`
+
 **Get AI-friendly fix recommendations**
 
 ```typescript
@@ -84,6 +89,7 @@ Implement Model Context Protocol server so AI assistants can:
 ```
 
 ### 3. `vibesec_validate_fix`
+
 **Verify a fix resolves the vulnerability**
 
 ```typescript
@@ -104,6 +110,7 @@ Implement Model Context Protocol server so AI assistants can:
 ```
 
 ### 4. `vibesec_init_config`
+
 **Generate project configuration**
 
 ```typescript
@@ -124,6 +131,7 @@ Implement Model Context Protocol server so AI assistants can:
 ```
 
 ### 5. `vibesec_list_rules`
+
 **Discover available detection rules**
 
 ```typescript
@@ -165,7 +173,7 @@ async function login(req, res) {
 // 2. AI scans automatically
 const result = await mcp__vibesec__scan({
   files: ['src/api/login.ts'],
-  severity: 'high'
+  severity: 'high',
 });
 
 // 3. AI sees vulnerability
@@ -173,7 +181,7 @@ const result = await mcp__vibesec__scan({
 
 // 4. AI gets fix suggestion
 const fix = await mcp__vibesec__fix_suggestion({
-  finding: result.findings[0]
+  finding: result.findings[0],
 });
 
 // 5. AI fixes code automatically
@@ -190,7 +198,7 @@ async function login(req, res) {
 const validation = await mcp__vibesec__validate_fix({
   originalCode: code,
   fixedCode: fixedCode,
-  findingId: result.findings[0].id
+  findingId: result.findings[0].id,
 });
 
 // ✅ validation.fixed: true
@@ -204,7 +212,7 @@ const validation = await mcp__vibesec__validate_fix({
 // 1. Cursor scans before commit
 const scan = await mcp__vibesec__scan({
   files: ['src/api.ts'],
-  incremental: true
+  incremental: true,
 });
 
 // 2. If vulnerabilities found, block commit
@@ -239,7 +247,7 @@ const user = eval(req.query.code); // ← DANGEROUS
 // MCP server scans in background:
 const scan = await mcp__vibesec__scan({
   files: [currentFile],
-  incremental: true
+  incremental: true,
 });
 
 // Copilot shows inline warning:
@@ -254,6 +262,7 @@ const scan = await mcp__vibesec__scan({
 ### Phase 1: Core MCP Server (16 hours)
 
 **Week 1:**
+
 - [ ] Create MCP server scaffolding (`src/mcp/server.ts`)
 - [ ] Implement stdio transport for Claude Code
 - [ ] Add `vibesec_scan` tool
@@ -261,6 +270,7 @@ const scan = await mcp__vibesec__scan({
 - [ ] Basic error handling and logging
 
 **Deliverables:**
+
 - Working MCP server
 - Claude Code integration
 - 2 basic tools functional
@@ -268,6 +278,7 @@ const scan = await mcp__vibesec__scan({
 ### Phase 2: Advanced Tools (12 hours)
 
 **Week 2:**
+
 - [ ] Implement `vibesec_fix_suggestion`
 - [ ] Implement `vibesec_validate_fix`
 - [ ] Implement `vibesec_init_config`
@@ -275,6 +286,7 @@ const scan = await mcp__vibesec__scan({
 - [ ] Performance optimization
 
 **Deliverables:**
+
 - 5 complete MCP tools
 - Streaming for long scans
 - Documentation
@@ -282,6 +294,7 @@ const scan = await mcp__vibesec__scan({
 ### Phase 3: Integrations & Testing (12 hours)
 
 **Week 3:**
+
 - [ ] Test with Claude Code
 - [ ] Test with Cursor (if possible)
 - [ ] Create example workflows
@@ -289,6 +302,7 @@ const scan = await mcp__vibesec__scan({
 - [ ] Performance benchmarks
 
 **Deliverables:**
+
 - Integration tests
 - Example workflows
 - Performance benchmarks
@@ -297,12 +311,14 @@ const scan = await mcp__vibesec__scan({
 ### Phase 4: Distribution (8 hours)
 
 **Week 4:**
+
 - [ ] NPM package with MCP server
 - [ ] Installation guide
 - [ ] Video tutorial
 - [ ] GitHub README update
 
 **Deliverables:**
+
 - Published MCP server
 - Complete documentation
 - Tutorial video
@@ -314,6 +330,7 @@ const scan = await mcp__vibesec__scan({
 ## Technical Architecture
 
 ### File Structure
+
 ```
 vibesec/
 ├── src/
@@ -375,18 +392,21 @@ await server.start();
 ## Benefits
 
 ### For Developers
+
 - ✅ **Automatic security checks** during AI coding
 - ✅ **Faster feedback loops** (seconds vs minutes)
 - ✅ **Self-correcting AI** that learns from security issues
 - ✅ **Zero manual scanning** required
 
 ### For AI Assistants
+
 - ✅ **Built-in security awareness**
 - ✅ **Vulnerability knowledge** without training
 - ✅ **Validation loop** for code quality
 - ✅ **Context-aware fixes** based on real rules
 
 ### For Organizations
+
 - ✅ **Shift-left security** (vulnerabilities caught at generation)
 - ✅ **Reduced security debt** (no vulnerable code in repos)
 - ✅ **Developer productivity** (AI handles security automatically)
@@ -397,17 +417,20 @@ await server.start();
 ## Market Differentiation
 
 ### Unique Positioning
+
 **"The only security scanner that AI assistants can call natively"**
 
 ### Competitive Advantage
-| Tool | CLI | MCP Server | AI-Native |
-|------|-----|------------|-----------|
-| Snyk | ✅ | ❌ | ❌ |
-| SonarQube | ✅ | ❌ | ❌ |
-| Semgrep | ✅ | ❌ | ❌ |
-| **VibeSec** | ✅ | ✅ | ✅ |
+
+| Tool        | CLI | MCP Server | AI-Native |
+| ----------- | --- | ---------- | --------- |
+| Snyk        | ✅  | ❌         | ❌        |
+| SonarQube   | ✅  | ❌         | ❌        |
+| Semgrep     | ✅  | ❌         | ❌        |
+| **VibeSec** | ✅  | ✅         | ✅        |
 
 ### Use Cases
+
 1. **Claude Code** - Auto-fix during generation
 2. **Cursor** - Pre-commit validation
 3. **Windsurf** - Real-time feedback
@@ -420,27 +443,33 @@ await server.start();
 ## Risks & Mitigations
 
 ### Risk 1: Performance Overhead
+
 **Impact**: Slow scans block AI workflow
 
 **Mitigation**:
+
 - Incremental scanning (git diff only)
 - Streaming results (show findings as found)
 - Configurable timeout (fail-fast option)
 - Caching (same code = same results)
 
 ### Risk 2: False Positives Annoy AI
+
 **Impact**: AI repeatedly tries to "fix" non-issues
 
 **Mitigation**:
+
 - Confidence scores on findings
 - Configurable severity threshold
 - Allow AI to suppress findings
 - Learn from user feedback
 
 ### Risk 3: Integration Complexity
+
 **Impact**: Different AI platforms need different integrations
 
 **Mitigation**:
+
 - Start with MCP (Claude Code standard)
 - Document API clearly for other platforms
 - HTTP API for non-MCP platforms
@@ -451,18 +480,21 @@ await server.start();
 ## Success Metrics
 
 ### Technical KPIs
+
 - [ ] Scan latency <2s for typical file
 - [ ] MCP tool response <200ms overhead
 - [ ] 0 crashes on malformed input
 - [ ] 100% test coverage for MCP tools
 
 ### Adoption KPIs
+
 - [ ] 100+ Claude Code users in first month
 - [ ] 10+ GitHub stars on announcement
 - [ ] Featured in Claude Code showcase
 - [ ] Integration with 3+ AI coding platforms
 
 ### Business KPIs
+
 - [ ] 50% reduction in vulnerabilities in AI-generated code
 - [ ] 80% user retention after first scan
 - [ ] Positive feedback from 90% of users
@@ -500,16 +532,19 @@ await server.start();
 **IMPLEMENT THIS AS HIGH PRIORITY**
 
 ### Rationale
+
 1. **Unique market position** - No other security scanner is AI-native
 2. **Natural fit** - VibeSec is designed for AI-generated code
 3. **Low effort** - 48 hours to MVP
 4. **High impact** - Transforms security from post-gen to in-loop
 
 ### Suggested Priority
+
 - **Insert as Priority 2.5** (after current P2, before P3)
 - **Or replace** some of planned P2 (Snyk/Socket can wait)
 
 ### Proposed Timeline
+
 - **Week 5-6**: MCP Server implementation
 - **Week 7**: Testing and documentation
 - **Week 8**: Launch and promotion

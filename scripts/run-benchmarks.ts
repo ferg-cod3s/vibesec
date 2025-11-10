@@ -15,7 +15,9 @@ async function main() {
 
   // Check for --expose-gc flag
   if (!global.gc) {
-    console.log('⚠️  Note: Running without --expose-gc flag. Memory measurements may be less accurate.');
+    console.log(
+      '⚠️  Note: Running without --expose-gc flag. Memory measurements may be less accurate.'
+    );
     console.log('   For better results, run with: bun --expose-gc run scripts/run-benchmarks.ts\n');
   }
 

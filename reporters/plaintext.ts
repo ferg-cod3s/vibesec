@@ -58,13 +58,15 @@ export class PlainTextReporter {
     lines.push('');
     lines.push(chalk.bold('📋 Summary:'));
     lines.push(`  ✓ ${result.summary.total} security issues detected`);
-    
+
     if (result.summary.bySeverity.critical > 0) {
       lines.push(
-        chalk.red(`  ✓ ${result.summary.bySeverity.critical} require immediate attention (CRITICAL)`)
+        chalk.red(
+          `  ✓ ${result.summary.bySeverity.critical} require immediate attention (CRITICAL)`
+        )
       );
     }
-    
+
     lines.push('  ✓ All issues include fix recommendations');
     lines.push('');
 
@@ -98,7 +100,7 @@ export class PlainTextReporter {
 
     // Location
     lines.push(chalk.gray(`📍 Location: ${finding.location.file}:${finding.location.line}`));
-    
+
     // Snippet
     lines.push(chalk.gray('📝 Code:'));
     lines.push(chalk.gray(finding.snippet));
@@ -112,7 +114,7 @@ export class PlainTextReporter {
     lines.push(chalk.green('✅ Fix:'));
     lines.push(finding.fix.recommendation);
     lines.push('');
-    
+
     if (finding.fix.before) {
       lines.push(chalk.gray('  Before:'));
       lines.push(chalk.red(`  ${finding.fix.before}`));

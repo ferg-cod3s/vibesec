@@ -9,6 +9,7 @@
 ## 📊 Current Status
 
 ### Overall Progress
+
 - **Total Components**: 37 atomic components across 8 layers
 - **Complete**: 24 components (65%)
 - **Remaining**: 13 components (35%)
@@ -23,6 +24,7 @@
 ### What's Built and Working
 
 #### Core Scanning Engine (5/7 components)
+
 - ✅ File discovery with fast-glob (scanner/core/engine.ts)
 - ✅ YAML rule loading (scanner/core/rule-loader.ts)
 - ✅ Regex pattern matching (scanner/analyzers/regex.ts)
@@ -31,6 +33,7 @@
 - ✅ Parallel/sequential scanning modes
 
 #### Detection Rules (19/20 systems)
+
 - ✅ 16 YAML rule files with 90+ rules
 - ✅ Categories: Secrets, Injection, Auth, AI-Specific, Incomplete, CSRF, Crypto, Headers, Path Traversal, Prototype Pollution, SSRF, Deserialization, Command Injection
 - ✅ Multi-language patterns (JS, TS, Python)
@@ -38,12 +41,14 @@
 - ✅ Fix recommendations
 
 #### Reporting System (4/6 reporters)
+
 - ✅ Plain Text Reporter (technical users)
 - ✅ Plain Language Reporter (--explain flag for non-technical)
 - ✅ Stakeholder Reporter (executive summaries)
 - ✅ JSON Reporter (CI/CD integration)
 
 #### User Experience (4/6 features)
+
 - ✅ CLI with Commander.js (cli/index.ts)
 - ✅ Progress indicators with ora spinners
 - ✅ Friendly error handling (lib/errors/friendly-handler.ts)
@@ -52,6 +57,7 @@
 - ✅ --no-color flag for accessibility
 
 #### Testing Infrastructure (6/7 systems)
+
 - ✅ Unit tests (4 test files)
 - ✅ Integration tests (scanner.test.ts)
 - ✅ Vulnerable test fixtures (16 files: 8 JS, 8 Python)
@@ -60,12 +66,14 @@
 - ✅ 82% test coverage
 
 #### Documentation (3/5 sets)
+
 - ✅ Architecture docs (ARCHITECTURE.md - 467 lines)
 - ✅ POC specification (POC_SPEC.md - 452 lines)
 - ✅ Quick Start guide (QUICK_START.md - 850+ lines)
 - ✅ Tech stack documentation (TECH_STACK.md)
 
 #### Build & Deployment (1/5 systems)
+
 - ✅ TypeScript + Bun build system
 - ✅ NPM scripts (build, dev, test, lint)
 - ✅ Asset copying (copy-assets.js)
@@ -77,12 +85,14 @@
 ### Priority 1: Foundation (38 hours, Weeks 1-2)
 
 **🎯 P1.1: AST Parser Integration** (16h)
+
 - Tree-sitter for JS/TS/Python/Go
 - Complex pattern detection (data flow, control flow)
 - Target: <200ms per file
 - Impact: 40% improvement in detection accuracy
 
 **🎯 P1.2: Configuration System** (12h)
+
 - .vibesec.yaml support
 - Environment variable substitution
 - Exclude/include patterns
@@ -90,6 +100,7 @@
 - Impact: Enterprise-ready configuration
 
 **🎯 P1.3: Incremental Scanning** (10h)
+
 - Git diff-based file filtering
 - Result caching (SHA-256 hashing)
 - Target: <10s for typical PR
@@ -100,17 +111,20 @@
 ### Priority 2: Integrations (48 hours, Weeks 3-4)
 
 **🎯 P2.1: Snyk Integration** (16h)
+
 - API client for vulnerability enrichment
 - Rate limiting and caching
 - Impact: +50% vulnerability coverage
 
 **🎯 P2.2: Socket.dev Integration** (12h)
+
 - Supply chain attack detection
 - Package risk scoring
 - Typosquatting detection
 - Impact: Supply chain security
 
 **🎯 P2.3: GitHub Action** (20h)
+
 - Action YAML + marketplace listing
 - PR annotations and comments
 - SARIF upload to Security tab
@@ -124,6 +138,7 @@
 **🚀 Game-Changer: First AI-Native Security Scanner**
 
 **🎯 P2.5: Model Context Protocol Server** (48h)
+
 - MCP server implementation with stdio transport
 - 5 AI-accessible tools for real-time security feedback
 - Integration with Claude Code, Cursor, and other AI assistants
@@ -131,6 +146,7 @@
 - **Impact: Unique market differentiator - "The only security scanner AI assistants can call natively"**
 
 **Tools to Implement:**
+
 1. **vibesec_scan** - Scan files for vulnerabilities (16h)
 2. **vibesec_list_rules** - Discover available detection rules (4h)
 3. **vibesec_fix_suggestion** - Get AI-friendly fix recommendations (12h)
@@ -138,6 +154,7 @@
 5. **vibesec_init_config** - Generate project configuration (8h)
 
 **Why This Is Critical:**
+
 - ✅ Shifts security from post-generation to in-loop
 - ✅ Enables AI assistants to self-correct security issues
 - ✅ Zero manual scanning required for AI-generated code
@@ -145,6 +162,7 @@
 - ✅ Positions VibeSec as essential tool for "vibe coding" platforms
 
 **Integration Targets:**
+
 - Claude Code (stdio MCP - immediate)
 - Cursor (via MCP bridge)
 - Windsurf (future integration)
@@ -158,12 +176,14 @@
 ### Priority 3: Enhanced Reporting (24 hours, Weeks 6-7)
 
 **🎯 P3.1: SARIF Reporter** (16h)
+
 - SARIF 2.1.0 compliance
 - GitHub Security tab integration
 - IDE support
 - Impact: Professional tool integration
 
 **🎯 P3.2: HTML/Markdown Reporters** (8h)
+
 - Interactive single-file HTML
 - GitHub-flavored markdown
 - Filtering and search
@@ -174,12 +194,14 @@
 ### Priority 4: Distribution & UX (24 hours, Week 7)
 
 **🎯 P4.1: Package Distribution** (10h)
+
 - NPM package publishing
 - Homebrew formula (macOS)
 - Docker image
 - Impact: Easy installation
 
 **🎯 P4.2: Interactive First-Run** (14h)
+
 - Setup wizard
 - Project type detection
 - Config generation
@@ -190,17 +212,20 @@
 ### Priority 5: Polish & Launch (24 hours, Week 8)
 
 **🎯 P5.1: Performance Benchmarks** (10h)
+
 - Automated performance testing
 - Regression detection
 - Memory profiling
 - Target: <2min for 10K files
 
 **🎯 P5.2: API Documentation** (8h)
+
 - Programmatic scanner usage
 - Custom reporter guide
 - TypeScript API reference
 
 **🎯 P5.3: Video Tutorials** (6h)
+
 - Getting started (5 min)
 - Plain language walkthrough (3 min)
 - CI/CD integration (10 min)
@@ -210,15 +235,15 @@
 
 ## 📈 9-Week MVP Roadmap (Updated with MCP Server)
 
-| Week | Focus | Effort | Deliverable |
-|------|-------|--------|-------------|
-| 1-2 | Foundation | 38h | AST + Config + Incremental ✅ |
-| 3-4 | Integrations | 48h | Scanner Engine + CLI + Rules + Tests ✅ |
-| 4.5-6 | **MCP Server** ⭐ | **48h** | **AI-Native Integration** 🚧 |
-| 6-7 | Reporting | 24h | SARIF + HTML + Markdown |
-| 7-8 | Distribution | 24h | NPM + Docker + First-Run |
-| 9 | Launch | 24h | Benchmarks + Docs + Beta |
-| **Total** | **MVP Complete** | **206h** | **v1.0.0 Launch** |
+| Week      | Focus             | Effort   | Deliverable                             |
+| --------- | ----------------- | -------- | --------------------------------------- |
+| 1-2       | Foundation        | 38h      | AST + Config + Incremental ✅           |
+| 3-4       | Integrations      | 48h      | Scanner Engine + CLI + Rules + Tests ✅ |
+| 4.5-6     | **MCP Server** ⭐ | **48h**  | **AI-Native Integration** 🚧            |
+| 6-7       | Reporting         | 24h      | SARIF + HTML + Markdown                 |
+| 7-8       | Distribution      | 24h      | NPM + Docker + First-Run                |
+| 9         | Launch            | 24h      | Benchmarks + Docs + Beta                |
+| **Total** | **MVP Complete**  | **206h** | **v1.0.0 Launch**                       |
 
 **Timeline**: 5-7 weeks with 1 full-time developer (30-40 hrs/week)
 
@@ -229,35 +254,39 @@
 ## 🎯 Success Metrics
 
 ### Technical Targets
-| Metric | Current | MVP Target | Status |
-|--------|---------|------------|--------|
-| Detection accuracy | 90% | 95% | 🟡 |
-| False positive rate | 0% | <5% | ✅ |
-| Scan speed (10K files) | 1-12 min | <2 min | 🟡 |
-| Test coverage | 82% | >80% | ✅ |
-| Memory usage | 123 MB peak | <500MB | ✅ |
+
+| Metric                 | Current     | MVP Target | Status |
+| ---------------------- | ----------- | ---------- | ------ |
+| Detection accuracy     | 90%         | 95%        | 🟡     |
+| False positive rate    | 0%          | <5%        | ✅     |
+| Scan speed (10K files) | 1-12 min    | <2 min     | 🟡     |
+| Test coverage          | 82%         | >80%       | ✅     |
+| Memory usage           | 123 MB peak | <500MB     | ✅     |
 
 ### User Experience Targets
-| Metric | Baseline | MVP Target | Status |
-|--------|----------|------------|--------|
-| Installation success | 40% | 85% | ⏳ |
-| Time to first scan | 10-30 min | <3 min | ⏳ |
-| Non-tech comprehension | 30% | 80% | ✅ (POC) |
-| Support ticket rate | High | <10/week | ⏳ |
+
+| Metric                 | Baseline  | MVP Target | Status   |
+| ---------------------- | --------- | ---------- | -------- |
+| Installation success   | 40%       | 85%        | ⏳       |
+| Time to first scan     | 10-30 min | <3 min     | ⏳       |
+| Non-tech comprehension | 30%       | 80%        | ✅ (POC) |
+| Support ticket rate    | High      | <10/week   | ⏳       |
 
 ### Market Targets
-| Metric | Target | Status |
-|--------|--------|--------|
-| Installs (month 1) | 500 | ⏳ |
-| GitHub stars | 100 | ⏳ |
-| Beta testers | 20 | ⏳ |
-| AI platform partnerships | 1+ | ⏳ |
+
+| Metric                   | Target | Status |
+| ------------------------ | ------ | ------ |
+| Installs (month 1)       | 500    | ⏳     |
+| GitHub stars             | 100    | ⏳     |
+| Beta testers             | 20     | ⏳     |
+| AI platform partnerships | 1+     | ⏳     |
 
 ---
 
 ## 🔴 Critical Dependencies
 
 ### Must Have for Launch
+
 1. ✅ Core scanner engine (complete)
 2. ✅ Plain language reporting (complete)
 3. ⏳ AST parser (Priority 1)
@@ -266,6 +295,7 @@
 6. ⏳ Package distribution (Priority 4)
 
 ### Nice to Have (Can Launch Without)
+
 7. Snyk/Socket.dev integrations (defer if needed)
 8. HTML reports (stakeholder reporter sufficient)
 9. Interactive first-run (docs can compensate)
@@ -279,6 +309,7 @@
 **Total Items**: 43 (as of 2025-10-14)
 
 ### Item Breakdown
+
 - **MVP Milestones**: 8 items (Weeks 1-8)
 - **Go-to-Market**: 2 items
 - **Post-MVP Features**: 5 items
@@ -293,6 +324,7 @@
 - **Status Tracking**: 2 overview items
 
 ### Labels & Organization
+
 - 🎯 = MVP Priority items
 - ✅ = Complete
 - ⏳ = In progress
@@ -303,20 +335,21 @@
 
 ## 🚨 Risk Assessment
 
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|------------|
-| AST performance issues | Medium | High | Fallback to regex, lazy loading |
-| API rate limits (Snyk/Socket) | High | Medium | Caching, graceful degradation |
-| False positive spikes | Medium | High | Extensive testing, confidence scores |
-| GitHub Action approval delays | Low | Medium | Submit early, backup distribution |
-| Beta testing recruitment | Medium | Medium | Start recruiting Week 6 |
-| Non-tech comprehension <80% | Medium | High | User testing in Phase 4 |
+| Risk                          | Probability | Impact | Mitigation                           |
+| ----------------------------- | ----------- | ------ | ------------------------------------ |
+| AST performance issues        | Medium      | High   | Fallback to regex, lazy loading      |
+| API rate limits (Snyk/Socket) | High        | Medium | Caching, graceful degradation        |
+| False positive spikes         | Medium      | High   | Extensive testing, confidence scores |
+| GitHub Action approval delays | Low         | Medium | Submit early, backup distribution    |
+| Beta testing recruitment      | Medium      | Medium | Start recruiting Week 6              |
+| Non-tech comprehension <80%   | Medium      | High   | User testing in Phase 4              |
 
 ---
 
 ## 📝 Next Immediate Actions
 
 ### This Week
+
 1. **Start AST Parser Implementation** (scanner/analyzers/ast-parser.ts)
    - Set up tree-sitter dependencies
    - Implement JS/TS parser
@@ -328,6 +361,7 @@
    - Environment variable support
 
 ### Next Week
+
 3. **Complete AST Parser** (all languages)
 4. **Finish Configuration System** (validation + CLI integration)
 5. **Implement Incremental Scanning** (git diff + caching)
@@ -348,6 +382,7 @@
 ## 🎉 Recent Achievements
 
 **2025-10-15 - Phase 5 Complete**:
+
 - ✅ Performance benchmarks system (P5.1)
   - Automated testing with 6 scenarios
   - Memory profiler with leak detection
@@ -365,6 +400,7 @@
 - ✅ All MVP Week 8 (Polish & Launch) deliverables complete
 
 **2025-10-14**:
+
 - ✅ Migrated planning from .md files to GitHub Projects
 - ✅ Created 37-component atomic breakdown
 - ✅ Added 11 detailed priority items to GitHub Project
@@ -373,6 +409,7 @@
 - ✅ Archived historical planning docs
 
 **POC Completion (Phases 1-4)**:
+
 - ✅ Core scanner with 90+ rules
 - ✅ Plain language reporting for non-technical users
 - ✅ Security scorecard (0-100 grading)

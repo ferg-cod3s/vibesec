@@ -310,22 +310,19 @@ export function createErrorResponse(
     error: {
       code,
       message,
-      data
-    }
+      data,
+    },
   };
 }
 
 /**
  * Create an MCP success response
  */
-export function createSuccessResponse(
-  id: string | number,
-  result: unknown
-): MCPResponse {
+export function createSuccessResponse(id: string | number, result: unknown): MCPResponse {
   return {
     id,
     jsonrpc: '2.0',
-    result
+    result,
   };
 }
 
@@ -339,6 +336,6 @@ export function createNotification(
   return {
     jsonrpc: '2.0',
     method,
-    params
+    params,
   };
 }

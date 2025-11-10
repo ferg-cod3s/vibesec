@@ -11,6 +11,7 @@
 After thorough research, **ACP integration is NOT recommended at this time** for VibeSec. However, the concepts are valuable for future multi-agent workflows. The protocol is transitioning to A2A (Agent-to-Agent) under Linux Foundation, which should be monitored for future integration.
 
 **Key Findings:**
+
 - ✅ VibeSec's current MCP integration is the correct approach
 - ⚠️ ACP is being deprecated in favor of A2A
 - 🔮 A2A integration could enable powerful future workflows
@@ -70,6 +71,7 @@ After thorough research, **ACP integration is NOT recommended at this time** for
 ```
 
 **OpenAPI Specification** defines:
+
 - REST API endpoints
 - Request/response formats
 - Data models
@@ -84,11 +86,13 @@ After thorough research, **ACP integration is NOT recommended at this time** for
 **Purpose:** Provide context and capabilities to AI models
 
 **Use Case:**
+
 ```
 AI Model (Claude) ←→ [MCP] ←→ Tool (VibeSec Scanner)
 ```
 
 **VibeSec's Current Implementation:**
+
 - Claude Code connects to VibeSec via MCP
 - VibeSec exposes tools (vibesec_scan, vibesec_list_rules)
 - Claude can invoke VibeSec directly
@@ -100,11 +104,13 @@ AI Model (Claude) ←→ [MCP] ←→ Tool (VibeSec Scanner)
 **Purpose:** Enable autonomous agents to communicate as peers
 
 **Use Case:**
+
 ```
 Agent 1 ←→ [ACP] ←→ Agent 2 ←→ [ACP] ←→ Agent 3
 ```
 
 **Hypothetical VibeSec Scenario:**
+
 ```
 Security Agent (VibeSec) ←→ [ACP] ←→ Code Generator Agent
                         ←→ [ACP] ←→ Testing Agent
@@ -113,17 +119,18 @@ Security Agent (VibeSec) ←→ [ACP] ←→ Code Generator Agent
 
 ### Key Differences
 
-| Aspect | MCP | ACP |
-|--------|-----|-----|
-| **Purpose** | Model ↔ Tools | Agent ↔ Agent |
-| **Architecture** | JSON-RPC | REST/HTTP |
-| **Communication** | Request/Response | Peer-to-peer |
-| **Use Case** | Provide context to models | Collaboration between agents |
-| **VibeSec Status** | ✅ Implemented | ❌ Not needed yet |
+| Aspect             | MCP                       | ACP                          |
+| ------------------ | ------------------------- | ---------------------------- |
+| **Purpose**        | Model ↔ Tools            | Agent ↔ Agent               |
+| **Architecture**   | JSON-RPC                  | REST/HTTP                    |
+| **Communication**  | Request/Response          | Peer-to-peer                 |
+| **Use Case**       | Provide context to models | Collaboration between agents |
+| **VibeSec Status** | ✅ Implemented            | ❌ Not needed yet            |
 
 ### Complementary Nature
 
 MCP and ACP can work together:
+
 ```
 ┌──────────────────────────────────────────────┐
 │  AI Model (Claude)                           │
@@ -141,6 +148,7 @@ MCP and ACP can work together:
 ### ACP is Being Deprecated
 
 **Official Statement:**
+
 > "ACP has merged with A2A under the Linux Foundation umbrella. The ACP team is winding down active development and contributing its technology and expertise to A2A."
 
 ### What This Means
@@ -155,12 +163,14 @@ MCP and ACP can work together:
 **Status:** Linux Foundation project, actively developing
 
 **Key Differences from ACP:**
+
 - More comprehensive agent orchestration
 - Enhanced security model
 - Broader ecosystem support
 - Community-driven governance
 
 **Resources:**
+
 - Specification: TBD (under Linux Foundation)
 - GitHub: Multiple implementations emerging
 - Community: Growing under LF umbrella
@@ -172,12 +182,14 @@ MCP and ACP can work together:
 ### Current State Analysis
 
 **What VibeSec Does Today:**
+
 1. Scans code for security vulnerabilities
 2. Integrates with Claude Code via MCP
 3. Provides scan results to the AI model
 4. Works as a standalone CLI tool
 
 **Current Integration:**
+
 ```
 User ─→ Claude Code ─→ [MCP] ─→ VibeSec Scanner ─→ Results
 ```
@@ -207,6 +219,7 @@ User ─→ Claude Code ─→ [MCP] ─→ VibeSec Scanner ─→ Results
 ```
 
 **Benefits:**
+
 - Distributed scanning (different agents for different languages)
 - Parallel analysis
 - Specialized agents for specific vulnerability types
@@ -227,6 +240,7 @@ Code Commit ─→ Build Agent ─→ [A2A] ─→ VibeSec Agent
 ```
 
 **Benefits:**
+
 - Autonomous security gates
 - Agent-driven decisions (block/allow deployment)
 - Cross-agent policy enforcement
@@ -246,6 +260,7 @@ VibeSec Scan ─→ [A2A] ─→ Code Fix Agent ─→ [A2A] ─→ Verification
 ```
 
 **Benefits:**
+
 - Automated fix suggestions
 - Code generation for security patches
 - Verification loop
@@ -267,6 +282,7 @@ User Query ─→ Orchestrator Agent
 ```
 
 **Benefits:**
+
 - Best-in-class agents for each domain
 - Unified user experience
 - Distributed expertise
@@ -280,12 +296,14 @@ User Query ─→ Orchestrator Agent
 ### If VibeSec Integrated A2A Today
 
 **Pros:**
+
 - ✅ Enable multi-agent workflows
 - ✅ Position as agent-ready security tool
 - ✅ Support distributed security scans
 - ✅ Enable autonomous remediation flows
 
 **Cons:**
+
 - ❌ A2A spec is still evolving
 - ❌ Limited ecosystem/tooling
 - ❌ Adds complexity without immediate value
@@ -297,6 +315,7 @@ User Query ─→ Orchestrator Agent
 **Estimated Work: 2-3 weeks**
 
 **Tasks:**
+
 1. Implement A2A server endpoints (REST) - 3 days
 2. Define agent manifest (capabilities) - 1 day
 3. Message handling (async/sync) - 2 days
@@ -305,6 +324,7 @@ User Query ─→ Orchestrator Agent
 6. Documentation - 2 days
 
 **Dependencies:**
+
 - A2A specification finalization
 - SDK availability (Python/TypeScript)
 - Other agents to integrate with
@@ -319,12 +339,14 @@ User Query ─→ Orchestrator Agent
 **Do NOT integrate ACP/A2A now**
 
 **Reasons:**
+
 1. **Spec Instability**: A2A is under active development
 2. **No Clear Demand**: Users are satisfied with MCP integration
 3. **Limited Ecosystem**: Few A2A-compatible agents exist
 4. **Resource Allocation**: Better spent on core features
 
 **Instead:**
+
 - ✅ Continue MCP development
 - ✅ Monitor A2A specification progress
 - ✅ Build core VibeSec features
@@ -333,6 +355,7 @@ User Query ─→ Orchestrator Agent
 ### Medium Term (6-12 Months)
 
 **Evaluate A2A when:**
+
 1. A2A specification reaches v1.0
 2. SDKs are stable and well-documented
 3. Ecosystem has 5+ production agents
@@ -340,6 +363,7 @@ User Query ─→ Orchestrator Agent
 5. Clear use case emerges (e.g., CI/CD orchestration)
 
 **Preparation:**
+
 - Design agent interface abstraction
 - Document potential agent capabilities
 - Prototype message schemas
@@ -348,12 +372,14 @@ User Query ─→ Orchestrator Agent
 ### Long Term (12+ Months)
 
 **Consider A2A Integration If:**
+
 1. Multi-agent security workflows become standard
 2. Enterprise customers request agent orchestration
 3. Competitive landscape shifts to agent ecosystems
 4. A2A becomes industry standard
 
 **Strategic Value:**
+
 - Differentiation from standalone tools
 - Enterprise multi-agent offerings
 - Platform play (VibeSec as security agent hub)
@@ -374,12 +400,14 @@ GET  /api/results/:scanId
 ```
 
 **Pros:**
+
 - ✅ Simple to implement
 - ✅ Universal compatibility
 - ✅ Well-understood by developers
 - ✅ No protocol lock-in
 
 **Cons:**
+
 - ❌ No standard agent discovery
 - ❌ Manual orchestration required
 - ❌ No built-in async messaging
@@ -402,11 +430,13 @@ webhooks:
 ```
 
 **Pros:**
+
 - ✅ Event-driven architecture
 - ✅ Easy to configure
 - ✅ Loosely coupled
 
 **Cons:**
+
 - ❌ One-way communication only
 - ❌ No agent negotiation
 - ❌ Limited to pre-defined events
@@ -430,11 +460,13 @@ queue.subscribe('security.fix.request', handleFix);
 ```
 
 **Pros:**
+
 - ✅ Mature, battle-tested
 - ✅ Great for async workflows
 - ✅ Scalable
 
 **Cons:**
+
 - ❌ Requires infrastructure setup
 - ❌ Not agent-native
 - ❌ Ops complexity
@@ -458,30 +490,35 @@ queue.subscribe('security.fix.request', handleFix);
 ### Recommended Action Plan
 
 **Phase 1: Now (Q4 2025)**
+
 - ✅ Focus on core VibeSec features
 - ✅ Enhance MCP integration
 - ✅ Monitor A2A development
 - ✅ Document agent interface design
 
 **Phase 2: Monitor (Q1-Q2 2026)**
+
 - 📊 Track A2A specification progress
 - 📊 Watch ecosystem adoption
 - 📊 Gather user feedback on multi-agent needs
 - 📊 Prototype simple HTTP API
 
 **Phase 3: Evaluate (Q3 2026)**
+
 - 🔍 Reassess A2A maturity
 - 🔍 Identify concrete use cases
 - 🔍 Prototype A2A integration
 - 🔍 Cost/benefit analysis
 
 **Phase 4: Decide (Q4 2026)**
+
 - ✅ Implement if ecosystem is ready
 - ⏸️ Continue monitoring if premature
 
 ### Decision Criteria for Future Integration
 
 Integrate A2A when **ALL** of these are true:
+
 1. ✅ A2A spec is stable (v1.0+)
 2. ✅ SDKs are production-ready
 3. ✅ 3+ compatible agents exist
@@ -493,17 +530,20 @@ Integrate A2A when **ALL** of these are true:
 ## Resources
 
 ### ACP/A2A Documentation
+
 - **ACP Spec**: https://agentcommunicationprotocol.dev
 - **ACP GitHub**: https://github.com/i-am-bee/acp
 - **IBM Research**: https://research.ibm.com/projects/agent-communication-protocol
 - **Linux Foundation A2A**: (TBD - watch for official announcement)
 
 ### Comparison Articles
+
 - ["MCP and ACP: Decoding the Language of Models and Agents"](https://outshift.cisco.com/blog/mcp-acp-decoding-language-of-models-and-agents)
 - ["Evolving Standards for Agentic Systems"](https://heidloff.net/article/mcp-acp/)
 - ["Agent Interoperability Protocols Survey" (arXiv)](https://arxiv.org/html/2505.02279v1)
 
 ### VibeSec Integration Points
+
 - **Current MCP Implementation**: `src/mcp/server.ts`
 - **Tool Definitions**: `src/mcp/tools/`
 - **Future Agent Interface**: Design at `src/agent/` (not yet implemented)
@@ -546,11 +586,7 @@ AI Models ─→ [MCP/JSON-RPC] ─→ VibeSec Agent
     "name": "vibesec-security-scanner",
     "version": "1.0.0",
     "description": "Security scanner for AI-generated code",
-    "capabilities": [
-      "code-security-scan",
-      "vulnerability-detection",
-      "rule-management"
-    ],
+    "capabilities": ["code-security-scan", "vulnerability-detection", "rule-management"],
     "interfaces": {
       "mcp": {
         "tools": ["vibesec_scan", "vibesec_list_rules"]

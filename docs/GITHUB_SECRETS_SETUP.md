@@ -14,6 +14,7 @@ You need to add **4 secrets** to your GitHub repository:
 ## How to Add Secrets
 
 Go to your repository on GitHub:
+
 1. Click **Settings** tab
 2. Go to **Secrets and variables** → **Actions**
 3. Click **New repository secret**
@@ -26,6 +27,7 @@ Go to your repository on GitHub:
 **What it does:** Publishes your package to npm registry
 
 **How to create:**
+
 1. Go to [npmjs.com](https://www.npmjs.com) and log in
 2. Click your profile → **Access Tokens**
 3. Click **Generate New Token** → **Automation**
@@ -33,6 +35,7 @@ Go to your repository on GitHub:
 5. Copy the token
 
 **Add to GitHub:**
+
 - Name: `NPM_TOKEN`
 - Value: Paste the token from npm
 
@@ -43,9 +46,11 @@ Go to your repository on GitHub:
 **What it does:** Authenticates to Docker Hub for pushing images
 
 **How to get:**
+
 - This is just your Docker Hub username (e.g., `johnsmith`)
 
 **Add to GitHub:**
+
 - Name: `DOCKERHUB_USERNAME`
 - Value: Your Docker Hub username
 
@@ -56,6 +61,7 @@ Go to your repository on GitHub:
 **What it does:** Authenticates to Docker Hub with access token
 
 **How to create:**
+
 1. Go to [hub.docker.com](https://hub.docker.com) and log in
 2. Click your profile → **Account Settings** → **Security**
 3. Click **New Access Token**
@@ -64,6 +70,7 @@ Go to your repository on GitHub:
 6. Copy the token (save it - you can't see it again!)
 
 **Add to GitHub:**
+
 - Name: `DOCKERHUB_TOKEN`
 - Value: Paste the token from Docker Hub
 
@@ -74,6 +81,7 @@ Go to your repository on GitHub:
 **What it does:** Deploys your Worker to Cloudflare
 
 **How to create:**
+
 1. Go to [Cloudflare Dashboard](https://dash.cloudflare.com)
 2. Click your profile icon → **My Profile** → **API Tokens**
 3. Click **Create Token**
@@ -84,6 +92,7 @@ Go to your repository on GitHub:
 7. Copy the token (save it!)
 
 **Add to GitHub:**
+
 - Name: `CLOUDFLARE_API_TOKEN`
 - Value: Paste the token from Cloudflare
 
@@ -116,6 +125,7 @@ Once secrets are configured:
 6. Watch the magic happen! 🚀
 
 The workflow will:
+
 - Bump version (e.g., 0.1.0 → 0.1.1)
 - Create git tag `v0.1.1`
 - Publish to npm
@@ -128,18 +138,22 @@ The workflow will:
 ## Troubleshooting
 
 ### "Error: npm token is invalid"
+
 - Regenerate `NPM_TOKEN` at npmjs.com (choose **Automation** type)
 
 ### "Error: unauthorized Docker Hub"
+
 - Make sure `DOCKERHUB_USERNAME` matches exactly
 - Regenerate `DOCKERHUB_TOKEN` with Read/Write/Delete permissions
 
 ### "Error: Cloudflare authentication failed"
+
 - Check `CLOUDFLARE_API_TOKEN` has "Edit Cloudflare Workers" permission
 - Verify token isn't expired
 - Make sure account resources include your account
 
 ### Workflow doesn't trigger
+
 - Ensure PR has a version label (`major`, `minor`, `patch`, `feature`, `fix`, or `breaking`)
 - Check GitHub Actions are enabled in repository settings
 
@@ -158,6 +172,7 @@ The workflow will:
 ## Need Help?
 
 See detailed documentation:
+
 - [VERSIONING.md](./VERSIONING.md) - Full workflow explanation
 - [GitHub Secrets Docs](https://docs.github.com/en/actions/security-guides/encrypted-secrets)
 - [npm Token Docs](https://docs.npmjs.com/creating-and-viewing-access-tokens)

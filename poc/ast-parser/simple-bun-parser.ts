@@ -40,7 +40,8 @@ export class SimpleBunParser {
 
   private extractFunctions(content: string): string[] {
     // Match function declarations and arrow functions
-    const functionPattern = /(?:function\s+(\w+)|const\s+(\w+)\s*=|async\s+function\s+(\w+)|export\s+(?:async\s+)?function\s+(\w+))/g;
+    const functionPattern =
+      /(?:function\s+(\w+)|const\s+(\w+)\s*=|async\s+function\s+(\w+)|export\s+(?:async\s+)?function\s+(\w+))/g;
     const matches: string[] = [];
     let match;
 

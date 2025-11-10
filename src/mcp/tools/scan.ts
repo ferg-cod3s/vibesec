@@ -76,7 +76,8 @@ Returns detailed findings with severity levels, descriptions, and fix recommenda
       files: {
         type: 'array',
         items: { type: 'string' },
-        description: 'Array of file paths or glob patterns to scan (e.g., ["src/**/*.ts", "lib/auth.js"])',
+        description:
+          'Array of file paths or glob patterns to scan (e.g., ["src/**/*.ts", "lib/auth.js"])',
       },
       severity: {
         type: 'string',
@@ -86,7 +87,8 @@ Returns detailed findings with severity levels, descriptions, and fix recommenda
       rules: {
         type: 'array',
         items: { type: 'string' },
-        description: 'Optional: Specific rule IDs to run (e.g., ["hardcoded-secret", "sql-injection"]). If omitted, runs all applicable rules.',
+        description:
+          'Optional: Specific rule IDs to run (e.g., ["hardcoded-secret", "sql-injection"]). If omitted, runs all applicable rules.',
       },
       format: {
         type: 'string',
@@ -204,10 +206,7 @@ function validateScanParams(params: unknown): ScanParams {
 /**
  * Transform core ScanResult to MCP tool result
  */
-function transformScanResult(
-  coreResult: CoreScanResult,
-  params: ScanParams
-): ScanToolResult {
+function transformScanResult(coreResult: CoreScanResult, params: ScanParams): ScanToolResult {
   // Apply additional filtering if specific rules requested
   let findings = coreResult.findings;
   if (params.rules && params.rules.length > 0) {

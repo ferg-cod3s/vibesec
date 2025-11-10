@@ -12,7 +12,7 @@ import {
   ToolCallParams,
   createErrorResponse,
   isValidMCPRequest,
-  isValidToolCallParams
+  isValidToolCallParams,
 } from './types';
 
 /**
@@ -23,15 +23,11 @@ export class MCPErrorHandler {
   /**
    * Create a standardized MCP error
    */
-  static createError(
-    code: number,
-    message: string,
-    data?: unknown
-  ): MCPError {
+  static createError(code: number, message: string, data?: unknown): MCPError {
     return {
       code,
       message,
-      data
+      data,
     };
   }
 
@@ -39,66 +35,46 @@ export class MCPErrorHandler {
    * Create a parse error (invalid JSON)
    */
   static parseError(data?: unknown): MCPError {
-    return this.createError(
-      MCPErrorCode.PARSE_ERROR,
-      'Parse error: Invalid JSON',
-      data
-    );
+    return this.createError(MCPErrorCode.PARSE_ERROR, 'Parse error: Invalid JSON', data);
   }
 
   /**
    * Create an invalid request error
    */
   static invalidRequest(message?: string, data?: unknown): MCPError {
-    return this.createError(
-      MCPErrorCode.INVALID_REQUEST,
-      message || 'Invalid request',
-      data
-    );
+    return this.createError(MCPErrorCode.INVALID_REQUEST, message || 'Invalid request', data);
   }
 
   /**
    * Create a method not found error
    */
   static methodNotFound(method: string): MCPError {
-    return this.createError(
-      MCPErrorCode.METHOD_NOT_FOUND,
-      `Method not found: ${method}`,
-      { method }
-    );
+    return this.createError(MCPErrorCode.METHOD_NOT_FOUND, `Method not found: ${method}`, {
+      method,
+    });
   }
 
   /**
    * Create an invalid params error
    */
   static invalidParams(message: string, data?: unknown): MCPError {
-    return this.createError(
-      MCPErrorCode.INVALID_PARAMS,
-      `Invalid params: ${message}`,
-      data
-    );
+    return this.createError(MCPErrorCode.INVALID_PARAMS, `Invalid params: ${message}`, data);
   }
 
   /**
    * Create an internal error
    */
   static internalError(message?: string, data?: unknown): MCPError {
-    return this.createError(
-      MCPErrorCode.INTERNAL_ERROR,
-      message || 'Internal error',
-      data
-    );
+    return this.createError(MCPErrorCode.INTERNAL_ERROR, message || 'Internal error', data);
   }
 
   /**
    * Create a tool not found error
    */
   static toolNotFound(toolName: string): MCPError {
-    return this.createError(
-      MCPErrorCode.TOOL_NOT_FOUND,
-      `Tool not found: ${toolName}`,
-      { toolName }
-    );
+    return this.createError(MCPErrorCode.TOOL_NOT_FOUND, `Tool not found: ${toolName}`, {
+      toolName,
+    });
   }
 
   /**
@@ -111,7 +87,7 @@ export class MCPErrorHandler {
       {
         toolName,
         error: error.message,
-        stack: error.stack
+        stack: error.stack,
       }
     );
   }
@@ -203,7 +179,7 @@ export class MCPErrorHandler {
     if (error instanceof Error) {
       return this.internalError(error.message, {
         name: error.name,
-        stack: error.stack
+        stack: error.stack,
       });
     }
 
@@ -217,13 +193,11 @@ export class MCPErrorHandler {
   /**
    * Create an error response from an error
    */
-  static toErrorResponse(
-    id: string | number,
-    error: unknown
-  ): MCPResponse {
-    const mcpError = error instanceof Object && 'code' in error && 'message' in error
-      ? (error as MCPError)
-      : this.fromError(error);
+  static toErrorResponse(id: string | number, error: unknown): MCPResponse {
+    const mcpError =
+      error instanceof Object && 'code' in error && 'message' in error
+        ? (error as MCPError)
+        : this.fromError(error);
 
     return createErrorResponse(id, mcpError.code, mcpError.message, mcpError.data);
   }
@@ -275,7 +249,7 @@ export class MCPOperationError extends Error {
     return {
       code: this.code,
       message: this.message,
-      data: this.data
+      data: this.data,
     };
   }
 }
@@ -285,11 +259,10 @@ export class MCPOperationError extends Error {
  */
 export class ToolValidationError extends MCPOperationError {
   constructor(toolName: string, reason: string) {
-    super(
-      `Invalid arguments for tool ${toolName}: ${reason}`,
-      MCPErrorCode.INVALID_TOOL_ARGS,
-      { toolName, reason }
-    );
+    super(`Invalid arguments for tool ${toolName}: ${reason}`, MCPErrorCode.INVALID_TOOL_ARGS, {
+      toolName,
+      reason,
+    });
     this.name = 'ToolValidationError';
   }
 }
@@ -299,15 +272,11 @@ export class ToolValidationError extends MCPOperationError {
  */
 export class ToolExecutionError extends MCPOperationError {
   constructor(toolName: string, cause: Error) {
-    super(
-      `Tool execution failed: ${toolName}`,
-      MCPErrorCode.TOOL_EXECUTION_ERROR,
-      {
-        toolName,
-        error: cause.message,
-        stack: cause.stack
-      }
-    );
+    super(`Tool execution failed: ${toolName}`, MCPErrorCode.TOOL_EXECUTION_ERROR, {
+      toolName,
+      error: cause.message,
+      stack: cause.stack,
+    });
     this.name = 'ToolExecutionError';
   }
 }

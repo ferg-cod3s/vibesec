@@ -54,14 +54,14 @@ export class RuleLoader {
     }
 
     // Convert patterns to Pattern[] format
-    const patterns: Pattern[] = (Array.isArray(rule.patterns) ? rule.patterns : [rule.patterns]).map(
-      (p: string | Pattern) => {
-        if (typeof p === 'string') {
-          return { regex: p, flags: 'gm' };
-        }
-        return p;
+    const patterns: Pattern[] = (
+      Array.isArray(rule.patterns) ? rule.patterns : [rule.patterns]
+    ).map((p: string | Pattern) => {
+      if (typeof p === 'string') {
+        return { regex: p, flags: 'gm' };
       }
-    );
+      return p;
+    });
 
     // Parse fix metadata
     const fix = rule.fix

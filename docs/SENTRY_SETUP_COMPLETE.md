@@ -148,11 +148,7 @@ import { ErrorCategory } from './observability/error-reporter';
 try {
   // Your code here
 } catch (error) {
-  sentry.captureError(
-    error as Error,
-    ErrorCategory.PARSE_ERROR,
-    { file: 'example.ts', line: 42 }
-  );
+  sentry.captureError(error as Error, ErrorCategory.PARSE_ERROR, { file: 'example.ts', line: 42 });
 }
 ```
 
@@ -174,7 +170,7 @@ import { sentry } from './observability/integrations/sentry';
 
 sentry.addBreadcrumb('Config loaded', 'config', {
   configPath: '.vibesec.yaml',
-  rulesCount: 45
+  rulesCount: 45,
 });
 ```
 
@@ -203,6 +199,7 @@ Expected: All tests pass, 5 errors appear in Sentry dashboard.
 Visit: https://sentry.fergify.work/organizations/unfergettable-designs/projects/vibesec/
 
 You should see:
+
 - Test errors with stack traces
 - Error categorization tags
 - User context (test-user-123)
@@ -232,11 +229,13 @@ You should see:
 ### Optional Enhancements
 
 1. **Configure release tracking**
+
    ```bash
    SENTRY_RELEASE=vibesec@1.0.0
    ```
 
 2. **Set up source maps** for better stack traces
+
    ```typescript
    Sentry.init({
      // ... existing config
@@ -245,6 +244,7 @@ You should see:
    ```
 
 3. **Add custom tags** for better filtering
+
    ```typescript
    Sentry.setTag('scan_type', 'incremental');
    Sentry.setTag('language', 'typescript');
@@ -273,17 +273,20 @@ Before deploying to production:
 ### Errors Not Appearing in Sentry
 
 1. Check DSN is correct:
+
    ```bash
    echo $SENTRY_DSN
    ```
 
 2. Verify Sentry is initialized:
+
    ```typescript
    import { sentry } from './observability/integrations/sentry';
    console.log('Sentry initialized:', sentry !== null);
    ```
 
 3. Check self-hosted instance is accessible:
+
    ```bash
    curl -I https://sentry.fergify.work
    ```

@@ -54,7 +54,7 @@ export class EnhancedASTParser {
         line,
         column: match.index - content.lastIndexOf('\n', match.index),
         content: match[0],
-        children: []
+        children: [],
       });
     }
 
@@ -68,7 +68,7 @@ export class EnhancedASTParser {
         line,
         column: match.index - content.lastIndexOf('\n', match.index),
         content: match[0],
-        children: []
+        children: [],
       });
     }
 
@@ -82,7 +82,7 @@ export class EnhancedASTParser {
         line,
         column: match.index - content.lastIndexOf('\n', match.index),
         content: match[0],
-        children: []
+        children: [],
       });
     }
 
@@ -95,7 +95,7 @@ export class EnhancedASTParser {
         line,
         column: match.index - content.lastIndexOf('\n', match.index),
         content: match[0],
-        children: []
+        children: [],
       });
     }
 
@@ -103,14 +103,14 @@ export class EnhancedASTParser {
     const assignRegex = /^\s*(export\s+)?(const|let|var)\s+(\w+)\s*=/gm;
     while ((match = assignRegex.exec(content)) !== null) {
       const line = content.substring(0, match.index).split('\n').length;
-      if (!nodes.some(n => n.line === line && n.type === 'FunctionDecl')) {
+      if (!nodes.some((n) => n.line === line && n.type === 'FunctionDecl')) {
         nodes.push({
           type: 'Assignment',
           name: match[3],
           line,
           column: match.index - content.lastIndexOf('\n', match.index),
           content: match[0],
-          children: []
+          children: [],
         });
       }
     }
@@ -132,7 +132,7 @@ export class EnhancedASTParser {
         line,
         column: match.index - content.lastIndexOf('\n', match.index),
         content: match[0],
-        children: []
+        children: [],
       });
     }
 
@@ -146,7 +146,7 @@ export class EnhancedASTParser {
         line,
         column: match.index - content.lastIndexOf('\n', match.index),
         content: match[0],
-        children: []
+        children: [],
       });
     }
 
@@ -159,7 +159,7 @@ export class EnhancedASTParser {
         line,
         column: match.index - content.lastIndexOf('\n', match.index),
         content: match[0],
-        children: []
+        children: [],
       });
     }
 
@@ -167,14 +167,16 @@ export class EnhancedASTParser {
     const assignRegex = /^\s*(\w+)\s*=/gm;
     while ((match = assignRegex.exec(content)) !== null) {
       const line = content.substring(0, match.index).split('\n').length;
-      if (!nodes.some(n => n.line === line && (n.type === 'FunctionDecl' || n.type === 'ClassDecl'))) {
+      if (
+        !nodes.some((n) => n.line === line && (n.type === 'FunctionDecl' || n.type === 'ClassDecl'))
+      ) {
         nodes.push({
           type: 'Assignment',
           name: match[1],
           line,
           column: match.index - content.lastIndexOf('\n', match.index),
           content: match[0],
-          children: []
+          children: [],
         });
       }
     }
@@ -196,7 +198,7 @@ export class EnhancedASTParser {
         line,
         column: match.index - content.lastIndexOf('\n', match.index),
         content: match[0],
-        children: []
+        children: [],
       });
     }
 
@@ -210,7 +212,7 @@ export class EnhancedASTParser {
         line,
         column: match.index - content.lastIndexOf('\n', match.index),
         content: match[0],
-        children: []
+        children: [],
       });
     }
 
@@ -224,7 +226,7 @@ export class EnhancedASTParser {
         line,
         column: match.index - content.lastIndexOf('\n', match.index),
         content: match[0],
-        children: []
+        children: [],
       });
     }
 
@@ -237,7 +239,7 @@ export class EnhancedASTParser {
         line,
         column: match.index - content.lastIndexOf('\n', match.index),
         content: match[0],
-        children: []
+        children: [],
       });
     }
 
@@ -251,7 +253,7 @@ export class EnhancedASTParser {
         line,
         column: match.index - content.lastIndexOf('\n', match.index),
         content: match[0],
-        children: []
+        children: [],
       });
     }
 

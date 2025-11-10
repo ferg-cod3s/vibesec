@@ -73,6 +73,7 @@ VibeSec is designed as a modular, extensible security scanning platform for AI-g
 ### 1. CLI Interface (`cli/`)
 
 **Responsibilities:**
+
 - Parse command-line arguments
 - Load configuration files
 - Orchestrate scanning workflow
@@ -80,6 +81,7 @@ VibeSec is designed as a modular, extensible security scanning platform for AI-g
 - Handle errors gracefully
 
 **Key Commands:**
+
 ```bash
 vibesec scan [path]           # Scan codebase
 vibesec report [options]      # Generate reports
@@ -89,6 +91,7 @@ vibesec integrate [service]   # Setup integrations
 ```
 
 **Technologies:**
+
 - Node.js (JavaScript/TypeScript) or Go
 - Commander.js / Cobra for CLI framework
 - Chalk for colorful output
@@ -98,6 +101,7 @@ vibesec integrate [service]   # Setup integrations
 ### 2. Core Scanner (`scanner/`)
 
 **Responsibilities:**
+
 - File system traversal
 - Code parsing and analysis
 - Detector orchestration
@@ -107,6 +111,7 @@ vibesec integrate [service]   # Setup integrations
 **Subcomponents:**
 
 #### 2.1 Analyzers (`scanner/analyzers/`)
+
 - **AST Parser**: Abstract Syntax Tree parsing for deep code analysis
 - **Regex Engine**: Pattern matching for simple detections
 - **Heuristic Analyzer**: ML-based confidence scoring for AI-generated code
@@ -114,19 +119,20 @@ vibesec integrate [service]   # Setup integrations
 #### 2.2 Detectors (`scanner/detectors/`)
 
 Each detector is a self-contained module that:
+
 1. Accepts parsed code/files
 2. Applies detection rules
 3. Returns findings with severity and fix suggestions
 
 **Detector Types:**
 
-| Detector | Purpose | Examples |
-|----------|---------|----------|
-| **Secrets** | Hardcoded credentials | API keys, passwords, tokens |
-| **Injection** | Input validation flaws | SQL injection, XSS, command injection |
-| **Auth** | Authentication/Authorization | Weak passwords, missing MFA, broken access control |
-| **AI-Specific** | AI-generated patterns | Incomplete implementations, prompt injection |
-| **Incomplete** | Placeholder code | TODO comments, unimplemented functions |
+| Detector        | Purpose                      | Examples                                           |
+| --------------- | ---------------------------- | -------------------------------------------------- |
+| **Secrets**     | Hardcoded credentials        | API keys, passwords, tokens                        |
+| **Injection**   | Input validation flaws       | SQL injection, XSS, command injection              |
+| **Auth**        | Authentication/Authorization | Weak passwords, missing MFA, broken access control |
+| **AI-Specific** | AI-generated patterns        | Incomplete implementations, prompt injection       |
+| **Incomplete**  | Placeholder code             | TODO comments, unimplemented functions             |
 
 ---
 
@@ -184,16 +190,19 @@ metadata:
 **Purpose:** Enhance VibeSec findings with data from external security tools.
 
 #### 4.1 Snyk Integration
+
 - **What**: Dependency vulnerability scanning
 - **How**: Query Snyk API for package vulnerabilities
 - **Output**: Merge Snyk findings with VibeSec report
 
 #### 4.2 Socket.dev Integration
+
 - **What**: Supply chain attack detection
 - **How**: Check for malicious packages, typosquatting
 - **Output**: Flag risky dependencies
 
 #### 4.3 GitHub Integration
+
 - **What**: CI/CD automation
 - **How**: GitHub Action + SARIF upload to Security tab
 - **Output**: Pull request checks and annotations
@@ -217,12 +226,12 @@ interface Integration {
 
 #### Output Formats
 
-| Format | Use Case | Audience |
-|--------|----------|----------|
-| **JSON** | CI/CD pipelines, automation | Machines |
-| **SARIF** | GitHub Security, IDE integration | Developers |
-| **HTML** | Detailed human-readable reports | All users |
-| **PlainText** | Terminal output | Developers |
+| Format        | Use Case                         | Audience   |
+| ------------- | -------------------------------- | ---------- |
+| **JSON**      | CI/CD pipelines, automation      | Machines   |
+| **SARIF**     | GitHub Security, IDE integration | Developers |
+| **HTML**      | Detailed human-readable reports  | All users  |
+| **PlainText** | Terminal output                  | Developers |
 
 **Reporter Interface:**
 
@@ -308,6 +317,7 @@ interface Reporter {
    - Max concurrent workers (default: CPU cores)
 
 **Expected Performance:**
+
 - Small projects (<1K files): <10 seconds
 - Medium projects (1K-10K files): <2 minutes
 - Large projects (10K+ files): <10 minutes
@@ -326,7 +336,7 @@ interface Reporter {
    - Integration tokens stored in local config or env vars
    - Never logged or transmitted unencrypted
 
-3. **Telemetry** *(Optional)*
+3. **Telemetry** _(Optional)_
    - Anonymous usage statistics (opt-in)
    - No code snippets or file paths collected
 
@@ -366,16 +376,19 @@ interface Reporter {
 ## Testing Strategy
 
 ### Unit Tests
+
 - Test each detector independently
 - Mock code parsing and rule matching
 - Verify fix recommendations
 
 ### Integration Tests
+
 - Test complete scan workflow
 - Verify integration with Snyk/Socket.dev (mocked)
 - Test output formats
 
 ### Fixture Tests
+
 - `tests/fixtures/vulnerable/` - Known vulnerable code
 - `tests/fixtures/secure/` - Secure reference implementations
 - Verify detection accuracy (precision/recall)
@@ -387,6 +400,7 @@ interface Reporter {
 ## Deployment Architecture
 
 ### POC/MVP (Local)
+
 ```
 Developer Machine
 ├── VibeSec CLI
@@ -395,6 +409,7 @@ Developer Machine
 ```
 
 ### Enterprise (Future)
+
 ```
 ┌─────────────────────────────────────┐
 │       VibeSec Cloud Platform        │
@@ -417,18 +432,21 @@ Developer Machine
 ## Technology Stack
 
 ### Backend/CLI
+
 - **Language:** Node.js (TypeScript) or Go
 - **Parsing:** Tree-sitter (multi-language AST), Babel (JS/TS), ast (Python)
 - **Regex:** RE2 (safe regex engine)
 - **Storage:** SQLite (local cache), YAML (rules)
 
 ### Web Dashboard (Future)
+
 - **Frontend:** React + TypeScript
 - **Backend API:** Express.js or FastAPI
 - **Database:** PostgreSQL
 - **Auth:** Auth0 or Firebase Auth
 
 ### CI/CD
+
 - **GitHub Actions:** Pre-built action
 - **Docker:** Containerized scanner
 - **Helm Charts:** Kubernetes deployment (enterprise)
@@ -438,12 +456,14 @@ Developer Machine
 ## Future Enhancements
 
 ### Phase 2 (Post-MVP)
+
 - Machine learning model for AI-generated code detection
 - Natural language query interface ("Show me auth issues")
 - VS Code / JetBrains IDE extensions
 - Automated PR generation for fixes
 
 ### Phase 3 (Enterprise)
+
 - SaaS platform with centralized management
 - Team collaboration features
 - Custom rule marketplace

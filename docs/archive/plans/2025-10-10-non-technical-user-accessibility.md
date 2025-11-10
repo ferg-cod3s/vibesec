@@ -12,15 +12,18 @@
 ## Executive Summary
 
 ### Objective
+
 Transform VibeSec's TypeScript CLI from a technical security scanner into an accessible tool that empowers non-technical users (Product Managers, Designers, Executives) to understand and act on security findings independently.
 
 ### Business Value
+
 - **60-70% reduction** in installation friction
 - **80% improvement** in finding comprehension for non-technical users
 - **50% reduction** in support burden through self-service
 - **Enable stakeholder communication** without developer translation
 
 ### Core Deliverables
+
 1. Plain language reporter with business-focused explanations
 2. `--explain` flag for non-technical output mode
 3. Friendly error handling with actionable guidance
@@ -34,6 +37,7 @@ Transform VibeSec's TypeScript CLI from a technical security scanner into an acc
 ### Current State Analysis
 
 **Technology Stack** (POC):
+
 - **Runtime**: Bun 1.0+ / Node.js 16+
 - **Language**: TypeScript 5.9+
 - **CLI Framework**: Commander.js 11.1+
@@ -41,6 +45,7 @@ Transform VibeSec's TypeScript CLI from a technical security scanner into an acc
 - **Package Manager**: Bun (POC), npm (compatible)
 
 **Existing Implementation**:
+
 ```
 cli/
   index.ts                    # CLI entry point with Commander
@@ -52,6 +57,7 @@ reporters/
 ```
 
 **Current User Experience**:
+
 ```bash
 $ vibesec scan ./myproject
 ═══════════════════════════════════════════════════════════════════
@@ -66,6 +72,7 @@ $ vibesec scan ./myproject
 ```
 
 **Problems for Non-Technical Users**:
+
 - ❌ "CWE-798" and "OWASP A07:2021" are meaningless jargon
 - ❌ No business impact explained
 - ❌ Unclear what to do next
@@ -76,33 +83,39 @@ $ vibesec scan ./myproject
 ### Target User Personas
 
 #### Primary: Product Manager (Sarah)
+
 - Uses AI tools (Lovable, Bolt.new) to prototype
 - No coding experience
 - Needs to verify security before releases
 - Reports to stakeholders on security posture
 
 **Success Criteria**:
+
 - ✅ Install in <3 minutes
 - ✅ Understand findings without dev help
 - ✅ Know which issues block release
 - ✅ Generate stakeholder reports
 
 #### Secondary: Designer (Marcus)
+
 - Familiar with Git and terminal basics
 - Worried about exposed API keys in design repos
 - No security expertise
 
 **Success Criteria**:
+
 - ✅ Scan repos confidently
 - ✅ Identify exposed credentials
 - ✅ Know when to escalate to engineering
 
 #### Tertiary: Executive (James)
+
 - Needs metrics for board reporting
 - Makes risk/cost decisions
 - Limited technical knowledge
 
 **Success Criteria**:
+
 - ✅ Receive formatted reports
 - ✅ Understand security posture at-a-glance
 - ✅ Compare to industry benchmarks
@@ -110,6 +123,7 @@ $ vibesec scan ./myproject
 ### Research Foundation
 
 This plan is based on:
+
 - `/docs/NON_TECHNICAL_USER_RESEARCH.md` - User research and personas
 - `/docs/IMPLEMENTATION_QUICK_REFERENCE.md` - Feature specifications (updated for TypeScript)
 - Codebase analysis of existing reporter architecture
@@ -157,6 +171,7 @@ This plan is based on:
 **Purpose**: Translate technical security findings into business language
 
 **Interface**:
+
 ```typescript
 export class PlainLanguageReporter {
   generate(result: ScanResult): string;
@@ -176,6 +191,7 @@ interface PlainSeverity {
 ```
 
 **Key Features**:
+
 - Analogies for technical concepts (SQL injection = "unlocked front door")
 - Business impact explanations
 - Fix time estimates (10-15 min, 1-2 hours, etc.)
@@ -183,6 +199,7 @@ interface PlainSeverity {
 - No unexplained jargon (CVE, CWE, OWASP)
 
 **Example Output**:
+
 ```
 🚨 Urgent - Fix Today
 
@@ -211,6 +228,7 @@ Who can fix: Any developer
 **Purpose**: Convert exceptions into helpful, actionable guidance
 
 **Interface**:
+
 ```typescript
 export class FriendlyErrorHandler {
   handle(error: Error, context: ErrorContext): void;
@@ -221,8 +239,8 @@ export class FriendlyErrorHandler {
 }
 
 interface ErrorContext {
-  action: string;      // "scan project", "write report"
-  path?: string;       // File/directory being processed
+  action: string; // "scan project", "write report"
+  path?: string; // File/directory being processed
   userLevel?: 'technical' | 'non-technical';
 }
 ```
@@ -230,6 +248,7 @@ interface ErrorContext {
 **Example Transformations**:
 
 **Before** (Current):
+
 ```
 Error: ENOENT: no such file or directory, scandir '/wrong/path'
     at Object.readdirSync (node:fs:1514:3)
@@ -238,6 +257,7 @@ Error: ENOENT: no such file or directory, scandir '/wrong/path'
 ```
 
 **After** (With Handler):
+
 ```
 ❌ Couldn't find the folder you wanted to scan
 
@@ -260,6 +280,7 @@ Need help? https://vibesec.dev/docs/troubleshooting
 **Purpose**: Provide visual feedback during long operations
 
 **Implementation** (using ora spinner):
+
 ```typescript
 import ora from 'ora';
 
@@ -276,7 +297,6 @@ try {
 
   // Show summary
   console.log(`\n📊 Scanned ${files.length} files in ${duration}s`);
-
 } catch (error) {
   spinner.fail(chalk.red('Scan failed'));
   errorHandler.handle(error, { action: 'scan project', path });
@@ -297,7 +317,7 @@ program
   .option('-o, --output <file>', 'Output file path')
   .option('-e, --exclude <patterns...>', 'File patterns to exclude')
   .option('-i, --include <patterns...>', 'File patterns to include')
-  .option('--explain', 'Use plain language for non-technical users')  // NEW
+  .option('--explain', 'Use plain language for non-technical users') // NEW
   .option('--rules <path>', 'Custom rules directory path')
   .option('--no-parallel', 'Disable parallel scanning')
   .action(scanCommand);
@@ -306,14 +326,11 @@ program
 #### Reporter Selection Logic (`commands/scan.ts`)
 
 ```typescript
-export async function scanCommand(
-  path: string,
-  options: ScanCommandOptions
-): Promise<void> {
+export async function scanCommand(path: string, options: ScanCommandOptions): Promise<void> {
   try {
     const errorHandler = new FriendlyErrorHandler();
     const isJson = options.format === 'json';
-    const useExplain = options.explain;  // NEW
+    const useExplain = options.explain; // NEW
 
     // ... validation and scanning logic ...
 
@@ -322,9 +339,9 @@ export async function scanCommand(
     if (isJson) {
       reporter = new JsonReporter();
     } else if (useExplain) {
-      reporter = new PlainLanguageReporter();  // NEW
+      reporter = new PlainLanguageReporter(); // NEW
     } else {
-      reporter = new PlainTextReporter();      // Existing technical
+      reporter = new PlainTextReporter(); // Existing technical
     }
 
     const report = reporter.generate(result);
@@ -340,12 +357,11 @@ export async function scanCommand(
     }
 
     // ... exit code logic ...
-
   } catch (error) {
     errorHandler.handle(error as Error, {
       action: 'scan project',
       path,
-      userLevel: options.explain ? 'non-technical' : 'technical'
+      userLevel: options.explain ? 'non-technical' : 'technical',
     });
     process.exit(1);
   }
@@ -355,15 +371,17 @@ export async function scanCommand(
 ### Dependencies
 
 **New Package Additions**:
+
 ```json
 {
   "dependencies": {
-    "ora": "^6.3.1"  // Progress spinners (use v6 for CommonJS compatibility)
+    "ora": "^6.3.1" // Progress spinners (use v6 for CommonJS compatibility)
   }
 }
 ```
 
 **Existing Dependencies** (already available):
+
 - `chalk` 4.1.2 - Terminal styling
 - `commander` 11.1.0 - CLI framework
 
@@ -405,12 +423,14 @@ export async function scanCommand(
    - Document new flag in help text
 
 **Deliverables**:
+
 - ✅ `reporters/plain-language.ts` - Working plain language reporter
 - ✅ `lib/errors/friendly-handler.ts` - Error handling utility
 - ✅ `--explain` flag functional in CLI
 - ✅ Error messages are user-friendly
 
 **Success Criteria**:
+
 - [ ] `vibesec scan --explain` produces plain language output
 - [ ] No unexplained jargon (CWE, CVE) in explain mode
 - [ ] Errors include suggestions and examples
@@ -418,6 +438,7 @@ export async function scanCommand(
 - [ ] 80%+ comprehension in user testing
 
 **Testing Checklist**:
+
 ```bash
 # Test plain language mode
 vibesec scan ./examples/vulnerable --explain
@@ -473,6 +494,7 @@ vibesec scan --explain --output report.txt
    - Document feedback
 
 **Deliverables**:
+
 - ✅ Progress indicators during scanning
 - ✅ Success/completion messaging
 - ✅ Enhanced help text with examples
@@ -480,6 +502,7 @@ vibesec scan --explain --output report.txt
 - ✅ User feedback documentation
 
 **Success Criteria**:
+
 - [ ] Visual feedback during all operations >2 seconds
 - [ ] Clear success states and next steps
 - [ ] Help text includes 3+ usage examples
@@ -487,6 +510,7 @@ vibesec scan --explain --output report.txt
 - [ ] Time to first scan <3 minutes
 
 **Testing Checklist**:
+
 ```bash
 # Test progress indicators
 vibesec scan ./large-project
@@ -530,12 +554,14 @@ vibesec scan
    - Add `--no-color` flag for terminals without color
 
 **Deliverables**:
+
 - ✅ Security scorecard in output
 - ✅ Executive-friendly report format
 - ✅ Screen reader compatibility
 - ✅ `--no-color` flag support
 
 **Success Criteria**:
+
 - [ ] Security score calculation is consistent
 - [ ] Stakeholder reports are boardroom-ready
 - [ ] Screen reader announces all findings clearly
@@ -543,6 +569,7 @@ vibesec scan
 - [ ] Colorblind users can distinguish severity
 
 **Testing Checklist**:
+
 ```bash
 # Test scorecard
 vibesec scan --explain
@@ -593,12 +620,14 @@ vibesec scan
    - Upload and link from docs
 
 **Deliverables**:
+
 - ✅ Updated `README.md`
 - ✅ New `docs/QUICK_START.md` (TypeScript-focused)
 - ✅ Corrected `docs/IMPLEMENTATION_QUICK_REFERENCE.md`
 - ✅ Video tutorial published
 
 **Success Criteria**:
+
 - [ ] Non-technical users can follow docs without help
 - [ ] All code examples are TypeScript
 - [ ] Video has <5% drop-off rate
@@ -611,6 +640,7 @@ vibesec scan
 ### Automated Testing
 
 **Unit Tests** (`tests/reporters/plain-language.test.ts`):
+
 ```typescript
 describe('PlainLanguageReporter', () => {
   it('translates CRITICAL severity to urgent language', () => {
@@ -635,6 +665,7 @@ describe('PlainLanguageReporter', () => {
 ```
 
 **Integration Tests** (`tests/cli/scan-explain.test.ts`):
+
 ```typescript
 describe('scan --explain command', () => {
   it('uses plain language reporter when --explain flag is set', async () => {
@@ -657,18 +688,19 @@ describe('scan --explain command', () => {
 ```
 
 **Error Handling Tests** (`tests/lib/friendly-handler.test.ts`):
+
 ```typescript
 describe('FriendlyErrorHandler', () => {
   it('provides helpful message for ENOENT errors', () => {
     const handler = new FriendlyErrorHandler();
-    const error = new Error("ENOENT: no such file or directory");
+    const error = new Error('ENOENT: no such file or directory');
     error.code = 'ENOENT';
 
     const output = handler.handle(error, { action: 'scan project' });
 
     expect(output).toContain("Couldn't find");
-    expect(output).toContain("Suggestions:");
-    expect(output).toContain("Examples:");
+    expect(output).toContain('Suggestions:');
+    expect(output).toContain('Examples:');
   });
 });
 ```
@@ -682,6 +714,7 @@ describe('FriendlyErrorHandler', () => {
 **Scenario**: First-time scan of AI-generated project
 
 **Steps**:
+
 1. **Installation**
    - Provide only README installation section
    - Observe: Can they install without help?
@@ -705,6 +738,7 @@ describe('FriendlyErrorHandler', () => {
    - Success: Creates file suitable for sharing
 
 **Acceptance Criteria**:
+
 - ✅ Completes all tasks independently
 - ✅ Understands severity without asking
 - ✅ Can prioritize fixes correctly
@@ -715,34 +749,40 @@ describe('FriendlyErrorHandler', () => {
 ## Risk Assessment & Mitigation
 
 ### Risk 1: Over-Simplification
+
 **Likelihood**: Medium | **Impact**: Medium
 
 **Description**: Plain language mode may omit important technical details
 
 **Mitigation**:
+
 - Always include technical metadata at bottom of findings
 - Add "Show technical details" option
 - Link to full technical docs
 - Get feedback from both technical and non-technical users
 
 **Validation**:
+
 - Security review of plain language output
 - Verify all CWE/OWASP mappings preserved
 
 ---
 
 ### Risk 2: TypeScript/Python Documentation Mismatch
+
 **Likelihood**: High | **Impact**: Medium
 
 **Description**: Existing docs reference Python implementation that doesn't exist
 
 **Mitigation**:
+
 - **Immediate**: Add notice to all docs clarifying TypeScript is POC language
 - **Phase 4**: Complete rewrite of Python references
 - Update all code examples to TypeScript
 - Create `TECH_STACK.md` documenting decisions
 
 **Validation**:
+
 - Documentation consistency review
 - Grep for remaining `.py` references
 - Test all code examples
@@ -750,32 +790,38 @@ describe('FriendlyErrorHandler', () => {
 ---
 
 ### Risk 3: Dependency on Chalk Version
+
 **Likelihood**: Low | **Impact**: Low
 
 **Description**: Chalk 4.x uses CommonJS, Chalk 5.x is ESM-only
 
 **Mitigation**:
+
 - Keep Chalk 4.x for POC compatibility
 - Document upgrade path to Chalk 5.x for production
 - Test with both Bun and Node.js runtimes
 
 **Validation**:
+
 - Test suite runs on both Bun and Node 16+
 
 ---
 
 ### Risk 4: Terminal Compatibility
+
 **Likelihood**: Medium | **Impact**: Low
 
 **Description**: Emojis and colors may not render on all terminals
 
 **Mitigation**:
+
 - Implement `--no-color` flag (strips ANSI codes)
 - Detect terminal capabilities and downgrade gracefully
 - Provide ASCII fallbacks for emojis
 - Test on Windows CMD, PowerShell, WSL, macOS Terminal
 
 **Validation**:
+
 - Test matrix covering major terminal emulators
 - CI tests with `NO_COLOR=1` environment variable
 
@@ -785,35 +831,39 @@ describe('FriendlyErrorHandler', () => {
 
 ### Quantitative Metrics
 
-| Metric | Baseline | Phase 1 Target | Phase 3 Target | Measurement Method |
-|--------|----------|----------------|----------------|--------------------|
-| Installation success rate | 40% | 70% | 85% | Telemetry (opt-in) |
-| Time to first scan | 10-30 min | 5 min | <3 min | User timing study |
-| Scan completion rate | 50% | 75% | 90% | Usage analytics |
-| Finding comprehension | 30% | 80% | 90% | User survey |
-| Self-service rate | 20% | 60% | 75% | Support ticket reduction |
+| Metric                    | Baseline  | Phase 1 Target | Phase 3 Target | Measurement Method       |
+| ------------------------- | --------- | -------------- | -------------- | ------------------------ |
+| Installation success rate | 40%       | 70%            | 85%            | Telemetry (opt-in)       |
+| Time to first scan        | 10-30 min | 5 min          | <3 min         | User timing study        |
+| Scan completion rate      | 50%       | 75%            | 90%            | Usage analytics          |
+| Finding comprehension     | 30%       | 80%            | 90%            | User survey              |
+| Self-service rate         | 20%       | 60%            | 75%            | Support ticket reduction |
 
 ### Qualitative Success Criteria
 
 **Phase 1 Complete When**:
+
 - [ ] Non-technical user completes scan independently
 - [ ] User understands critical findings without help
 - [ ] Errors are helpful, not scary
 - [ ] All tests pass
 
 **Phase 2 Complete When**:
+
 - [ ] Visual feedback during all operations
 - [ ] Users feel guided through the process
 - [ ] Help text answers common questions
 - [ ] Time to first scan <3 minutes
 
 **Phase 3 Complete When**:
+
 - [ ] Security score is clear and actionable
 - [ ] Reports suitable for stakeholder presentation
 - [ ] Tool accessible to screen reader users
 - [ ] Works in all terminal environments
 
 **Phase 4 Complete When**:
+
 - [ ] Documentation has no Python references
 - [ ] Non-technical users can self-serve
 - [ ] Video tutorial has >100 views
@@ -824,12 +874,14 @@ describe('FriendlyErrorHandler', () => {
 ## Implementation Checklist
 
 ### Pre-Implementation
+
 - [x] Research complete (codebase analysis, user research)
 - [x] Plan reviewed and approved
 - [ ] Tech stack documented (TypeScript/Bun for POC)
 - [ ] Development environment ready (Bun installed)
 
 ### Phase 1: Foundation
+
 - [ ] Create `reporters/plain-language.ts`
   - [ ] Severity translation with emojis
   - [ ] Analogy mapping for vulnerabilities
@@ -853,6 +905,7 @@ describe('FriendlyErrorHandler', () => {
 - [ ] User test with 1 PM
 
 ### Phase 2: UX Enhancements
+
 - [ ] Add `ora` dependency
 - [ ] Implement progress spinners
 - [ ] Add completion summary
@@ -862,6 +915,7 @@ describe('FriendlyErrorHandler', () => {
 - [ ] Document feedback
 
 ### Phase 3: Accessibility & Polish
+
 - [ ] Implement security scorecard
 - [ ] Create stakeholder report format
 - [ ] Add `--no-color` flag
@@ -870,6 +924,7 @@ describe('FriendlyErrorHandler', () => {
 - [ ] Accessibility documentation
 
 ### Phase 4: Documentation
+
 - [ ] Update README.md
   - [ ] Add "For Non-Technical Users" section
   - [ ] Update installation (Bun/npm)
@@ -938,7 +993,7 @@ vibesec/
 export class PlainLanguageReporter {
   private readonly analogies: Record<string, string> = {
     'sql-injection': 'unlocked front door that anyone can walk through',
-    'xss': 'poisoned water supply affecting everyone who drinks',
+    xss: 'poisoned water supply affecting everyone who drinks',
     'hardcoded-secret': 'password written on a sticky note on your monitor',
     'command-injection': 'blank check handed to a stranger',
     // ... more analogies
@@ -949,13 +1004,13 @@ export class PlainLanguageReporter {
       emoji: '🚨',
       label: 'Urgent - Fix Today',
       timeframe: 'immediately',
-      businessImpact: 'High risk of data breach, legal liability, financial loss'
+      businessImpact: 'High risk of data breach, legal liability, financial loss',
     },
     [Severity.HIGH]: {
       emoji: '⚠️',
       label: 'Important - Fix This Week',
       timeframe: 'within 7 days',
-      businessImpact: 'Moderate risk to data security and user trust'
+      businessImpact: 'Moderate risk to data security and user trust',
     },
     // ... more severity mappings
   };
@@ -997,31 +1052,31 @@ Who can fix: ${this.suggestWhoCanFix(finding)}
 
 export class FriendlyErrorHandler {
   private readonly errorMessages: Record<string, ErrorTemplate> = {
-    'ENOENT': {
+    ENOENT: {
       title: "Couldn't find the folder you wanted to scan",
       explanation: (path) => `The path '${path}' doesn't exist on your computer.`,
       suggestions: [
         'Check the path for typos',
         'Make sure the folder exists',
-        "Try using '.' to scan the current folder"
+        "Try using '.' to scan the current folder",
       ],
       examples: [
         'vibesec scan .              # Scan current folder',
-        'vibesec scan ./myproject    # Scan specific folder'
-      ]
+        'vibesec scan ./myproject    # Scan specific folder',
+      ],
     },
-    'EACCES': {
+    EACCES: {
       title: "Don't have permission to read this folder",
       explanation: (path) => `Your user account can't access '${path}'.`,
       suggestions: [
         'Check folder permissions',
         'Try running with appropriate access',
-        'Make sure you own the folder'
+        'Make sure you own the folder',
       ],
       examples: [
         'ls -la # Check folder permissions',
-        'vibesec scan ~/myproject  # Try your home directory'
-      ]
+        'vibesec scan ~/myproject  # Try your home directory',
+      ],
     },
     // ... more error mappings
   };
@@ -1032,11 +1087,11 @@ export class FriendlyErrorHandler {
     console.error(chalk.red(`\n❌ ${template.title}\n`));
     console.error(template.explanation(context.path));
     console.error(chalk.yellow('\n💡 Suggestions:'));
-    template.suggestions.forEach(s => console.error(`  • ${s}`));
+    template.suggestions.forEach((s) => console.error(`  • ${s}`));
 
     if (template.examples.length > 0) {
       console.error(chalk.cyan('\nExamples:'));
-      template.examples.forEach(ex => console.error(`  ${ex}`));
+      template.examples.forEach((ex) => console.error(`  ${ex}`));
     }
 
     console.error(chalk.gray(`\nNeed help? https://vibesec.dev/docs/troubleshooting\n`));
@@ -1049,10 +1104,7 @@ export class FriendlyErrorHandler {
 ```typescript
 // commands/scan.ts (updated excerpt)
 
-export async function scanCommand(
-  path: string,
-  options: ScanCommandOptions
-): Promise<void> {
+export async function scanCommand(path: string, options: ScanCommandOptions): Promise<void> {
   const errorHandler = new FriendlyErrorHandler();
 
   try {
@@ -1084,7 +1136,11 @@ export async function scanCommand(
 
     // Show helpful summary
     if (!options.format === 'json') {
-      console.log(chalk.bold(`\n📊 Scanned ${result.scan.filesScanned} files in ${result.scan.duration.toFixed(1)}s`));
+      console.log(
+        chalk.bold(
+          `\n📊 Scanned ${result.scan.filesScanned} files in ${result.scan.duration.toFixed(1)}s`
+        )
+      );
 
       if (result.summary.total === 0) {
         console.log(chalk.green('✨ Great job! No security issues found.\n'));
@@ -1094,12 +1150,11 @@ export async function scanCommand(
         console.log(`  2. Run 'vibesec scan --explain' for plain language help\n`);
       }
     }
-
   } catch (error) {
     errorHandler.handle(error as Error, {
       action: 'scan project',
       path,
-      userLevel: options.explain ? 'non-technical' : 'technical'
+      userLevel: options.explain ? 'non-technical' : 'technical',
     });
     process.exit(1);
   }
@@ -1141,24 +1196,28 @@ npm install ora
 ## Next Steps
 
 ### Immediate (This Week)
+
 1. ✅ Review and approve this implementation plan
 2. ⏳ Create `docs/TECH_STACK.md` documenting TypeScript/Bun choice
 3. ⏳ Update `docs/IMPLEMENTATION_QUICK_REFERENCE.md` to remove Python references
 4. ⏳ Begin Phase 1 implementation
 
 ### Short-term (Next 2 Weeks)
+
 1. Complete Phase 1 (Foundation)
 2. User test with 1 PM
 3. Begin Phase 2 (UX Enhancements)
 4. Document learnings
 
 ### Medium-term (This Month)
+
 1. Complete Phases 2-3
 2. Conduct comprehensive user testing
 3. Iterate based on feedback
 4. Complete Phase 4 documentation
 
 ### Long-term (Next Quarter)
+
 1. Measure adoption metrics
 2. Gather feedback from diverse user base
 3. Plan Phase 5 (Web UI, integrations)
@@ -1170,34 +1229,34 @@ npm install ora
 
 ### A. Analogy Reference Table
 
-| Vulnerability Type | Technical Term | Plain Language Analogy |
-|-------------------|----------------|------------------------|
-| SQL Injection | CWE-89 | Unlocked front door anyone can walk through |
-| XSS | CWE-79 | Poisoned water supply affecting all users |
-| Hardcoded Secrets | CWE-798 | Password written on sticky note on monitor |
-| CSRF | CWE-352 | Forged signature on important documents |
-| Command Injection | CWE-78 | Blank check handed to stranger |
-| Path Traversal | CWE-22 | Skeleton key opening any room |
-| Insecure Deserialization | CWE-502 | Trojan horse package delivery |
-| Weak Crypto | CWE-327 | Lock that can be picked with paperclip |
+| Vulnerability Type       | Technical Term | Plain Language Analogy                      |
+| ------------------------ | -------------- | ------------------------------------------- |
+| SQL Injection            | CWE-89         | Unlocked front door anyone can walk through |
+| XSS                      | CWE-79         | Poisoned water supply affecting all users   |
+| Hardcoded Secrets        | CWE-798        | Password written on sticky note on monitor  |
+| CSRF                     | CWE-352        | Forged signature on important documents     |
+| Command Injection        | CWE-78         | Blank check handed to stranger              |
+| Path Traversal           | CWE-22         | Skeleton key opening any room               |
+| Insecure Deserialization | CWE-502        | Trojan horse package delivery               |
+| Weak Crypto              | CWE-327        | Lock that can be picked with paperclip      |
 
 ### B. Fix Time Estimation Guidelines
 
-| Vulnerability Complexity | Estimated Time | Who Can Fix |
-|-------------------------|----------------|-------------|
-| Simple (hardcoded secret) | 10-15 minutes | Any developer |
-| Moderate (SQL injection) | 15-30 minutes | Backend developer |
-| Complex (auth bypass) | 1-2 hours | Senior developer |
-| Architectural | 4-8 hours | Tech lead + team |
+| Vulnerability Complexity  | Estimated Time | Who Can Fix       |
+| ------------------------- | -------------- | ----------------- |
+| Simple (hardcoded secret) | 10-15 minutes  | Any developer     |
+| Moderate (SQL injection)  | 15-30 minutes  | Backend developer |
+| Complex (auth bypass)     | 1-2 hours      | Senior developer  |
+| Architectural             | 4-8 hours      | Tech lead + team  |
 
 ### C. Severity Translation Reference
 
-| Technical | Plain Language | Timeframe | Business Impact |
-|-----------|----------------|-----------|-----------------|
-| CRITICAL | 🚨 Urgent - Fix Today | Immediately | High risk of breach, legal liability |
-| HIGH | ⚠️ Important - Fix This Week | Within 7 days | Moderate security risk, user trust impact |
-| MEDIUM | 📋 Notable - Fix Soon | Within 30 days | Could lead to security problems |
-| LOW | ℹ️ Good to Know - Consider Fixing | When convenient | Minimal risk, best practices |
+| Technical | Plain Language                    | Timeframe       | Business Impact                           |
+| --------- | --------------------------------- | --------------- | ----------------------------------------- |
+| CRITICAL  | 🚨 Urgent - Fix Today             | Immediately     | High risk of breach, legal liability      |
+| HIGH      | ⚠️ Important - Fix This Week      | Within 7 days   | Moderate security risk, user trust impact |
+| MEDIUM    | 📋 Notable - Fix Soon             | Within 30 days  | Could lead to security problems           |
+| LOW       | ℹ️ Good to Know - Consider Fixing | When convenient | Minimal risk, best practices              |
 
 ### D. Related Documentation
 

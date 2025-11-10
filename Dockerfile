@@ -11,7 +11,8 @@ COPY package*.json ./
 COPY tsconfig.json ./
 
 # Install ALL dependencies (including dev dependencies for build)
-RUN npm ci
+RUN npm install --no-optional && \
+    ls -la node_modules/.bin/ | grep tsc || echo "tsc not found in node_modules/.bin"
 
 # Copy source code
 COPY cli ./cli
@@ -23,7 +24,7 @@ COPY rules ./rules
 COPY copy-assets.js ./
 
 # Build the application
-RUN npm run build
+RUN npx tsc && node copy-assets.js
 
 # Production stage
 FROM node:20-alpine

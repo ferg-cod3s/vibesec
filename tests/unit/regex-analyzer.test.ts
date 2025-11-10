@@ -28,9 +28,9 @@ db.execute(query);
 `;
       // Fix pattern - need to match the actual line with execute and +
       const rule = createTestRule('execute.*query');
-      
+
       const findings = await analyzer.analyze('test.js', code, rule);
-      
+
       expect(findings.length).toBeGreaterThan(0);
       expect(findings[0].rule).toBe('test-rule');
       expect(findings[0].severity).toBe('high');
@@ -42,9 +42,9 @@ const query = "SELECT * FROM users WHERE id = ?";
 db.execute(query, [userId]);
 `;
       const rule = createTestRule('execute.*\\+');
-      
+
       const findings = await analyzer.analyze('test.js', code, rule);
-      
+
       expect(findings).toHaveLength(0);
     });
 
@@ -53,9 +53,9 @@ db.execute(query, [userId]);
 element.innerHTML = userInput;
 `;
       const rule = createTestRule('innerHTML\\s*=');
-      
+
       const findings = await analyzer.analyze('test.js', code, rule);
-      
+
       expect(findings).toHaveLength(1);
       expect(findings[0].location.line).toBe(2);
     });
@@ -65,9 +65,9 @@ element.innerHTML = userInput;
 element.textContent = userInput;
 `;
       const rule = createTestRule('innerHTML\\s*=');
-      
+
       const findings = await analyzer.analyze('test.js', code, rule);
-      
+
       expect(findings).toHaveLength(0);
     });
 
@@ -77,9 +77,9 @@ const apiKey = "sk_live_1234567890abcdef";
 const password = "SuperSecret123!";
 `;
       const rule = createTestRule('(apiKey|password)\\s*=\\s*["\']');
-      
+
       const findings = await analyzer.analyze('test.js', code, rule);
-      
+
       expect(findings).toHaveLength(2);
       expect(findings[0].location.line).toBe(2);
       expect(findings[1].location.line).toBe(3);
@@ -92,9 +92,9 @@ const result = exec(cmd);
 `;
       // Fix pattern to match the line that has exec
       const rule = createTestRule('exec\\s*\\(');
-      
+
       const findings = await analyzer.analyze('test.js', code, rule);
-      
+
       expect(findings).toHaveLength(1);
     });
 
@@ -104,9 +104,9 @@ const query = "SELECT * FROM users " +
               "WHERE name = '" + userName + "'";
 `;
       const rule = createTestRule('SELECT.*\\+');
-      
+
       const findings = await analyzer.analyze('test.js', code, rule);
-      
+
       expect(findings.length).toBeGreaterThan(0);
     });
 
@@ -116,9 +116,9 @@ line 2
 vulnerable line with pattern
 line 4`;
       const rule = createTestRule('vulnerable.*pattern');
-      
+
       const findings = await analyzer.analyze('test.js', code, rule);
-      
+
       expect(findings[0].location.file).toBe('test.js');
       expect(findings[0].location.line).toBe(3);
       expect(findings[0].location.column).toBeGreaterThanOrEqual(0);
@@ -133,9 +133,9 @@ line 5
 line 6
 line 7`;
       const rule = createTestRule('vulnerable');
-      
+
       const findings = await analyzer.analyze('test.js', code, rule);
-      
+
       expect(findings[0].snippet).toContain('line 2');
       expect(findings[0].snippet).toContain('line 3');
       expect(findings[0].snippet).toContain('vulnerable line');
@@ -147,9 +147,9 @@ line 7`;
     it('should include metadata in findings', async () => {
       const code = 'vulnerable pattern';
       const rule = createTestRule('vulnerable');
-      
+
       const findings = await analyzer.analyze('test.js', code, rule);
-      
+
       expect(findings[0].metadata).toBeDefined();
       expect(findings[0].metadata.cwe).toBe('CWE-TEST');
       expect(findings[0].metadata.owasp).toBe('A0:TEST');
@@ -159,14 +159,17 @@ line 7`;
 
     it('should calculate confidence based on match length', async () => {
       const shortCode = 'exec(x)';
-      const longCode = 'executeThisVeryLongCommandWithManyCharactersThatGoesOnAndOn(this.is.a.very.long.command.execution.with.many.characters)';
-      const rule = createTestRule('exec[a-zA-Z]*\([^)]*\)');
-      
+      const longCode =
+        'executeThisVeryLongCommandWithManyCharactersThatGoesOnAndOn(this.is.a.very.long.command.execution.with.many.characters)';
+      const rule = createTestRule('exec[a-zA-Z]*\\([^)]*\\)');
+
       const shortFindings = await analyzer.analyze('test.js', shortCode, rule);
       const longFindings = await analyzer.analyze('test.js', longCode, rule);
-      
+
       // The long match should have higher confidence due to length
-      expect(longFindings[0].metadata.confidence).toBeGreaterThan(shortFindings[0].metadata.confidence);
+      expect(longFindings[0].metadata.confidence).toBeGreaterThan(
+        shortFindings[0].metadata.confidence
+      );
     });
 
     it('should include fix recommendations', async () => {
@@ -176,11 +179,13 @@ line 7`;
         template: 'Avoid using eval(). Consider safer alternatives.',
         references: ['https://owasp.org/eval-dangers'],
       };
-      
+
       const findings = await analyzer.analyze('test.js', code, rule);
-      
+
       expect(findings[0].fix).toBeDefined();
-      expect(findings[0].fix.recommendation).toBe('Avoid using eval(). Consider safer alternatives.');
+      expect(findings[0].fix.recommendation).toBe(
+        'Avoid using eval(). Consider safer alternatives.'
+      );
       expect(findings[0].fix.references).toContain('https://owasp.org/eval-dangers');
       expect(findings[0].fix.before).toBe('eval(userInput)');
     });
@@ -208,18 +213,18 @@ pattern3 here
         enabled: true,
         metadata: { tags: [] },
       };
-      
+
       const findings = await analyzer.analyze('test.js', code, multiPatternRule);
-      
+
       expect(findings).toHaveLength(3);
     });
 
     it('should handle empty file', async () => {
       const code = '';
       const rule = createTestRule('anything');
-      
+
       const findings = await analyzer.analyze('test.js', code, rule);
-      
+
       expect(findings).toHaveLength(0);
     });
 
@@ -229,9 +234,9 @@ const safe = 'code';
 const secure = 'implementation';
 `;
       const rule = createTestRule('vulnerable');
-      
+
       const findings = await analyzer.analyze('test.js', code, rule);
-      
+
       expect(findings).toHaveLength(0);
     });
 
@@ -242,11 +247,11 @@ pattern here
 pattern here
 `;
       const rule = createTestRule('pattern');
-      
+
       const findings = await analyzer.analyze('test.js', code, rule);
-      
+
       expect(findings).toHaveLength(3);
-      const ids = findings.map(f => f.id);
+      const ids = findings.map((f) => f.id);
       const uniqueIds = new Set(ids);
       expect(uniqueIds.size).toBe(3); // All IDs should be unique
     });

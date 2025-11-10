@@ -13,9 +13,11 @@ Phase 3 (POC Testing & Iteration) is now **100% complete**. All user testing mat
 ## Completed Deliverables
 
 ### 1. User Testing Guide ✅
+
 **File**: `docs/USER_TESTING_GUIDE.md`
 
 **Contents**:
+
 - Installation instructions (Node.js 18+, npm install)
 - Step-by-step first scan walkthrough
 - Output format explanations (plain text + JSON)
@@ -29,9 +31,11 @@ Phase 3 (POC Testing & Iteration) is now **100% complete**. All user testing mat
 **Estimated Time**: 10-15 minutes to complete
 
 ### 2. User Feedback Form ✅
+
 **File**: `docs/USER_FEEDBACK_FORM.md`
 
 **Structure**: 24 questions across 9 sections
+
 1. Installation & Setup (Q1-Q3)
 2. Scan Results Comprehension (Q4-Q7)
 3. Usability (Q8-Q10)
@@ -43,14 +47,17 @@ Phase 3 (POC Testing & Iteration) is now **100% complete**. All user testing mat
 9. Technical Details (optional)
 
 **Data Types**:
+
 - Quantitative: 14 rating scales (1-10)
 - Qualitative: 10 open-ended questions
 - Demographic: Experience level, OS, project size
 
 ### 3. Sample Vulnerable API ✅
+
 **Location**: `examples/sample-api/`
 
 **Structure**:
+
 ```
 examples/sample-api/
 ├── src/
@@ -68,6 +75,7 @@ examples/sample-api/
 ```
 
 **Vulnerabilities** (5 intentional):
+
 1. **SQL Injection** (HIGH) - `users.js:23`
    - Pattern: Template literal with user input
    - Impact: Database manipulation/data theft
@@ -85,19 +93,21 @@ examples/sample-api/
    - Impact: Arbitrary command execution
 
 5. **Insecure CORS** (MEDIUM) - `server.js:15`
-   - Pattern: origin: '*' configuration
+   - Pattern: origin: '\*' configuration
    - Impact: CSRF attacks, data exposure
 
 **Validation**: ✅ VibeSec scan detected **11 findings** (all 5 vulnerability types + variations)
 
 ### 4. Feedback Collection Plan ✅
+
 **File**: `docs/FEEDBACK_COLLECTION_PLAN.md`
 
 **Key Sections**:
+
 - **Recruitment Strategy**: 15-20 testers (focus on juniors)
 - **Collection Tools**: Google Forms (recommended)
 - **Timeline**: 5-week plan (setup → pilot → main wave → analysis)
-- **Analysis Methodology**: 
+- **Analysis Methodology**:
   - Quantitative: NPS, comprehension scores, usability ratings
   - Qualitative: Thematic coding of open responses
 - **Success Criteria**:
@@ -113,11 +123,13 @@ examples/sample-api/
 ### VibeSec Scan of Sample API
 
 **Command**:
+
 ```bash
 vibesec scan examples/sample-api/src
 ```
 
 **Results**:
+
 - ✅ **11 findings detected**
 - ✅ Files scanned: 6
 - ✅ Duration: 0.10s
@@ -128,22 +140,26 @@ vibesec scan examples/sample-api/src
   - 0 LOW
 
 **Findings by Category**:
+
 - Injection: 3 (SQL, XSS, Command)
 - Secrets: 7 (API keys, passwords, JWT secrets)
 - AI-specific: 1 (CORS)
 
 **False Positives**:
+
 - ✅ **0 false positives** on secure middleware (`auth.js`)
 - ✅ Correctly ignored secure patterns (env vars, parameterized queries)
 
 ### JSON Output Validation
 
 **Command**:
+
 ```bash
 vibesec scan examples/sample-api/src --format json
 ```
 
 **Results**:
+
 - ✅ Well-formed JSON (parseable by `jq`)
 - ✅ Contains all required fields (findings, metadata, summary)
 - ✅ Proper structure for CI/CD integration
@@ -155,22 +171,24 @@ vibesec scan examples/sample-api/src --format json
 
 ### Completion: 100%
 
-| Task | Status | Result |
-|------|--------|--------|
-| Task 1: False Positive Testing | ✅ Complete | 0% false positive rate |
-| Task 2: JSON Output Validation | 🟡 Partial (90%) | Core done, docs pending |
-| Task 3: Unit Testing | ✅ Complete | 82.2% coverage, 67/67 tests pass |
-| Task 4: User Testing Prep | ✅ Complete | All 4 deliverables ready |
+| Task                           | Status           | Result                           |
+| ------------------------------ | ---------------- | -------------------------------- |
+| Task 1: False Positive Testing | ✅ Complete      | 0% false positive rate           |
+| Task 2: JSON Output Validation | 🟡 Partial (90%) | Core done, docs pending          |
+| Task 3: Unit Testing           | ✅ Complete      | 82.2% coverage, 67/67 tests pass |
+| Task 4: User Testing Prep      | ✅ Complete      | All 4 deliverables ready         |
 
 ### Key Metrics
 
 **Testing**:
+
 - Test coverage: 82.2% functions, 99.5% lines
 - Test pass rate: 100% (67/67)
 - Test execution: 0.67s
 - False positive rate: 0%
 
 **User Testing Readiness**:
+
 - Testing guide: ✅ Complete (15-min walkthrough)
 - Feedback form: ✅ Complete (24 questions)
 - Sample codebase: ✅ Complete (5 vulnerabilities)
@@ -183,6 +201,7 @@ vibesec scan examples/sample-api/src --format json
 ### Week 1: Setup & Pilot (Days 1-7)
 
 **Day 1-2: Setup**
+
 - [ ] Create Google Form from `USER_FEEDBACK_FORM.md`
 - [ ] Set up form notifications and short URL
 - [ ] Test form submission end-to-end
@@ -190,12 +209,14 @@ vibesec scan examples/sample-api/src --format json
 - [ ] Identify 20+ potential testers
 
 **Day 3-4: Pilot Testing**
+
 - [ ] Send invitations to 3-5 trusted pilot testers
 - [ ] Include `USER_TESTING_GUIDE.md` link
 - [ ] Monitor pilot responses closely
 - [ ] Fix any critical issues discovered
 
 **Day 5-7: Iterate**
+
 - [ ] Review pilot feedback
 - [ ] Update guide/form if needed
 - [ ] Create testing FAQ for common questions
@@ -204,18 +225,21 @@ vibesec scan examples/sample-api/src --format json
 ### Week 2-4: Main Testing Wave (Days 8-28)
 
 **Week 2 (Days 8-14)**:
+
 - [ ] Send invitations to 15-20 main testers
 - [ ] Post on social media (Twitter, Reddit, Discord)
 - [ ] Monitor response rate (target: 10+ responses)
 - [ ] Provide support for install issues (<24h response)
 
 **Week 3 (Days 15-21)**:
+
 - [ ] Send reminder to non-respondents (day 17)
 - [ ] Continue support and bug fixes
 - [ ] Monitor for common issues → update FAQ
 - [ ] Celebrate milestone: 10 responses 🎉
 
 **Week 4 (Days 22-28)**:
+
 - [ ] Final reminder to stragglers
 - [ ] Reach target: 15-20 responses
 - [ ] Close form to new submissions
@@ -224,18 +248,21 @@ vibesec scan examples/sample-api/src --format json
 ### Week 5: Analysis & Reporting (Days 29-35)
 
 **Data Analysis**:
+
 - [ ] Export responses to CSV
 - [ ] Calculate quantitative metrics (NPS, scores)
 - [ ] Code qualitative themes
 - [ ] Create visualizations (charts, word clouds)
 
 **Report Creation**:
+
 - [ ] Write `PHASE4_TESTING_REPORT.md`
 - [ ] Document findings (quantitative + qualitative)
 - [ ] Create prioritized backlog (P0/P1/P2/P3)
 - [ ] Make go/no-go decision for Phase 5
 
 **Stakeholder Communication**:
+
 - [ ] Share report with team
 - [ ] Send thank-you emails to testers
 - [ ] Update README with contributor badges
@@ -246,17 +273,20 @@ vibesec scan examples/sample-api/src --format json
 ## Success Criteria for Phase 4
 
 ### Must-Have (Go/No-Go)
+
 - ✅ **10+ completed responses** from target audience
 - ✅ **Comprehension Score >7.0/10** (findings are clear)
 - ✅ **Installation Success >80%** (setup works)
 - ✅ **No critical bugs** blocking usage
 
 ### Should-Have (Proceed with iteration)
+
 - ✅ **Usability Score >7.0/10** (tool is usable)
 - ✅ **False Positive Rate <15%** (acceptable accuracy)
 - ✅ **NPS >0** (more promoters than detractors)
 
 ### Nice-to-Have (Bonus validation)
+
 - 🎯 20+ responses
 - 🎯 Comparison data from security engineers
 - 🎯 Tests on real-world codebases (beyond sample-api)
@@ -266,16 +296,19 @@ vibesec scan examples/sample-api/src --format json
 ## Resources for Phase 4
 
 ### Documentation
+
 - `docs/USER_TESTING_GUIDE.md` - Tester instructions
 - `docs/USER_FEEDBACK_FORM.md` - Feedback questions
 - `docs/FEEDBACK_COLLECTION_PLAN.md` - Collection strategy
 - `examples/sample-api/README.md` - Vulnerability explanations
 
 ### Sample Code
+
 - `examples/sample-api/` - Vulnerable Express.js API (5 vulns)
 - `tests/fixtures/secure/` - Secure code for contrast
 
 ### Support Resources
+
 - Email template (in FEEDBACK_COLLECTION_PLAN.md)
 - Social media post template (in FEEDBACK_COLLECTION_PLAN.md)
 - Reminder email template (in FEEDBACK_COLLECTION_PLAN.md)
@@ -286,17 +319,20 @@ vibesec scan examples/sample-api/src --format json
 ## Risk Assessment
 
 ### Low Risk ✅
+
 - **Materials quality**: Comprehensive and tested
 - **Scanner functionality**: Working correctly (11/11 findings)
 - **False positive rate**: 0% on secure code
 
 ### Medium Risk ⚠️
+
 - **Recruitment**: May need >1 week to get 15-20 testers
   - **Mitigation**: Multiple channels (email, social, community)
 - **Response rate**: May be <70% completion
   - **Mitigation**: Incentives (early access, badges, gift cards)
 
 ### High Risk 🔴
+
 - **Technical issues**: Install failures could block testing
   - **Mitigation**: Fast support (<24h), detailed troubleshooting guide
 - **Negative feedback**: High false positives or unclear output
@@ -307,6 +343,7 @@ vibesec scan examples/sample-api/src --format json
 ## Contact & Support
 
 ### During Phase 4 Testing
+
 - **Support Email**: [Your email or support@vibesec.dev]
 - **Response Time**: <24h for critical issues, <48h for questions
 - **GitHub Issues**: For bug reports
@@ -318,11 +355,11 @@ vibesec scan examples/sample-api/src --format json
 
 **Phase 4 Total Duration**: 5 weeks
 
-| Week | Activities | Milestone |
-|------|-----------|-----------|
-| 1 | Setup + Pilot | 3-5 pilot responses |
-| 2-4 | Main Testing | 15-20 total responses |
-| 5 | Analysis + Report | Go/no-go decision for Phase 5 |
+| Week | Activities        | Milestone                     |
+| ---- | ----------------- | ----------------------------- |
+| 1    | Setup + Pilot     | 3-5 pilot responses           |
+| 2-4  | Main Testing      | 15-20 total responses         |
+| 5    | Analysis + Report | Go/no-go decision for Phase 5 |
 
 **Target Completion**: ~2025-11-13 (if starting today)
 

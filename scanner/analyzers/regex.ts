@@ -56,7 +56,7 @@ export class RegexAnalyzer {
   private getSnippet(lines: string[], lineIndex: number, context: number = 2): string {
     const start = Math.max(0, lineIndex - context);
     const end = Math.min(lines.length, lineIndex + context + 1);
-    
+
     return lines
       .slice(start, end)
       .map((line, i) => {

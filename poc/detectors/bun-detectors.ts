@@ -86,7 +86,7 @@ export class BunSQLInjectionDetector {
       const nodeText = this.parser.getNodeText(node, content);
 
       // Check if template contains SQL keywords
-      const containsSQLKeyword = this.sqlKeywords.some(keyword =>
+      const containsSQLKeyword = this.sqlKeywords.some((keyword) =>
         nodeText.toLowerCase().includes(keyword)
       );
 

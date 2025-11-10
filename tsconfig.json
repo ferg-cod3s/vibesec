@@ -17,21 +17,14 @@
     "moduleResolution": "node",
     "types": ["node", "jest"]
   },
-  "include": [
-    "cli/**/*",
-    "scanner/**/*",
-    "reporters/**/*",
-    "src/**/*",
-    "lib/**/*"
-  ],
+  "include": ["cli/**/*", "scanner/**/*", "reporters/**/*", "src/**/*", "lib/**/*", "tests/**/*"],
   "exclude": [
     "node_modules",
     "dist",
-    "**/*.test.ts",
-    "tests/**/*",
     "poc/**/*",
     "demo-examples/**/*",
     "demo-automation/**/*",
-    "benchmark-results/**/*"
+    "benchmark-results/**/*",
+    "tests/mcp/fixtures/**/*"
   ]
 }
