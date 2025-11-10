@@ -6,22 +6,62 @@ Command-line interface for the VibeSec security scanner.
 
 ```
 cli/
-├── cmd/           # Command implementations
-└── pkg/           # CLI packages and utilities
+├── index.ts              # CLI entry point
+└── commands/
+    ├── scan.ts           # Scan command implementation
+    └── benchmark.ts      # Performance benchmarking command
 ```
 
-## Development
+## Implementation Status
 
-Coming soon - CLI implementation will be added in POC phase.
+✅ **Implemented** - CLI is fully functional with the following commands:
 
-## Commands
+### Available Commands
 
 ```bash
-vibesec scan [path]           # Scan directory/file
-vibesec report [options]      # Generate reports
-vibesec config [action]       # Manage configuration
-vibesec update                # Update rules database
-vibesec integrate [service]   # Setup integrations
+# Scan a directory or file for security vulnerabilities
+vibesec scan [path] [options]
+
+# Options:
+#   --format <type>     Output format: text, json, stakeholder (default: text)
+#   --explain           Use plain-language explanations for non-technical users
+#   --severity <level>  Filter by severity: critical, high, medium, low
+#   --output <file>     Write results to file
+#   --quiet             Suppress progress indicators
+#   --no-color          Disable colored output
+
+# Examples:
+vibesec scan .                         # Scan current directory
+vibesec scan src/ --format json        # JSON output
+vibesec scan . --explain               # Plain language mode
+vibesec scan . --severity critical     # Only critical findings
 ```
 
-See [POC_SPEC.md](../docs/POC_SPEC.md) for detailed implementation plan.
+## Features
+
+- **Multiple Output Formats**: Text, JSON, and stakeholder-friendly reports
+- **Plain Language Mode**: Non-technical explanations with `--explain` flag
+- **Severity Filtering**: Focus on critical/high priority issues
+- **User-Friendly Errors**: Friendly error handler with actionable suggestions
+- **Progress Indicators**: Visual feedback with ora spinners
+- **Color Support**: Syntax-highlighted output (can be disabled)
+
+## Usage from Code
+
+```typescript
+import { Scanner } from '../scanner/core/engine';
+
+const scanner = new Scanner({
+  path: './src',
+  quiet: false
+});
+
+const result = await scanner.scan();
+console.log(result);
+```
+
+## See Also
+
+- [API Documentation](../docs/API.md) - Complete CLI reference
+- [Programmatic API](../docs/PROGRAMMATIC_API.md) - TypeScript API usage
+- [User Testing Guide](../docs/USER_TESTING_GUIDE.md) - Testing guidelines

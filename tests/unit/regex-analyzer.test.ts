@@ -1,5 +1,5 @@
 import { RegexAnalyzer } from '../../scanner/analyzers/regex';
-import { Rule, Pattern } from '../../scanner/core/types';
+import { Rule, Severity, Category } from '../../scanner/core/types';
 
 describe('RegexAnalyzer', () => {
   const analyzer = new RegexAnalyzer();
@@ -8,8 +8,8 @@ describe('RegexAnalyzer', () => {
     id: 'test-rule',
     name: 'Test Rule',
     description: 'Test description',
-    severity: 'high',
-    category: 'test',
+    severity: Severity.HIGH,
+    category: Category.CUSTOM,
     patterns: [{ regex: pattern, flags: 'gm' }],
     languages: ['javascript'],
     enabled: true,
@@ -197,8 +197,8 @@ pattern3 here
         id: 'multi-test',
         name: 'Multi Pattern Test',
         description: 'Test',
-        severity: 'medium',
-        category: 'test',
+        severity: Severity.MEDIUM,
+        category: Category.CUSTOM,
         patterns: [
           { regex: 'pattern1', flags: 'gm' },
           { regex: 'pattern2', flags: 'gm' },
