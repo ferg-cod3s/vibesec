@@ -28,6 +28,7 @@ rules/
 ## Creating Rules
 
 See [DETECTION_RULES.md](../docs/DETECTION_RULES.md) for:
+
 - Rule schema documentation
 - Examples of built-in rules
 - How to create custom rules
@@ -36,6 +37,7 @@ See [DETECTION_RULES.md](../docs/DETECTION_RULES.md) for:
 ## Contributing
 
 We welcome community-contributed rules! See [CONTRIBUTING.md](../docs/CONTRIBUTING.md) for:
+
 - Submission guidelines
 - Quality standards
 - Bounty program details
@@ -43,6 +45,7 @@ We welcome community-contributed rules! See [CONTRIBUTING.md](../docs/CONTRIBUTI
 ## Rule Updates
 
 Update community rules:
+
 ```bash
 vibesec update-rules
 ```

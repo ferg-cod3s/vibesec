@@ -14,16 +14,19 @@ integrations/
 ## Supported Integrations
 
 ### Snyk
+
 - **Purpose**: Dependency vulnerability scanning
 - **Features**: CVE database, package vulnerability detection
 - **Status**: Planned for MVP
 
 ### Socket.dev
+
 - **Purpose**: Supply chain attack detection
 - **Features**: Malicious package detection, typosquatting
 - **Status**: Planned for MVP
 
 ### GitHub
+
 - **Purpose**: CI/CD automation
 - **Features**: GitHub Action, SARIF upload, PR annotations
 - **Status**: Planned for MVP

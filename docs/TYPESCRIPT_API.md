@@ -92,9 +92,11 @@ constructor(options: ScanOptions)
 ```
 
 **Parameters:**
+
 - `options` - Configuration options for the scanner
 
 **Example:**
+
 ```typescript
 const scanner = new Scanner({
   path: './src',
@@ -116,6 +118,7 @@ scan(): Promise<ScanResult>
 **Returns:** `Promise<ScanResult>`
 
 **Example:**
+
 ```typescript
 const result = await scanner.scan();
 console.log(`Found ${result.summary.total} issues`);
@@ -138,7 +141,11 @@ class PerformanceBenchmark {
   // Static methods
   static formatDuration(ms: number): string;
   static formatMemory(bytes: number): string;
-  static detectRegression(current: BenchmarkResult, baseline: BenchmarkResult, thresholdPercent?: number): RegressionResult[];
+  static detectRegression(
+    current: BenchmarkResult,
+    baseline: BenchmarkResult,
+    thresholdPercent?: number
+  ): RegressionResult[];
   static meetsTarget(result: BenchmarkResult): boolean;
   static getProjectedTime10K(result: BenchmarkResult): number;
 }
@@ -155,6 +162,7 @@ start(): void
 ```
 
 **Example:**
+
 ```typescript
 const benchmark = new PerformanceBenchmark();
 benchmark.start();
@@ -170,6 +178,7 @@ stop(name: string, filesScanned: number, metadata?: Record<string, unknown>): Be
 ```
 
 **Parameters:**
+
 - `name` - Name of the benchmark
 - `filesScanned` - Number of files processed
 - `metadata` - Optional custom metadata
@@ -177,6 +186,7 @@ stop(name: string, filesScanned: number, metadata?: Record<string, unknown>): Be
 **Returns:** `BenchmarkResult`
 
 **Example:**
+
 ```typescript
 const result = benchmark.stop('My Scan', 100, {
   findingsCount: 5,
@@ -192,6 +202,7 @@ static formatDuration(ms: number): string
 ```
 
 **Parameters:**
+
 - `ms` - Duration in milliseconds
 
 **Returns:** Formatted string (e.g., "1.23s", "2m 15.50s")
@@ -205,6 +216,7 @@ static formatMemory(bytes: number): string
 ```
 
 **Parameters:**
+
 - `bytes` - Memory size in bytes
 
 **Returns:** Formatted string (e.g., "45.23 MB", "1.23 GB")
@@ -241,9 +253,11 @@ start(intervalMs?: number): void
 ```
 
 **Parameters:**
+
 - `intervalMs` - Snapshot interval in milliseconds (default: 100ms)
 
 **Example:**
+
 ```typescript
 const profiler = new MemoryProfiler();
 profiler.start(50); // snapshot every 50ms
@@ -260,6 +274,7 @@ stop(): MemoryProfile
 **Returns:** `MemoryProfile`
 
 **Example:**
+
 ```typescript
 const profile = profiler.stop();
 console.log(`Peak Heap: ${MemoryProfiler.formatMemory(profile.peakHeapUsed)}`);
@@ -274,6 +289,7 @@ static detectLeak(profile: MemoryProfile, thresholdBytesPerSecond?: number): Mem
 ```
 
 **Parameters:**
+
 - `profile` - Memory profile to analyze
 - `thresholdBytesPerSecond` - Leak detection threshold (default: 1MB/s)
 
@@ -289,20 +305,21 @@ Configuration options for the Scanner.
 
 ```typescript
 interface ScanOptions {
-  path: string;              // Directory or file to scan (required)
-  exclude?: string[];        // Glob patterns to exclude
-  include?: string[];        // Glob patterns to include
-  severity?: Severity;       // Minimum severity level
+  path: string; // Directory or file to scan (required)
+  exclude?: string[]; // Glob patterns to exclude
+  include?: string[]; // Glob patterns to include
+  severity?: Severity; // Minimum severity level
   format?: 'text' | 'json' | 'sarif';
-  output?: string;           // Output file path
-  rulesPath?: string;        // Custom rules directory
-  parallel?: boolean;        // Enable parallel scanning (default: true)
-  maxFileSize?: number;      // Max file size in bytes (default: 1MB)
-  quiet?: boolean;           // Suppress progress messages
+  output?: string; // Output file path
+  rulesPath?: string; // Custom rules directory
+  parallel?: boolean; // Enable parallel scanning (default: true)
+  maxFileSize?: number; // Max file size in bytes (default: 1MB)
+  quiet?: boolean; // Suppress progress messages
 }
 ```
 
 **Example:**
+
 ```typescript
 const options: ScanOptions = {
   path: './src',
@@ -321,14 +338,15 @@ Complete scan execution result.
 
 ```typescript
 interface ScanResult {
-  version: string;           // VibeSec version
-  scan: ScanMetadata;        // Scan execution metadata
-  summary: ScanSummary;      // Finding statistics
-  findings: Finding[];       // Array of all findings
+  version: string; // VibeSec version
+  scan: ScanMetadata; // Scan execution metadata
+  summary: ScanSummary; // Finding statistics
+  findings: Finding[]; // Array of all findings
 }
 ```
 
 **Example:**
+
 ```typescript
 const result: ScanResult = await scanner.scan();
 
@@ -349,11 +367,11 @@ Metadata about scan execution.
 
 ```typescript
 interface ScanMetadata {
-  path: string;              // Scanned path
-  filesScanned: number;      // Number of files scanned
-  duration: number;          // Scan duration in seconds
-  timestamp: string;         // ISO 8601 timestamp
-  version: string;           // VibeSec version
+  path: string; // Scanned path
+  filesScanned: number; // Number of files scanned
+  duration: number; // Scan duration in seconds
+  timestamp: string; // ISO 8601 timestamp
+  version: string; // VibeSec version
 }
 ```
 
@@ -365,7 +383,7 @@ Statistical summary of findings.
 
 ```typescript
 interface ScanSummary {
-  total: number;             // Total findings
+  total: number; // Total findings
   bySeverity: {
     critical: number;
     high: number;
@@ -379,6 +397,7 @@ interface ScanSummary {
 ```
 
 **Example:**
+
 ```typescript
 const summary: ScanSummary = result.summary;
 
@@ -395,20 +414,21 @@ Individual security finding.
 
 ```typescript
 interface Finding {
-  id: string;                   // Unique finding ID
-  rule: string;                 // Rule ID that triggered
-  severity: Severity;           // critical|high|medium|low
-  category: Category;           // secrets|injection|auth|etc
-  title: string;                // Short title
-  description: string;          // Detailed description
-  location: Location;           // File and line number
-  snippet: string;              // Code snippet
-  fix: FixRecommendation;       // How to fix
-  metadata: FindingMetadata;    // CWE, OWASP, confidence
+  id: string; // Unique finding ID
+  rule: string; // Rule ID that triggered
+  severity: Severity; // critical|high|medium|low
+  category: Category; // secrets|injection|auth|etc
+  title: string; // Short title
+  description: string; // Detailed description
+  location: Location; // File and line number
+  snippet: string; // Code snippet
+  fix: FixRecommendation; // How to fix
+  metadata: FindingMetadata; // CWE, OWASP, confidence
 }
 ```
 
 **Example:**
+
 ```typescript
 const finding: Finding = result.findings[0];
 
@@ -425,11 +445,11 @@ Source code location of a finding.
 
 ```typescript
 interface Location {
-  file: string;              // File path
-  line: number;              // Line number
-  column: number;            // Column number
-  endLine?: number;          // End line (optional)
-  endColumn?: number;        // End column (optional)
+  file: string; // File path
+  line: number; // Line number
+  column: number; // Column number
+  endLine?: number; // End line (optional)
+  endColumn?: number; // End column (optional)
 }
 ```
 
@@ -441,14 +461,15 @@ Recommendation for fixing a finding.
 
 ```typescript
 interface FixRecommendation {
-  recommendation: string;    // Human-readable fix description
-  before: string;            // Code before fix
-  after: string;             // Code after fix
-  references: string[];      // Reference URLs
+  recommendation: string; // Human-readable fix description
+  before: string; // Code before fix
+  after: string; // Code after fix
+  references: string[]; // Reference URLs
 }
 ```
 
 **Example:**
+
 ```typescript
 const fix: FixRecommendation = finding.fix;
 
@@ -469,14 +490,15 @@ Additional metadata about a finding.
 
 ```typescript
 interface FindingMetadata {
-  cwe?: string;              // CWE ID (e.g., "CWE-79")
-  owasp?: string;            // OWASP category
-  confidence: number;        // 0.0 to 1.0
-  [key: string]: unknown;    // Additional custom metadata
+  cwe?: string; // CWE ID (e.g., "CWE-79")
+  owasp?: string; // OWASP category
+  confidence: number; // 0.0 to 1.0
+  [key: string]: unknown; // Additional custom metadata
 }
 ```
 
 **Example:**
+
 ```typescript
 const metadata: FindingMetadata = finding.metadata;
 
@@ -492,14 +514,14 @@ Detection rule definition.
 
 ```typescript
 interface Rule {
-  id: string;                    // Unique rule ID
-  name: string;                  // Rule name
-  description: string;           // Rule description
-  severity: Severity;            // Severity level
-  category: Category;            // Category
-  patterns: Pattern[];           // Matching patterns
-  languages: string[];           // Supported languages
-  enabled: boolean;              // Rule enabled flag
+  id: string; // Unique rule ID
+  name: string; // Rule name
+  description: string; // Rule description
+  severity: Severity; // Severity level
+  category: Category; // Category
+  patterns: Pattern[]; // Matching patterns
+  languages: string[]; // Supported languages
+  enabled: boolean; // Rule enabled flag
   fix?: {
     template: string;
     references: string[];
@@ -520,9 +542,9 @@ Pattern matching configuration for a rule.
 
 ```typescript
 interface Pattern {
-  regex: string;             // Regular expression pattern
-  flags?: string;            // Regex flags (e.g., "gi")
-  multiline?: boolean;       // Multiline matching
+  regex: string; // Regular expression pattern
+  flags?: string; // Regex flags (e.g., "gi")
+  multiline?: boolean; // Multiline matching
 }
 ```
 
@@ -540,6 +562,7 @@ interface Reporter {
 ```
 
 **Example:**
+
 ```typescript
 class MyReporter implements Reporter {
   name = 'my-reporter';
@@ -558,9 +581,9 @@ Options for reporter formatting.
 
 ```typescript
 interface ReporterOptions {
-  color?: boolean;           // Enable color output
-  verbose?: boolean;         // Verbose output
-  [key: string]: unknown;    // Custom options
+  color?: boolean; // Enable color output
+  verbose?: boolean; // Verbose output
+  [key: string]: unknown; // Custom options
 }
 ```
 
@@ -572,13 +595,13 @@ Result of a performance benchmark.
 
 ```typescript
 interface BenchmarkResult {
-  name: string;              // Benchmark name
-  duration: number;          // Duration in milliseconds
-  memoryUsed: number;        // Memory used in bytes
-  filesScanned: number;      // Number of files scanned
-  filesPerSecond: number;    // Throughput
-  timestamp: Date;           // When the benchmark ran
-  metadata?: Record<string, unknown>;  // Custom metadata
+  name: string; // Benchmark name
+  duration: number; // Duration in milliseconds
+  memoryUsed: number; // Memory used in bytes
+  filesScanned: number; // Number of files scanned
+  filesPerSecond: number; // Throughput
+  timestamp: Date; // When the benchmark ran
+  metadata?: Record<string, unknown>; // Custom metadata
 }
 ```
 
@@ -590,12 +613,12 @@ Memory usage profile over time.
 
 ```typescript
 interface MemoryProfile {
-  snapshots: MemorySnapshot[];  // Array of memory snapshots
-  peakHeapUsed: number;         // Peak heap usage in bytes
-  peakRSS: number;              // Peak RSS in bytes
-  avgHeapUsed: number;          // Average heap usage in bytes
-  memoryGrowth: number;         // Net memory growth in bytes
-  duration: number;             // Profile duration in milliseconds
+  snapshots: MemorySnapshot[]; // Array of memory snapshots
+  peakHeapUsed: number; // Peak heap usage in bytes
+  peakRSS: number; // Peak RSS in bytes
+  avgHeapUsed: number; // Average heap usage in bytes
+  memoryGrowth: number; // Net memory growth in bytes
+  duration: number; // Profile duration in milliseconds
 }
 ```
 
@@ -607,12 +630,12 @@ Single point-in-time memory measurement.
 
 ```typescript
 interface MemorySnapshot {
-  timestamp: Date;           // When the snapshot was taken
-  heapUsed: number;          // Heap used in bytes
-  heapTotal: number;         // Total heap in bytes
-  external: number;          // External memory in bytes
-  arrayBuffers: number;      // Array buffer memory in bytes
-  rss: number;               // Resident set size in bytes
+  timestamp: Date; // When the snapshot was taken
+  heapUsed: number; // Heap used in bytes
+  heapTotal: number; // Total heap in bytes
+  external: number; // External memory in bytes
+  arrayBuffers: number; // Array buffer memory in bytes
+  rss: number; // Resident set size in bytes
 }
 ```
 
@@ -624,10 +647,10 @@ Memory leak detection result.
 
 ```typescript
 interface MemoryLeak {
-  detected: boolean;         // Whether leak was detected
-  growthRate: number;        // Bytes per second growth rate
-  totalGrowth: number;       // Total bytes grown
-  threshold: number;         // Detection threshold (bytes/sec)
+  detected: boolean; // Whether leak was detected
+  growthRate: number; // Bytes per second growth rate
+  totalGrowth: number; // Total bytes grown
+  threshold: number; // Detection threshold (bytes/sec)
 }
 ```
 
@@ -649,12 +672,13 @@ enum Severity {
 ```
 
 **Usage:**
+
 ```typescript
 import { Severity } from 'vibesec';
 
 const options: ScanOptions = {
   path: './src',
-  severity: Severity.HIGH,  // Only report high and critical
+  severity: Severity.HIGH, // Only report high and critical
 };
 
 // Check severity
@@ -684,13 +708,12 @@ enum Category {
 ```
 
 **Usage:**
+
 ```typescript
 import { Category } from 'vibesec';
 
 // Filter by category
-const secretLeaks = result.findings.filter(
-  f => f.category === Category.SECRETS
-);
+const secretLeaks = result.findings.filter((f) => f.category === Category.SECRETS);
 
 // Count by category
 const injectionCount = result.summary.byCategory[Category.INJECTION] || 0;
@@ -814,9 +837,7 @@ function sortBySeverity(findings: Finding[]): Finding[] {
     low: 3,
   };
 
-  return findings.sort((a, b) =>
-    severityOrder[a.severity] - severityOrder[b.severity]
-  );
+  return findings.sort((a, b) => severityOrder[a.severity] - severityOrder[b.severity]);
 }
 
 // Group findings by category
@@ -835,7 +856,7 @@ function groupByCategory(findings: Finding[]): Record<string, Finding[]> {
 
 // Filter high confidence findings
 function highConfidence(findings: Finding[], threshold = 0.8): Finding[] {
-  return findings.filter(f => f.metadata.confidence >= threshold);
+  return findings.filter((f) => f.metadata.confidence >= threshold);
 }
 ```
 

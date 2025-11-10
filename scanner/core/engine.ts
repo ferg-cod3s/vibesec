@@ -1,14 +1,7 @@
 import * as path from 'path';
 import * as fs from 'fs/promises';
 import fg from 'fast-glob';
-import {
-  ScanOptions,
-  ScanResult,
-  Finding,
-  ScanSummary,
-  Category,
-  Severity,
-} from './types';
+import { ScanOptions, ScanResult, Finding, ScanSummary, Category, Severity } from './types';
 import { RuleLoader } from './rule-loader';
 import { RegexAnalyzer } from '../analyzers/regex';
 import { DependencyAnalyzer } from '../analyzers/dependency';
@@ -97,7 +90,7 @@ export class Scanner {
 
   private async findFiles(): Promise<string[]> {
     const searchPath = path.resolve(this.options.path);
-    
+
     // Check if path is a file
     try {
       const stat = await fs.stat(searchPath);
@@ -139,9 +132,7 @@ export class Scanner {
 
     // Filter rules by language
     const applicableRules = rules.filter(
-      (rule) =>
-        rule.enabled &&
-        (rule.languages.includes(language) || rule.languages.includes('*'))
+      (rule) => rule.enabled && (rule.languages.includes(language) || rule.languages.includes('*'))
     );
 
     // Run detection
@@ -170,12 +161,7 @@ export class Scanner {
       return findings;
     }
 
-    const severityOrder = [
-      Severity.CRITICAL,
-      Severity.HIGH,
-      Severity.MEDIUM,
-      Severity.LOW,
-    ];
+    const severityOrder = [Severity.CRITICAL, Severity.HIGH, Severity.MEDIUM, Severity.LOW];
     const minIndex = severityOrder.indexOf(this.options.severity);
 
     return findings.filter((finding) => {
@@ -198,8 +184,7 @@ export class Scanner {
 
     for (const finding of findings) {
       summary.bySeverity[finding.severity]++;
-      summary.byCategory[finding.category] =
-        (summary.byCategory[finding.category] || 0) + 1;
+      summary.byCategory[finding.category] = (summary.byCategory[finding.category] || 0) + 1;
     }
 
     return summary;

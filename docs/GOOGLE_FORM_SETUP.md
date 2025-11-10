@@ -160,7 +160,7 @@ Your feedback will help us improve the tool's clarity, usability, and effectiven
   - <1 second (Excellent)
   - 1-5 seconds (Good)
   - 5-15 seconds (Acceptable)
-  - >15 seconds (Too slow)
+  - > 15 seconds (Too slow)
 - **Required**: Yes
 
 ### Q9a. How many files were scanned?
@@ -537,15 +537,18 @@ Your feedback will help us improve the tool's clarity, usability, and effectiven
 1. Click ⚙️ **Settings** (gear icon top-right)
 
 #### General Tab:
+
 - ✅ Collect email addresses: **OFF** (unless you want to track respondents)
 - ✅ Limit to 1 response: **OFF** (allow multiple devices)
 - ✅ Respondents can edit after submit: **ON**
 
 #### Presentation Tab:
+
 - ✅ Show progress bar: **ON**
 - ✅ Shuffle question order: **OFF**
 - ✅ Show link to submit another response: **OFF**
 - **Confirmation message**:
+
   ```
   🎉 Thank you for your feedback!
 
@@ -557,6 +560,7 @@ Your feedback will help us improve the tool's clarity, usability, and effectiven
   ```
 
 #### Quizzes Tab:
+
 - ✅ Make this a quiz: **OFF**
 
 ### Step 3: Create Short URL
@@ -589,10 +593,12 @@ Your feedback will help us improve the tool's clarity, usability, and effectiven
 ### View Responses
 
 **In Google Forms**:
+
 - Click **Responses** tab
 - View **Summary** (charts) or **Individual** (per response)
 
 **Export to Sheets**:
+
 1. Responses → Click green Sheets icon
 2. Creates linked Google Sheets spreadsheet
 3. Auto-updates as new responses arrive
@@ -606,16 +612,16 @@ Create a simple tracker:
 ```markdown
 # Phase 4 Response Tracker
 
-| Date | Total Responses | Notes |
-|------|-----------------|-------|
-| 2025-10-10 | 0 | Form published |
-| 2025-10-12 | 5 | Pilot testing complete |
-| 2025-10-17 | 8 | Main wave started |
-| ...  | ... | ... |
+| Date       | Total Responses | Notes                  |
+| ---------- | --------------- | ---------------------- |
+| 2025-10-10 | 0               | Form published         |
+| 2025-10-12 | 5               | Pilot testing complete |
+| 2025-10-17 | 8               | Main wave started      |
+| ...        | ...             | ...                    |
 
 **Target**: 15-20 responses by 2025-11-07
-**Current**: ____ responses
-**Progress**: ____% to target
+**Current**: \_**\_ responses
+**Progress**: \_\_**% to target
 ```
 
 ---

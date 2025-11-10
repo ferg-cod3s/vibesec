@@ -71,7 +71,6 @@ reports/*.html
 
 # TypeScript
 *.tsbuildinfo
-tsconfig.json
+# NOTE: tsconfig.json is needed for build, so it's NOT ignored
 
-# Build artifacts that will be created during Docker build
-copy-assets.js
+# NOTE: copy-assets.js is needed for build, so it's NOT ignored

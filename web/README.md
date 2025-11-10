@@ -13,18 +13,21 @@ web/
 ## Features (Planned for MVP)
 
 ### Project Overview
+
 - Security score (0-100)
 - Trend charts (issues over time)
 - Recent scan history
 - Top vulnerabilities by category
 
 ### Findings Explorer
+
 - Filterable table of all issues
 - Drill-down to code snippets
 - Fix status tracking (pending/resolved)
 - Export to PDF/CSV
 
 ### Team Management
+
 - Multi-user access (email/password auth)
 - Role-based permissions (viewer, admin)
 - Shared scan history

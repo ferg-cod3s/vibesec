@@ -3,7 +3,7 @@
  */
 
 import { vibesecScanTool, handleScan } from '../../../src/mcp/tools/scan';
-import { writeFile, mkdir, rm } from 'fs/promises';
+import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 
 describe('vibesec_scan MCP Tool', () => {
@@ -81,15 +81,13 @@ function authenticateUser(username: string, password: string) {
     });
 
     it('should reject invalid severity', async () => {
-      await expect(
-        handleScan({ files: ['test.ts'], severity: 'invalid' })
-      ).rejects.toThrow('severity');
+      await expect(handleScan({ files: ['test.ts'], severity: 'invalid' })).rejects.toThrow(
+        'severity'
+      );
     });
 
     it('should reject invalid format', async () => {
-      await expect(
-        handleScan({ files: ['test.ts'], format: 'invalid' })
-      ).rejects.toThrow('format');
+      await expect(handleScan({ files: ['test.ts'], format: 'invalid' })).rejects.toThrow('format');
     });
   });
 

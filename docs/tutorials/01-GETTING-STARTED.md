@@ -13,9 +13,11 @@
 **Visual:** VibeSec logo and title screen
 
 **Narration:**
+
 > "Hi! Welcome to VibeSec - the security scanner built specifically for teams building with AI. Whether you're a developer, PM, or designer, VibeSec helps you catch security vulnerabilities in AI-generated code before they reach production. In this 5-minute tutorial, we'll get you up and running with your first security scan."
 
 **Screen:**
+
 - VibeSec logo
 - "Getting Started with VibeSec"
 - "⏱️ 5 minutes"
@@ -27,9 +29,11 @@
 **Visual:** Terminal window
 
 **Narration:**
+
 > "First, let's install VibeSec. If you're using Node.js, it's as simple as running npm install. We'll install it globally so you can use it anywhere on your system."
 
 **Screen:**
+
 ```bash
 # Show terminal
 $ npm install -g vibesec
@@ -40,9 +44,11 @@ $ npm install -g vibesec
 ```
 
 **Narration (continued):**
+
 > "And let's verify the installation by checking the version."
 
 **Screen:**
+
 ```bash
 $ vibesec --version
 vibesec/0.1.0
@@ -57,9 +63,11 @@ vibesec/0.1.0
 **Visual:** Terminal, then file tree, then back to terminal
 
 **Narration:**
+
 > "Now let's run your first security scan. Navigate to any project directory - I'll use a sample Node.js application here."
 
 **Screen:**
+
 ```bash
 $ cd my-app
 $ ls
@@ -67,9 +75,11 @@ src/  tests/  package.json  README.md
 ```
 
 **Narration (continued):**
+
 > "To scan your project, simply run 'vibesec scan' followed by a dot for the current directory."
 
 **Screen:**
+
 ```bash
 $ vibesec scan .
 
@@ -99,9 +109,11 @@ Scanned: 42 files in 1.23s
 **Visual:** Split screen - terminal output on left, explanation on right
 
 **Narration:**
+
 > "Let's look at what VibeSec found. Each finding includes the severity level, a description, and exactly where in your code the issue exists."
 
 **Screen:**
+
 ```bash
 Critical: Hardcoded API Key
 ────────────────────────────────
@@ -118,6 +130,7 @@ Fix: Move to environment variables
 ```
 
 **Text overlay points at different parts:**
+
 - Arrow to "Critical" → "Severity level"
 - Arrow to location → "Exact file and line"
 - Arrow to code snippet → "Problematic code"
@@ -130,9 +143,11 @@ Fix: Move to environment variables
 **Visual:** Terminal with --explain flag
 
 **Narration:**
+
 > "If you're not a developer, VibeSec has a special plain-language mode that explains security issues in everyday terms. Just add the --explain flag."
 
 **Screen:**
+
 ```bash
 $ vibesec scan . --explain
 
@@ -170,6 +185,7 @@ How urgent is this?
 **Visual:** Split screen with multiple options
 
 **Narration:**
+
 > "Great job! You've completed your first VibeSec scan. From here, you have several options:"
 
 **Screen:** Shows 4 panels:
@@ -200,9 +216,11 @@ How urgent is this?
 **Visual:** VibeSec logo with links
 
 **Narration:**
+
 > "Thanks for watching! Check out our other tutorials for CI/CD integration, plain language reports, and custom rules. Happy secure coding!"
 
 **Screen:**
+
 ```
 🔗 More Tutorials
    → CI/CD Integration (10 min)
@@ -221,29 +239,34 @@ How urgent is this?
 ## Production Notes
 
 ### Visual Style
+
 - **Color scheme:** Dark terminal background (#1e1e1e) with syntax highlighting
 - **Font:** Monospace for code (Fira Code), sans-serif for overlays (Inter)
 - **Animations:** Smooth transitions, typing effects for commands
 - **Callouts:** Use arrows and highlights to draw attention
 
 ### Pacing
+
 - Allow 2-3 seconds after each command for viewers to read
 - Pause on important findings for 5-6 seconds
 - Use slow typing animation for commands (not instant)
 
 ### Accessibility
+
 - **Captions:** Full transcript as closed captions
 - **Screen reader:** Descriptive narration of all visual elements
 - **Colors:** High contrast, colorblind-friendly palette
 - **Speed:** Moderate pace, clear pronunciation
 
 ### B-Roll Suggestions
+
 - Code editor showing the vulnerable code
 - GitHub repository view
 - Team members reviewing results together
 - Before/after comparison of fixed code
 
 ### Music
+
 - Background music: Soft, non-distracting tech ambience
 - Volume: -30dB under narration
 - Genre: Lo-fi electronic, subtle beats
@@ -253,6 +276,7 @@ How urgent is this?
 ## Key Takeaways
 
 By the end of this tutorial, viewers should be able to:
+
 1. ✅ Install VibeSec on their system
 2. ✅ Run their first security scan
 3. ✅ Understand scan results and severity levels

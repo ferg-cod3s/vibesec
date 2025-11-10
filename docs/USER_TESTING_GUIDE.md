@@ -7,6 +7,7 @@ Thank you for helping test VibeSec, a security scanner designed to make vulnerab
 ## Testing Objectives
 
 We want to validate that VibeSec:
+
 1. **Comprehension**: Findings are clear and actionable for junior developers
 2. **Usability**: Installation and usage are straightforward
 3. **Effectiveness**: Correctly identifies real vulnerabilities without overwhelming false positives
@@ -27,6 +28,7 @@ npm install -g vibesec
 ```
 
 **Verify installation:**
+
 ```bash
 vibesec --version
 ```
@@ -90,6 +92,7 @@ HIGH | SQL Injection | src/routes/users.js:23
 ```
 
 **Key Elements:**
+
 - **Severity**: HIGH, MEDIUM, LOW, INFO
 - **Category**: Type of vulnerability (SQL Injection, XSS, etc.)
 - **Location**: File path and line number
@@ -125,38 +128,53 @@ HIGH | SQL Injection | src/routes/users.js:23
 The `examples/sample-api` project contains several intentional vulnerabilities:
 
 ### 1. SQL Injection (HIGH)
+
 **File**: `src/routes/users.js`
+
 ```javascript
 const query = `SELECT * FROM users WHERE id = ${req.params.id}`;
 ```
+
 **Why it's vulnerable**: User input directly concatenated into SQL query.
 
 ### 2. Cross-Site Scripting (HIGH)
+
 **File**: `src/routes/comments.js`
+
 ```javascript
 res.send(`<div>${req.body.comment}</div>`);
 ```
+
 **Why it's vulnerable**: User input rendered without sanitization.
 
 ### 3. Hardcoded Secrets (MEDIUM)
+
 **File**: `src/config/database.js`
+
 ```javascript
-const password = "MySecretP@ssw0rd123";
+const password = 'MySecretP@ssw0rd123';
 ```
+
 **Why it's vulnerable**: Credentials should be in environment variables.
 
 ### 4. Command Injection (HIGH)
+
 **File**: `src/routes/files.js`
+
 ```javascript
 exec(`cat ${req.query.filename}`);
 ```
+
 **Why it's vulnerable**: User input passed to shell command.
 
 ### 5. Insecure CORS (MEDIUM)
+
 **File**: `src/server.js`
+
 ```javascript
 app.use(cors({ origin: '*' }));
 ```
+
 **Why it's vulnerable**: Allows requests from any origin.
 
 ## What to Test
@@ -195,6 +213,7 @@ app.use(cors({ origin: '*' }));
 ### Issue: `vibesec: command not found`
 
 **Solution**: Ensure npm global bin directory is in your PATH:
+
 ```bash
 npm config get prefix
 # Add <prefix>/bin to your PATH
@@ -204,6 +223,7 @@ export PATH="$(npm config get prefix)/bin:$PATH"
 ### Issue: `EACCES: permission denied`
 
 **Solution**: Install with proper permissions:
+
 ```bash
 sudo npm install -g vibesec
 # OR use a node version manager like nvm
@@ -212,6 +232,7 @@ sudo npm install -g vibesec
 ### Issue: No findings detected
 
 **Checklist**:
+
 - Are you scanning the correct directory?
 - Does the directory contain JavaScript or Python files?
 - Try scanning the sample-api: `vibesec scan examples/sample-api`
@@ -219,6 +240,7 @@ sudo npm install -g vibesec
 ### Issue: Too many false positives
 
 **This is important feedback!** Please note:
+
 - Which files triggered false positives
 - Why you believe they're false positives
 - Include in the feedback form

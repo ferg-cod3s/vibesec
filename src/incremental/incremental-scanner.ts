@@ -27,10 +27,7 @@ export class IncrementalScanner {
 
   async getChangedFiles(cwd: string, baseBranch = 'main'): Promise<string[]> {
     try {
-      const output = await this.execGit(
-        ['diff', '--name-only', baseBranch, 'HEAD'],
-        cwd
-      );
+      const output = await this.execGit(['diff', '--name-only', baseBranch, 'HEAD'], cwd);
       return output ? output.split('\n').filter((f) => f.length > 0) : [];
     } catch {
       return [];
@@ -45,10 +42,7 @@ export class IncrementalScanner {
     }
   }
 
-  getCachedResults(
-    cache: ScanCache,
-    fileHash: string
-  ): Finding[] | undefined {
+  getCachedResults(cache: ScanCache, fileHash: string): Finding[] | undefined {
     for (const [hash, results] of cache.results.entries()) {
       if (hash === fileHash) return results;
     }

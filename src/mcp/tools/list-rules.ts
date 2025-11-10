@@ -87,7 +87,8 @@ Returns detailed information about each rule including:
     properties: {
       category: {
         type: 'string',
-        description: 'Filter by security category (e.g., "secrets", "injection", "auth", "incomplete", "ai-specific")',
+        description:
+          'Filter by security category (e.g., "secrets", "injection", "auth", "incomplete", "ai-specific")',
       },
       severity: {
         type: 'string',

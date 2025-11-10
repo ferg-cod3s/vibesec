@@ -1,7 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs/promises';
 import { RuleLoader } from '../../scanner/core/rule-loader';
-import { Rule } from '../../scanner/core/types';
 
 describe('RuleLoader', () => {
   const testRulesPath = path.join(__dirname, '../fixtures/test-rules');
@@ -174,8 +173,8 @@ patterns:
       const rules = await loader.load();
 
       expect(rules).toHaveLength(2);
-      expect(rules.map(r => r.id)).toContain('test-rule-1');
-      expect(rules.map(r => r.id)).toContain('test-rule-2');
+      expect(rules.map((r) => r.id)).toContain('test-rule-1');
+      expect(rules.map((r) => r.id)).toContain('test-rule-2');
     });
 
     it('should handle rules array in single file', async () => {
@@ -271,13 +270,13 @@ patterns: [
       await fs.writeFile(path.join(testRulesPath, 'bad.yaml'), badYaml);
 
       const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
-      
+
       const loader = new RuleLoader(testRulesPath);
       const rules = await loader.load();
 
       expect(rules).toHaveLength(0);
       expect(consoleErrorSpy).toHaveBeenCalled();
-      
+
       consoleErrorSpy.mockRestore();
     });
 
@@ -290,7 +289,7 @@ name: Incomplete Rule
       await fs.writeFile(path.join(testRulesPath, 'incomplete.yaml'), incompleteYaml);
 
       const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
-      
+
       const loader = new RuleLoader(testRulesPath);
       const rules = await loader.load();
 
@@ -299,7 +298,7 @@ name: Incomplete Rule
         expect.stringContaining('Error loading rule file'),
         expect.stringContaining('missing required fields')
       );
-      
+
       consoleErrorSpy.mockRestore();
     });
 
@@ -309,9 +308,9 @@ name: Incomplete Rule
 
       // Should load the actual rules from rules/default/
       expect(rules.length).toBeGreaterThan(0);
-      
+
       // Verify at least one known rule exists
-      const sqlInjectionRule = rules.find(r => r.id.includes('sql-injection'));
+      const sqlInjectionRule = rules.find((r) => r.id.includes('sql-injection'));
       expect(sqlInjectionRule).toBeDefined();
       expect(sqlInjectionRule?.metadata?.cwe).toBeDefined();
     });

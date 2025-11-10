@@ -20,12 +20,12 @@ Pick the most compelling based on your findings:
 
 ## Article Template (Dev.to / Medium Format)
 
-```markdown
+````markdown
 # I Scanned [X] AI-Generated Projects for Security Issues. Here's What I Found.
 
 ![Cover image: Screenshot of security scan results]
 
-*TL;DR: AI coding tools are amazing for productivity, but [X]% of the projects I scanned had critical security vulnerabilities. Here's what I found and how to protect yourself.*
+_TL;DR: AI coding tools are amazing for productivity, but [X]% of the projects I scanned had critical security vulnerabilities. Here's what I found and how to protect yourself._
 
 ---
 
@@ -60,13 +60,13 @@ After scanning [X] projects (ranging from [small side projects to production app
 
 Here's what I found most often:
 
-| Vulnerability Type | % of Projects | Severity |
-|-------------------|---------------|----------|
-| Hardcoded secrets (API keys, passwords) | [X]% | 🔴 Critical |
-| SQL Injection | [X]% | 🔴 Critical |
-| Cross-Site Scripting (XSS) | [X]% | 🟡 High |
-| Insecure CORS configuration | [X]% | 🟡 High |
-| Missing input validation | [X]% | 🟠 Medium |
+| Vulnerability Type                      | % of Projects | Severity    |
+| --------------------------------------- | ------------- | ----------- |
+| Hardcoded secrets (API keys, passwords) | [X]%          | 🔴 Critical |
+| SQL Injection                           | [X]%          | 🔴 Critical |
+| Cross-Site Scripting (XSS)              | [X]%          | 🟡 High     |
+| Insecure CORS configuration             | [X]%          | 🟡 High     |
+| Missing input validation                | [X]%          | 🟠 Medium   |
 
 ---
 
@@ -79,11 +79,13 @@ Here's what I found most often:
 
 ```javascript
 // config/database.js
-const stripeKey = "sk_live_51Abc123..."; // 🚨 PRODUCTION KEY
-const dbPassword = "SuperSecret123!";     // 🚨 HARDCODED
+const stripeKey = 'sk_live_51Abc123...'; // 🚨 PRODUCTION KEY
+const dbPassword = 'SuperSecret123!'; // 🚨 HARDCODED
 ```
+````
 
 This project had:
+
 - A **production** Stripe API key hardcoded in the repo
 - Committed to a **public** GitHub repository
 - Processing ~$10K/month in transactions
@@ -91,6 +93,7 @@ This project had:
 ### The Risk
 
 Anyone who found this repo could:
+
 - Steal customer payment information
 - Make charges to connected accounts
 - Access sensitive transaction data
@@ -105,12 +108,14 @@ const dbPassword = process.env.DB_PASSWORD;
 ```
 
 Plus `.env`:
+
 ```
 STRIPE_SECRET_KEY=sk_live_51Abc123...
 DB_PASSWORD=SuperSecret123!
 ```
 
 And `.gitignore`:
+
 ```
 .env
 ```
@@ -158,6 +163,7 @@ SELECT * FROM users WHERE id = 1 OR 1=1
 ```
 
 They could:
+
 - Dump the entire user database
 - Delete all records (`1; DROP TABLE users--`)
 - Access admin accounts
@@ -196,10 +202,7 @@ Not everything was bad! One project got it right:
 const apiKey = process.env.OPENAI_API_KEY;
 
 // ✅ Parameterized queries
-const user = await db.query(
-  'SELECT * FROM users WHERE email = $1',
-  [email]
-);
+const user = await db.query('SELECT * FROM users WHERE email = $1', [email]);
 
 // ✅ Input validation
 const schema = z.object({
@@ -208,15 +211,18 @@ const schema = z.object({
 });
 
 // ✅ Rate limiting
-app.use(rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100
-}));
+app.use(
+  rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+  })
+);
 ```
 
 **What Made the Difference:**
 
 The developer mentioned they:
+
 1. Explicitly asked the AI to "use security best practices"
 2. Reviewed each piece of generated code
 3. Ran security scans during development
@@ -228,6 +234,7 @@ The developer mentioned they:
 ### ⚠️ The Problem
 
 AI coding tools are trained on vast amounts of code - including **insecure** code. They learn patterns from:
+
 - Old StackOverflow answers (pre-2015 security practices)
 - Tutorial code (prioritizes simplicity over security)
 - Example code with placeholder secrets
@@ -236,11 +243,13 @@ AI coding tools are trained on vast amounts of code - including **insecure** cod
 ### 💡 The Reality
 
 **AI is optimizing for:**
+
 - ✅ Code that works
 - ✅ Code that's easy to understand
 - ✅ Code that matches common patterns
 
 **AI is NOT optimizing for:**
+
 - ❌ Security
 - ❌ Production readiness
 - ❌ Long-term maintainability
@@ -252,12 +261,14 @@ AI coding tools are trained on vast amounts of code - including **insecure** cod
    - Understand what it does before using it
 
 2. **Always use environment variables**
+
    ```bash
    # Ask AI to use env vars explicitly
    "Write this function using process.env for API keys"
    ```
 
 3. **Use parameterized queries**
+
    ```bash
    # Be specific in your prompt
    "Use parameterized queries to prevent SQL injection"
@@ -283,11 +294,13 @@ After seeing these results, I built **VibeSec** - a security scanner specificall
 ### Why It's Different
 
 **Traditional security scanners:**
+
 - Assume you're a security expert
 - Use technical jargon (CWE-798, OWASP A03:2021)
 - Require configuration
 
 **VibeSec:**
+
 - ✅ Explains issues in plain language
 - ✅ Designed for non-security experts
 - ✅ Works out of the box
@@ -296,6 +309,7 @@ After seeing these results, I built **VibeSec** - a security scanner specificall
 ### Example Output
 
 **Before (traditional scanner):**
+
 ```
 [CRITICAL] CWE-798: Use of Hard-coded Credentials
 Location: config.js:12
@@ -303,6 +317,7 @@ CVSS Score: 9.8
 ```
 
 **After (VibeSec --explain):**
+
 ```
 🚨 Urgent - Fix Today
 
@@ -358,18 +373,21 @@ vibesec scan -f stakeholder -o report.txt
 I'm looking for developers building with AI to beta test VibeSec.
 
 **Ideal if you:**
+
 - Built something with ChatGPT, Claude, or Cursor
 - Have a JavaScript/TypeScript codebase
 - Want a free security scan + help fixing issues
 - Can spare 15-30 minutes for feedback
 
 **What you get:**
+
 - Free security scan
 - Help fixing any issues we find
 - Early access to new features
 - My eternal gratitude 🙏
 
 **Interested?**
+
 - Comment below
 - DM me on Twitter: [@yourhandle]
 - Email: your@email.com
@@ -438,7 +456,7 @@ Let's discuss in the comments! 👇
 
 ---
 
-*Built with ❤️ for the AI coding community. If this helped you, please share!*
+_Built with ❤️ for the AI coding community. If this helped you, please share!_
 
 **Tags:** #AI #Security #ChatGPT #ClaudeAI #Cursor #WebDevelopment #JavaScript #TypeScript #DevTools
 
@@ -447,12 +465,14 @@ Let's discuss in the comments! 👇
 ## Share This Article
 
 If you found this useful:
+
 - 🐦 [Tweet it](link)
 - 💼 [Share on LinkedIn](link)
 - 📧 Forward to your team
 - ⭐ Star VibeSec on GitHub
 
 Thanks for reading! Stay secure 🛡️
+
 ```
 
 ---
@@ -542,13 +562,17 @@ Based on your scan results, you could also write:
 ### Meta Description
 
 ```
+
 I scanned [X] AI-generated projects for security issues. [X]% had critical vulnerabilities. Here's what I found and how to protect your code.
+
 ```
 
 ### URL Slug
 
 ```
+
 ai-generated-code-security-issues
+
 ```
 
 ---
@@ -586,3 +610,4 @@ ai-generated-code-security-issues
 5. Publish!
 
 Good luck! 🚀
+```

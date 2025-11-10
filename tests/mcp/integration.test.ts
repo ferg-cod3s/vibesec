@@ -124,7 +124,7 @@ describe('MCP Server End-to-End Integration', () => {
       expect(lastResponse.id).toBe(1);
       expect(lastResponse.result).toBeTruthy();
 
-      const initResult = lastResponse.result as { name: string, capabilities: any };
+      const initResult = lastResponse.result as { name: string; capabilities: any };
       expect(initResult.name).toBe('vibesec-test');
       expect(initResult.capabilities).toBeTruthy();
     });
@@ -205,7 +205,7 @@ describe('MCP Server End-to-End Integration', () => {
       expect(lastResponse.error).toBeUndefined();
       expect(lastResponse.result).toBeTruthy();
 
-      const listRulesResult = lastResponse.result as { rules: any[], totalRules: number };
+      const listRulesResult = lastResponse.result as { rules: any[]; totalRules: number };
       expect(listRulesResult.rules).toBeInstanceOf(Array);
       expect(listRulesResult.totalRules).toBeGreaterThanOrEqual(0);
     });
@@ -257,7 +257,12 @@ const password = "admin";
       expect(lastResponse.error).toBeUndefined();
       expect(lastResponse.result).toBeTruthy();
 
-      const result = lastResponse.result as { findings: any[], summary: any, scan: any, status: string };
+      const result = lastResponse.result as {
+        findings: any[];
+        summary: any;
+        scan: any;
+        status: string;
+      };
       expect(result.findings).toBeInstanceOf(Array);
       expect(result.summary).toBeTruthy();
       expect(result.scan).toBeTruthy();
@@ -452,7 +457,7 @@ const password = "admin";
       await transport.send(response);
 
       const scanResponse = transport.getLastResponse() as MCPResponse;
-      const scanResult = scanResponse.result as { findings: any[], summary: any, status: string };
+      const scanResult = scanResponse.result as { findings: any[]; summary: any; status: string };
       expect(scanResult.findings).toBeTruthy();
       expect(scanResult.summary).toBeTruthy();
       expect(scanResult.status).toBeTruthy();

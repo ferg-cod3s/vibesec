@@ -17,17 +17,20 @@ VibeSec is currently implemented as a **TypeScript-based CLI application** using
 
 **Chosen**: Bun
 **Why**:
+
 - ⚡ **Fast iteration**: Near-instant startup and execution
 - 🔧 **Built-in tooling**: Native TypeScript support, test runner, bundler
 - 📦 **npm compatibility**: Works with existing npm packages
 - 🚀 **Production-ready**: Stable 1.0+ release
 
 **Compatibility**:
+
 - All code is compatible with Node.js 16+ for broader deployment
 - Users can run VibeSec with either Bun or Node.js
 - CI/CD supports both runtimes
 
 **Installation**:
+
 ```bash
 # Bun (recommended for development)
 curl -fsSL https://bun.sh/install | bash
@@ -41,6 +44,7 @@ curl -fsSL https://bun.sh/install | bash
 ### Language: TypeScript 5.9+
 
 **Why TypeScript**:
+
 - ✅ **Type safety**: Catch errors at compile-time
 - ✅ **IDE support**: Excellent autocomplete and refactoring
 - ✅ **Maintainability**: Self-documenting code with types
@@ -55,6 +59,7 @@ curl -fsSL https://bun.sh/install | bash
 ### CLI Framework: Commander.js 11.1+
 
 **Why Commander**:
+
 - ✅ **Mature**: Battle-tested in production CLIs
 - ✅ **Intuitive API**: Easy to add commands and options
 - ✅ **Help generation**: Auto-generated help text
@@ -63,14 +68,12 @@ curl -fsSL https://bun.sh/install | bash
 **Alternative Considered**: yargs (rejected for complexity)
 
 **Usage**:
+
 ```typescript
 import { Command } from 'commander';
 
 const program = new Command();
-program
-  .command('scan')
-  .option('--explain', 'Use plain language')
-  .action(scanCommand);
+program.command('scan').option('--explain', 'Use plain language').action(scanCommand);
 ```
 
 ---
@@ -78,6 +81,7 @@ program
 ### Terminal Output: Chalk 4.1.2
 
 **Why Chalk 4.x**:
+
 - ✅ **CommonJS compatible**: Works with current setup
 - ✅ **Simple API**: Easy color and styling
 - ✅ **Wide adoption**: Industry standard
@@ -87,6 +91,7 @@ program
 **Upgrade Path**: When moving to full ESM, upgrade to Chalk 5.x
 
 **Usage**:
+
 ```typescript
 import chalk from 'chalk';
 
@@ -99,16 +104,18 @@ console.log(chalk.green.bold('Success!'));
 ### File System Operations: fast-glob 3.3+
 
 **Why fast-glob**:
+
 - ✅ **Performance**: Fast file pattern matching
 - ✅ **Cross-platform**: Works on Windows/Mac/Linux
 - ✅ **Flexible**: Supports complex glob patterns
 
 **Usage**:
+
 ```typescript
 import fg from 'fast-glob';
 
 const files = await fg(['**/*.ts', '**/*.js'], {
-  ignore: ['node_modules/**', 'dist/**']
+  ignore: ['node_modules/**', 'dist/**'],
 });
 ```
 
@@ -117,6 +124,7 @@ const files = await fg(['**/*.ts', '**/*.js'], {
 ### Configuration: js-yaml 4.1+
 
 **Why js-yaml**:
+
 - ✅ **Standard**: YAML is familiar to developers
 - ✅ **Readable**: Human-friendly config files
 - ✅ **Flexible**: Supports complex configurations
@@ -128,6 +136,7 @@ const files = await fg(['**/*.ts', '**/*.js'], {
 ### Progress Indicators: ora 6.3.1 ✅ IMPLEMENTED
 
 **Why ora 6.x**:
+
 - ✅ **CommonJS compatible**: Works with current setup
 - ✅ **Beautiful spinners**: Professional terminal UX
 - ✅ **Simple API**: Easy to add progress feedback
@@ -135,6 +144,7 @@ const files = await fg(['**/*.ts', '**/*.js'], {
 **Note**: ora 7.x is ESM-only; using 6.x for POC
 
 **Implementation** (Phase 2):
+
 ```typescript
 import ora from 'ora';
 
@@ -225,6 +235,7 @@ bun run format
 **Entry Point**: `dist/cli/index.js` (executable)
 
 **Build Process**:
+
 1. TypeScript compilation (`tsc`)
 2. Asset copying (`copy-assets.js`)
 3. Shebang preserved for CLI execution
@@ -236,6 +247,7 @@ bun run format
 ### Test Runner: Bun Test (Built-in)
 
 **Why Bun Test**:
+
 - ✅ **Fast**: Native test runner, no Jest overhead
 - ✅ **TypeScript**: Direct TS support, no transpilation
 - ✅ **Jest-compatible**: Familiar API (describe, it, expect)
@@ -271,6 +283,7 @@ describe('scan command', () => {
 
 **Configuration**: `.eslintrc.js`
 **Plugins**:
+
 - `@typescript-eslint/eslint-plugin`
 - `@typescript-eslint/parser`
 - `eslint-config-prettier` (disable conflicting rules)
@@ -283,6 +296,7 @@ describe('scan command', () => {
 **Files**: TypeScript, JSON, Markdown
 
 **Settings**:
+
 ```json
 {
   "semi": true,
@@ -298,24 +312,24 @@ describe('scan command', () => {
 
 ### Production Dependencies
 
-| Package | Version | Purpose |
-|---------|---------|---------|
-| chalk | ^4.1.2 | Terminal colors and styling |
-| commander | ^11.1.0 | CLI framework |
-| fast-glob | ^3.3.2 | File pattern matching |
-| js-yaml | ^4.1.0 | YAML parsing for rules |
-| ora | ^6.3.1 | Progress spinners (Phase 2) |
+| Package   | Version | Purpose                     |
+| --------- | ------- | --------------------------- |
+| chalk     | ^4.1.2  | Terminal colors and styling |
+| commander | ^11.1.0 | CLI framework               |
+| fast-glob | ^3.3.2  | File pattern matching       |
+| js-yaml   | ^4.1.0  | YAML parsing for rules      |
+| ora       | ^6.3.1  | Progress spinners (Phase 2) |
 
 ### Development Dependencies
 
-| Package | Version | Purpose |
-|---------|---------|---------|
-| typescript | ^5.9.3 | TypeScript compiler |
-| @types/node | ^20.19.20 | Node.js type definitions |
-| @types/js-yaml | ^4.0.9 | js-yaml type definitions |
-| eslint | ^8.56.0 | Code linting |
-| prettier | ^3.1.1 | Code formatting |
-| @typescript-eslint/* | ^6.17.0 | TypeScript linting |
+| Package               | Version   | Purpose                  |
+| --------------------- | --------- | ------------------------ |
+| typescript            | ^5.9.3    | TypeScript compiler      |
+| @types/node           | ^20.19.20 | Node.js type definitions |
+| @types/js-yaml        | ^4.0.9    | js-yaml type definitions |
+| eslint                | ^8.56.0   | Code linting             |
+| prettier              | ^3.1.1    | Code formatting          |
+| @typescript-eslint/\* | ^6.17.0   | TypeScript linting       |
 
 ---
 
@@ -327,6 +341,7 @@ describe('scan command', () => {
 Early documentation was exploratory and referenced Python patterns from security scanning tools (like Bandit, Semgrep). However, for the POC:
 
 ✅ **TypeScript chosen** for:
+
 - Faster iteration with Bun
 - Strong typing for maintainability
 - Better CLI tooling ecosystem (Commander, chalk, ora)
@@ -334,6 +349,7 @@ Early documentation was exploratory and referenced Python patterns from security
 - npm ecosystem access
 
 ❌ **Python not chosen** because:
+
 - Slower iteration during POC phase
 - Additional setup complexity (Poetry, venv)
 - Target users already have Node.js from AI tools
@@ -346,6 +362,7 @@ Early documentation was exploratory and referenced Python patterns from security
 ## Installation Methods (Planned)
 
 ### Current (POC)
+
 ```bash
 # Clone and build from source
 git clone https://github.com/vibesec/vibesec
@@ -358,22 +375,26 @@ bun link
 ### Planned (Production)
 
 **npm Registry**:
+
 ```bash
 npm install -g vibesec
 ```
 
 **Homebrew** (macOS/Linux):
+
 ```bash
 brew install vibesec
 ```
 
 **Binary Distribution**:
+
 ```bash
 # Download pre-built binary
 curl -fsSL https://vibesec.dev/install.sh | bash
 ```
 
 **Docker**:
+
 ```bash
 docker run vibesec/vibesec scan .
 ```
@@ -385,18 +406,21 @@ docker run vibesec/vibesec scan .
 ### Potential Technology Changes
 
 **When to Upgrade to ESM**:
+
 - Move from CommonJS to full ES Modules
 - Upgrade chalk 4.x → 5.x
 - Upgrade ora 6.x → 8.x
 - Update build tooling
 
 **When to Consider Rust/Go**:
+
 - If scanning performance becomes bottleneck
 - If binary size reduction needed
 - If cross-compilation required
 - Likely: Keep TypeScript CLI, rewrite scanner core
 
 **When to Add Web UI**:
+
 - After POC validation
 - Technology: Astro/React for static site
 - API: REST endpoints from existing scanner
@@ -434,10 +458,12 @@ docker run vibesec/vibesec scan .
 ### Updating Documentation from Python to TypeScript
 
 **Files Affected**:
+
 - ❌ `docs/IMPLEMENTATION_QUICK_REFERENCE.md` - Has Python code examples
 - ✅ Other docs are language-agnostic
 
 **Update Strategy**:
+
 1. Replace `.py` file extensions with `.ts`
 2. Update `src/` paths to match TypeScript structure
 3. Convert Python syntax to TypeScript syntax
@@ -445,6 +471,7 @@ docker run vibesec/vibesec scan .
 5. Fix installation instructions
 
 **Example Conversion**:
+
 ```diff
 - # Add import at top
 - from src.reporters.plain_language_reporter import PlainLanguageReporter
@@ -464,15 +491,19 @@ docker run vibesec/vibesec scan .
 ## Questions & Decisions
 
 ### Q: Why Bun over Node.js for development?
+
 **A**: Faster iteration, built-in TypeScript, better DX. Node.js remains supported for compatibility.
 
 ### Q: Will we switch languages later?
+
 **A**: Unlikely. TypeScript is suitable for production. May add Rust/Go for performance-critical scanner core if needed.
 
 ### Q: Why not use existing tools (like Semgrep)?
+
 **A**: VibeSec targets non-technical users with plain language output and AI-generated code patterns. Different audience and UX goals.
 
 ### Q: What about Windows support?
+
 **A**: Fully supported. All dependencies are cross-platform. WSL recommended but not required.
 
 ---

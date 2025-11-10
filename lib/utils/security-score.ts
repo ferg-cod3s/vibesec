@@ -174,10 +174,7 @@ export function formatSecurityScore(securityScore: SecurityScore): string {
 /**
  * Get benchmark comparison
  */
-export function getBenchmarkComparison(
-  score: number,
-  filesScanned: number
-): string {
+export function getBenchmarkComparison(score: number, filesScanned: number): string {
   // Industry benchmarks (estimated)
   const benchmarks = {
     small: { files: 50, avgScore: 85, description: 'small projects' },
@@ -191,11 +188,7 @@ export function getBenchmarkComparison(
 
   const diff = score - benchmark.avgScore;
   const comparison =
-    diff > 0
-      ? `${diff} points above`
-      : diff < 0
-      ? `${Math.abs(diff)} points below`
-      : 'at';
+    diff > 0 ? `${diff} points above` : diff < 0 ? `${Math.abs(diff)} points below` : 'at';
 
   return `Your score is ${comparison} the average for ${benchmark.description} (avg: ${benchmark.avgScore}/100)`;
 }
