@@ -7,7 +7,7 @@
  */
 
 import * as Sentry from '@sentry/bun'; // or @sentry/node
-import { errorReporter, ErrorCategory } from '../error-reporter';
+import { ErrorCategory } from '../error-reporter';
 import { metrics } from '../metrics';
 
 export interface SentryConfig {
@@ -38,15 +38,17 @@ export class SentryIntegration {
       release: config.release,
 
       // Self-hosted Sentry support
-      ...(config.serverUrl ? {
-        tunnel: config.serverUrl,
-        transportOptions: {
-          url: config.serverUrl
-        }
-      } : {}),
+      ...(config.serverUrl
+        ? {
+            tunnel: config.serverUrl,
+            transportOptions: {
+              url: config.serverUrl,
+            },
+          }
+        : {}),
 
       // Attach context
-      beforeSend(event, hint) {
+      beforeSend(event, _hint) {
         // Add scan metrics to error context
         const scanMetrics = metrics.getScanMetrics();
         event.contexts = {
@@ -68,11 +70,7 @@ export class SentryIntegration {
   /**
    * Report error to Sentry
    */
-  captureError(
-    error: Error,
-    category: ErrorCategory,
-    context?: Record<string, unknown>
-  ): string {
+  captureError(error: Error, category: ErrorCategory, context?: Record<string, unknown>): string {
     if (!this.initialized) {
       console.warn('Sentry not initialized');
       return '';
