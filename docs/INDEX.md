@@ -21,48 +21,48 @@ New to VibeSec? Start here:
 
 ### Project Planning & Strategy
 
-| Document | Description | Audience |
-|----------|-------------|----------|
-| **[MVP Roadmap](MVP_ROADMAP.md)** | Feature roadmap and 6-8 week timeline | Product, Engineering |
-| **[Market Strategy](MARKET_STRATEGY.md)** | Business strategy, pricing, GTM | Business, Marketing |
-| **[Research](RESEARCH.md)** | Market research and competitive analysis | All |
+| Document                                  | Description                              | Audience             |
+| ----------------------------------------- | ---------------------------------------- | -------------------- |
+| **[MVP Roadmap](MVP_ROADMAP.md)**         | Feature roadmap and 6-8 week timeline    | Product, Engineering |
+| **[Market Strategy](MARKET_STRATEGY.md)** | Business strategy, pricing, GTM          | Business, Marketing  |
+| **[Research](RESEARCH.md)**               | Market research and competitive analysis | All                  |
 
 ---
 
 ### Technical Documentation
 
-| Document | Description | Audience |
-|----------|-------------|----------|
-| **[Architecture](ARCHITECTURE.md)** | System design, components, data flow | Engineering |
-| **[API Documentation](API.md)** | CLI and programmatic API reference | Developers |
-| **[Programmatic API](PROGRAMMATIC_API.md)** | Complete TypeScript/JavaScript API guide | Developers |
-| **[TypeScript API Reference](TYPESCRIPT_API.md)** | Full TypeScript type definitions | Developers |
-| **[Custom Reporters](CUSTOM_REPORTERS.md)** | Creating custom output formats | Developers |
-| **[Performance Benchmarks](PERFORMANCE_BENCHMARKS.md)** | Performance testing and targets | Engineering, DevOps |
-| **[Detection Rules](DETECTION_RULES.md)** | Security rules and custom rule creation | Security, Developers |
-| **[Integrations](INTEGRATIONS.md)** | Third-party tool integrations | DevOps, Engineering |
+| Document                                                | Description                              | Audience             |
+| ------------------------------------------------------- | ---------------------------------------- | -------------------- |
+| **[Architecture](ARCHITECTURE.md)**                     | System design, components, data flow     | Engineering          |
+| **[API Documentation](API.md)**                         | CLI and programmatic API reference       | Developers           |
+| **[Programmatic API](PROGRAMMATIC_API.md)**             | Complete TypeScript/JavaScript API guide | Developers           |
+| **[TypeScript API Reference](TYPESCRIPT_API.md)**       | Full TypeScript type definitions         | Developers           |
+| **[Custom Reporters](CUSTOM_REPORTERS.md)**             | Creating custom output formats           | Developers           |
+| **[Performance Benchmarks](PERFORMANCE_BENCHMARKS.md)** | Performance testing and targets          | Engineering, DevOps  |
+| **[Detection Rules](DETECTION_RULES.md)**               | Security rules and custom rule creation  | Security, Developers |
+| **[Integrations](INTEGRATIONS.md)**                     | Third-party tool integrations            | DevOps, Engineering  |
 
 ---
 
 ### User Guides
 
-| Document | Description | Audience |
-|----------|-------------|----------|
-| **[Quick Start](QUICK_START.md)** | Step-by-step getting started guide | All Users |
-| **[Contributing](CONTRIBUTING.md)** | How to contribute to VibeSec | Contributors |
-| **[User Testing Guide](USER_TESTING_GUIDE.md)** | Beta testing instructions | Testers |
-| **[User Feedback Form](USER_FEEDBACK_FORM.md)** | Feedback collection template | Testers |
+| Document                                        | Description                        | Audience     |
+| ----------------------------------------------- | ---------------------------------- | ------------ |
+| **[Quick Start](QUICK_START.md)**               | Step-by-step getting started guide | All Users    |
+| **[Contributing](CONTRIBUTING.md)**             | How to contribute to VibeSec       | Contributors |
+| **[User Testing Guide](USER_TESTING_GUIDE.md)** | Beta testing instructions          | Testers      |
+| **[User Feedback Form](USER_FEEDBACK_FORM.md)** | Feedback collection template       | Testers      |
 
 ---
 
 ### Video Tutorials
 
-| Tutorial | Duration | Description | Audience |
-|----------|----------|-------------|----------|
-| **[Getting Started](tutorials/01-GETTING-STARTED.md)** | 5 min | Install and run your first scan | All Users |
-| **[Plain Language Walkthrough](tutorials/02-PLAIN-LANGUAGE-WALKTHROUGH.md)** | 3 min | Understanding results without technical knowledge | PMs, Designers, Non-technical |
-| **[CI/CD Integration](tutorials/03-CICD-INTEGRATION.md)** | 10 min | Automated scanning in GitHub Actions, GitLab | Developers, DevOps |
-| **[Custom Rules](tutorials/04-CUSTOM-RULES.md)** | 7 min | Creating company-specific detection rules | Developers, Security Engineers |
+| Tutorial                                                                     | Duration | Description                                       | Audience                       |
+| ---------------------------------------------------------------------------- | -------- | ------------------------------------------------- | ------------------------------ |
+| **[Getting Started](tutorials/01-GETTING-STARTED.md)**                       | 5 min    | Install and run your first scan                   | All Users                      |
+| **[Plain Language Walkthrough](tutorials/02-PLAIN-LANGUAGE-WALKTHROUGH.md)** | 3 min    | Understanding results without technical knowledge | PMs, Designers, Non-technical  |
+| **[CI/CD Integration](tutorials/03-CICD-INTEGRATION.md)**                    | 10 min   | Automated scanning in GitHub Actions, GitLab      | Developers, DevOps             |
+| **[Custom Rules](tutorials/04-CUSTOM-RULES.md)**                             | 7 min    | Creating company-specific detection rules         | Developers, Security Engineers |
 
 ---
 
@@ -70,19 +70,19 @@ New to VibeSec? Start here:
 
 ### Schemas & Formats
 
-| Document | Description |
-|----------|-------------|
+| Document                          | Description                 |
+| --------------------------------- | --------------------------- |
 | **[JSON Schema](JSON_SCHEMA.md)** | Output format specification |
 
 ---
 
 ### Standard Operating Procedures (SOP)
 
-| Document | Description | Audience |
-|----------|-------------|----------|
-| **[Agents](sop/agents.md)** | Agent orchestration patterns | Developers |
-| **[Claude](sop/claude.md)** | Claude Code integration guide | Developers |
-| **[Common Mistakes](sop/common-mistakes.md)** | Pitfalls to avoid | All |
+| Document                                      | Description                   | Audience   |
+| --------------------------------------------- | ----------------------------- | ---------- |
+| **[Agents](sop/agents.md)**                   | Agent orchestration patterns  | Developers |
+| **[Claude](sop/claude.md)**                   | Claude Code integration guide | Developers |
+| **[Common Mistakes](sop/common-mistakes.md)** | Pitfalls to avoid             | All        |
 
 ---
 
@@ -90,41 +90,41 @@ New to VibeSec? Start here:
 
 ### Project Status
 
-| Document | Description | Date |
-|----------|-------------|------|
-| **[POC Status Assessment](POC_STATUS_ASSESSMENT.md)** | POC completion status | 2025-10-09 |
+| Document                                                     | Description              | Date       |
+| ------------------------------------------------------------ | ------------------------ | ---------- |
+| **[POC Status Assessment](POC_STATUS_ASSESSMENT.md)**        | POC completion status    | 2025-10-09 |
 | **[Phase 2 Completion Report](PHASE2_COMPLETION_REPORT.md)** | Phase 2 milestone report | 2025-10-09 |
-| **[Phase 3 Checklist](PHASE3_CHECKLIST.md)** | Phase 3 task list | 2025-10-09 |
-| **[Phase 4 Ready](PHASE4_READY.md)** | Phase 4 launch readiness | 2025-10-09 |
+| **[Phase 3 Checklist](PHASE3_CHECKLIST.md)**                 | Phase 3 task list        | 2025-10-09 |
+| **[Phase 4 Ready](PHASE4_READY.md)**                         | Phase 4 launch readiness | 2025-10-09 |
 
 ---
 
 ### Testing & Quality
 
-| Document | Description |
-|----------|-------------|
-| **[Testing Summary](TESTING_SUMMARY.md)** | Test coverage and results |
-| **[False Positive Test Report](FALSE_POSITIVE_TEST_REPORT.md)** | Accuracy metrics |
+| Document                                                        | Description               |
+| --------------------------------------------------------------- | ------------------------- |
+| **[Testing Summary](TESTING_SUMMARY.md)**                       | Test coverage and results |
+| **[False Positive Test Report](FALSE_POSITIVE_TEST_REPORT.md)** | Accuracy metrics          |
 
 ---
 
 ### Launch Materials
 
-| Document | Description | Audience |
-|----------|-------------|----------|
-| **[Phase 4 Launch Checklist](PHASE4_LAUNCH_CHECKLIST.md)** | Pre-launch verification | Product, Engineering |
-| **[Phase 4 Quick Start](PHASE4_QUICK_START.md)** | Launch day guide | All |
-| **[Phase 4 Response Tracker](PHASE4_RESPONSE_TRACKER.md)** | User response monitoring | Product, Marketing |
+| Document                                                   | Description              | Audience             |
+| ---------------------------------------------------------- | ------------------------ | -------------------- |
+| **[Phase 4 Launch Checklist](PHASE4_LAUNCH_CHECKLIST.md)** | Pre-launch verification  | Product, Engineering |
+| **[Phase 4 Quick Start](PHASE4_QUICK_START.md)**           | Launch day guide         | All                  |
+| **[Phase 4 Response Tracker](PHASE4_RESPONSE_TRACKER.md)** | User response monitoring | Product, Marketing   |
 
 ---
 
 ### Feedback & Research
 
-| Document | Description |
-|----------|-------------|
-| **[Feedback Collection Plan](FEEDBACK_COLLECTION_PLAN.md)** | User feedback strategy |
-| **[Google Form Setup](GOOGLE_FORM_SETUP.md)** | Feedback form configuration |
-| **[Recruitment Email Templates](RECRUITMENT_EMAIL_TEMPLATES.md)** | Beta tester outreach |
+| Document                                                          | Description                 |
+| ----------------------------------------------------------------- | --------------------------- |
+| **[Feedback Collection Plan](FEEDBACK_COLLECTION_PLAN.md)**       | User feedback strategy      |
+| **[Google Form Setup](GOOGLE_FORM_SETUP.md)**                     | Feedback form configuration |
+| **[Recruitment Email Templates](RECRUITMENT_EMAIL_TEMPLATES.md)** | Beta tester outreach        |
 
 ---
 
@@ -132,13 +132,13 @@ New to VibeSec? Start here:
 
 Each VibeSec component has its own README:
 
-| Component | Path | Description |
-|-----------|------|-------------|
-| **CLI** | [cli/README.md](../cli/README.md) | Command-line interface |
-| **Scanner** | [scanner/README.md](../scanner/README.md) | Core scanning engine |
+| Component        | Path                                                | Description              |
+| ---------------- | --------------------------------------------------- | ------------------------ |
+| **CLI**          | [cli/README.md](../cli/README.md)                   | Command-line interface   |
+| **Scanner**      | [scanner/README.md](../scanner/README.md)           | Core scanning engine     |
 | **Integrations** | [integrations/README.md](../integrations/README.md) | Third-party integrations |
-| **Rules** | [rules/README.md](../rules/README.md) | Detection rules database |
-| **Web** | [web/README.md](../web/README.md) | Web dashboard (optional) |
+| **Rules**        | [rules/README.md](../rules/README.md)               | Detection rules database |
+| **Web**          | [web/README.md](../web/README.md)                   | Web dashboard (optional) |
 
 ---
 
@@ -161,6 +161,7 @@ Start with these docs to understand the codebase:
 11. [SOP: Claude](sop/claude.md) - Claude Code usage
 
 **Video Tutorials:**
+
 - [Getting Started (5 min)](tutorials/01-GETTING-STARTED.md)
 - [CI/CD Integration (10 min)](tutorials/03-CICD-INTEGRATION.md)
 - [Custom Rules (7 min)](tutorials/04-CUSTOM-RULES.md)
@@ -216,28 +217,28 @@ Understand the business case:
 
 ### Common Tasks
 
-| Task | Documentation |
-|------|---------------|
-| **Install VibeSec** | [README](../README.md#quick-start) |
-| **Scan a project** | [API Documentation](API.md#cli-api) |
-| **Create custom rule** | [Detection Rules](DETECTION_RULES.md#creating-custom-rules) |
-| **Set up GitHub Action** | [Integrations](INTEGRATIONS.md#github-actions) |
-| **Integrate Snyk** | [Integrations](INTEGRATIONS.md#snyk) |
-| **Configure VibeSec** | [API Documentation](API.md#configuration) |
-| **Report a bug** | [Contributing](CONTRIBUTING.md#report-bugs) |
-| **Submit PR** | [Contributing](CONTRIBUTING.md#development-workflow) |
+| Task                     | Documentation                                               |
+| ------------------------ | ----------------------------------------------------------- |
+| **Install VibeSec**      | [README](../README.md#quick-start)                          |
+| **Scan a project**       | [API Documentation](API.md#cli-api)                         |
+| **Create custom rule**   | [Detection Rules](DETECTION_RULES.md#creating-custom-rules) |
+| **Set up GitHub Action** | [Integrations](INTEGRATIONS.md#github-actions)              |
+| **Integrate Snyk**       | [Integrations](INTEGRATIONS.md#snyk)                        |
+| **Configure VibeSec**    | [API Documentation](API.md#configuration)                   |
+| **Report a bug**         | [Contributing](CONTRIBUTING.md#report-bugs)                 |
+| **Submit PR**            | [Contributing](CONTRIBUTING.md#development-workflow)        |
 
 ---
 
 ### Key Concepts
 
-| Concept | Documentation |
-|---------|---------------|
-| **Detection Rules** | [DETECTION_RULES.md](DETECTION_RULES.md#rule-system-overview) |
+| Concept                  | Documentation                                                   |
+| ------------------------ | --------------------------------------------------------------- |
+| **Detection Rules**      | [DETECTION_RULES.md](DETECTION_RULES.md#rule-system-overview)   |
 | **AI-Specific Patterns** | [MVP_ROADMAP.md](MVP_ROADMAP.md#2-ai-specific-detection-engine) |
-| **Integrations** | [INTEGRATIONS.md](INTEGRATIONS.md) |
-| **SARIF Output** | [API.md](API.md#output-formats) |
-| **Vibe Coding** | [README.md](../README.md#why-vibesec) |
+| **Integrations**         | [INTEGRATIONS.md](INTEGRATIONS.md)                              |
+| **SARIF Output**         | [API.md](API.md#output-formats)                                 |
+| **Vibe Coding**          | [README.md](../README.md#why-vibesec)                           |
 
 ---
 
@@ -324,15 +325,15 @@ Found a typo or want to improve documentation?
 
 ## 📊 Documentation Coverage
 
-| Category | Documents | Status |
-|----------|-----------|--------|
-| **Getting Started** | 3 | ✅ Complete |
-| **Technical** | 4 | ✅ Complete |
-| **User Guides** | 3 | ✅ Complete |
-| **SOP** | 3 | ✅ Complete |
-| **Status Reports** | 4 | ✅ Complete |
-| **Component Docs** | 5 | 🔄 In Progress |
-| **Advanced Topics** | 0 | ⏳ Planned |
+| Category            | Documents | Status         |
+| ------------------- | --------- | -------------- |
+| **Getting Started** | 3         | ✅ Complete    |
+| **Technical**       | 4         | ✅ Complete    |
+| **User Guides**     | 3         | ✅ Complete    |
+| **SOP**             | 3         | ✅ Complete    |
+| **Status Reports**  | 4         | ✅ Complete    |
+| **Component Docs**  | 5         | 🔄 In Progress |
+| **Advanced Topics** | 0         | ⏳ Planned     |
 
 ---
 

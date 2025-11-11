@@ -41,21 +41,27 @@ Found a bug? Please open an issue with:
 - **Sample code** that triggers the bug (if applicable)
 
 **Template:**
+
 ```markdown
 ## Bug Description
+
 Brief description of the issue
 
 ## Steps to Reproduce
+
 1. Run `vibesec scan .`
 2. ...
 
 ## Expected Behavior
+
 What should happen
 
 ## Actual Behavior
+
 What actually happens
 
 ## Environment
+
 - OS: macOS 14.0
 - Node: 20.5.0
 - VibeSec: 0.1.0
@@ -110,22 +116,26 @@ Contribute to the core scanner, detectors, integrations, or reporters.
 ### Setup
 
 1. **Fork the repository**
+
    ```bash
    # Click "Fork" on GitHub
    ```
 
 2. **Clone your fork**
+
    ```bash
    git clone https://github.com/YOUR_USERNAME/vibesec.git
    cd vibesec
    ```
 
 3. **Add upstream remote**
+
    ```bash
    git remote add upstream https://github.com/vibesec/vibesec.git
    ```
 
 4. **Install dependencies**
+
    ```bash
    npm install
    # or
@@ -133,6 +143,7 @@ Contribute to the core scanner, detectors, integrations, or reporters.
    ```
 
 5. **Run tests**
+
    ```bash
    npm test
    ```
@@ -155,6 +166,7 @@ git checkout -b fix/your-bug-fix
 ```
 
 **Branch Naming:**
+
 - `feature/` - New features
 - `fix/` - Bug fixes
 - `docs/` - Documentation updates
@@ -203,6 +215,7 @@ git commit -m "feat: add prompt injection detector"
 ```
 
 **Commit Types:**
+
 - `feat:` - New feature
 - `fix:` - Bug fix
 - `docs:` - Documentation changes
@@ -212,6 +225,7 @@ git commit -m "feat: add prompt injection detector"
 - `chore:` - Build/config changes
 
 **Examples:**
+
 ```bash
 feat: add SQL injection detector for Python
 fix: resolve false positives in secrets detector
@@ -238,23 +252,28 @@ git push origin feature/your-feature-name
 
 ```markdown
 ## Description
+
 Brief description of changes
 
 ## Related Issue
+
 Fixes #123
 
 ## Type of Change
+
 - [ ] Bug fix
 - [ ] New feature
 - [ ] Breaking change
 - [ ] Documentation update
 
 ## Testing
+
 - [ ] Unit tests added/updated
 - [ ] Integration tests added/updated
 - [ ] Manual testing completed
 
 ## Checklist
+
 - [ ] Code follows style guidelines
 - [ ] Tests pass locally
 - [ ] Documentation updated
@@ -271,7 +290,7 @@ Detection rules are the heart of VibeSec! Here's how to contribute:
 
 Create a YAML file in `rules/community/`:
 
-```yaml
+````yaml
 id: custom-rule-id
 name: Human-Readable Rule Name
 description: Clear explanation of what this detects
@@ -287,7 +306,7 @@ patterns:
   - type: ast
     query: 'AST query (optional)'
 
-confidence: 0.85  # 0.0-1.0
+confidence: 0.85 # 0.0-1.0
 
 fix:
   recommendation: |
@@ -316,18 +335,20 @@ metadata:
 
 author: Your Name
 date: 2025-10-09
-```
+````
 
 ### 2. Test Your Rule
 
 Create test fixtures in `tests/fixtures/`:
 
 **Vulnerable Code** (`tests/fixtures/vulnerable/your-rule/example.js`):
+
 ```javascript
 // Code that should trigger your rule
 ```
 
 **Secure Code** (`tests/fixtures/secure/your-rule/example.js`):
+
 ```javascript
 // Code that should NOT trigger your rule
 ```
@@ -342,6 +363,7 @@ npm test -- --grep "your-rule"
 ### 4. Submit PR
 
 Open a pull request with:
+
 - Rule YAML file
 - Test fixtures (vulnerable + secure)
 - Documentation explaining the security issue
@@ -358,18 +380,18 @@ Open a pull request with:
 // Good
 export async function scanFile(filePath: string): Promise<Finding[]> {
   const content = await readFile(filePath);
-  return detectors.map(d => d.detect(content)).flat();
+  return detectors.map((d) => d.detect(content)).flat();
 }
 
 // Bad
-export async function scanFile(filePath:string):Promise<Finding[]>
-{
-const content=await readFile(filePath);
-return detectors.map(d=>d.detect(content)).flat()
+export async function scanFile(filePath: string): Promise<Finding[]> {
+  const content = await readFile(filePath);
+  return detectors.map((d) => d.detect(content)).flat();
 }
 ```
 
 **Key Rules:**
+
 - Use `async/await` over promises
 - Prefer `const` over `let`
 - Use descriptive variable names
@@ -402,6 +424,7 @@ def scan_file(file_path):
 ```
 
 **Key Rules:**
+
 - Type hints for all function signatures
 - Docstrings for all public functions
 - 4 spaces for indentation
@@ -483,6 +506,7 @@ describe('Full scan workflow', () => {
 - **CLI:** >70% coverage (harder to test)
 
 Check coverage:
+
 ```bash
 npm test -- --coverage
 open coverage/lcov-report/index.html
@@ -495,6 +519,7 @@ open coverage/lcov-report/index.html
 ### README Updates
 
 When adding features, update:
+
 - Feature list
 - Usage examples
 - Configuration options
@@ -503,7 +528,7 @@ When adding features, update:
 
 Use JSDoc for TypeScript:
 
-```typescript
+````typescript
 /**
  * Scans a directory for security issues.
  *
@@ -521,7 +546,7 @@ Use JSDoc for TypeScript:
 export async function scan(path: string, options?: ScanOptions): Promise<ScanResult> {
   // ...
 }
-```
+````
 
 ---
 
@@ -537,6 +562,7 @@ export async function scan(path: string, options?: ScanOptions): Promise<ScanRes
 ### Recognition
 
 Contributors are recognized in:
+
 - `CONTRIBUTORS.md` file
 - Release notes
 - Monthly community shoutouts on Twitter
@@ -544,6 +570,7 @@ Contributors are recognized in:
 ### Bounties
 
 We offer bounties for:
+
 - **High-quality detection rules**: $50-$200 per rule
 - **Critical bug fixes**: $100-$500
 - **Major features**: $500-$2000

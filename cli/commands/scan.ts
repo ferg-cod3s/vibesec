@@ -28,10 +28,7 @@ interface ScanCommandOptions {
   parallel: boolean;
 }
 
-export async function scanCommand(
-  path: string,
-  options: ScanCommandOptions
-): Promise<void> {
+export async function scanCommand(path: string, options: ScanCommandOptions): Promise<void> {
   const errorHandler = new FriendlyErrorHandler();
 
   try {
@@ -118,11 +115,23 @@ export async function scanCommand(
         } else {
           // Show helpful next steps based on findings
           if (bySeverity.critical > 0) {
-            console.error(chalk.red.bold(`⚠️  Action needed: ${bySeverity.critical} critical issue${bySeverity.critical > 1 ? 's' : ''} found`));
+            console.error(
+              chalk.red.bold(
+                `⚠️  Action needed: ${bySeverity.critical} critical issue${bySeverity.critical > 1 ? 's' : ''} found`
+              )
+            );
           } else if (bySeverity.high > 0) {
-            console.error(chalk.yellow.bold(`⚠️  ${bySeverity.high} important issue${bySeverity.high > 1 ? 's' : ''} found`));
+            console.error(
+              chalk.yellow.bold(
+                `⚠️  ${bySeverity.high} important issue${bySeverity.high > 1 ? 's' : ''} found`
+              )
+            );
           } else {
-            console.error(chalk.blue.bold(`ℹ️  ${result.summary.total} issue${result.summary.total > 1 ? 's' : ''} found`));
+            console.error(
+              chalk.blue.bold(
+                `ℹ️  ${result.summary.total} issue${result.summary.total > 1 ? 's' : ''} found`
+              )
+            );
           }
           console.error('');
 
@@ -131,9 +140,17 @@ export async function scanCommand(
             console.error(chalk.red(`   1. Fix critical issues immediately`));
           }
           if (!useExplain) {
-            console.error(chalk.cyan(`   ${bySeverity.critical > 0 ? '2' : '1'}. Try running with --explain for plain language help`));
+            console.error(
+              chalk.cyan(
+                `   ${bySeverity.critical > 0 ? '2' : '1'}. Try running with --explain for plain language help`
+              )
+            );
           }
-          console.error(chalk.gray(`   ${bySeverity.critical > 0 ? (useExplain ? '2' : '3') : (useExplain ? '1' : '2')}. Run scan again after making fixes`));
+          console.error(
+            chalk.gray(
+              `   ${bySeverity.critical > 0 ? (useExplain ? '2' : '3') : useExplain ? '1' : '2'}. Run scan again after making fixes`
+            )
+          );
           console.error('');
         }
       }
@@ -161,9 +178,7 @@ export async function scanCommand(
 function validateSeverity(severity: string): Severity {
   const validSeverities = ['critical', 'high', 'medium', 'low'];
   if (!validSeverities.includes(severity.toLowerCase())) {
-    throw new Error(
-      `Invalid severity: ${severity}. Must be one of: ${validSeverities.join(', ')}`
-    );
+    throw new Error(`Invalid severity: ${severity}. Must be one of: ${validSeverities.join(', ')}`);
   }
   return severity.toLowerCase() as Severity;
 }

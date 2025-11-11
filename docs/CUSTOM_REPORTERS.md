@@ -37,7 +37,7 @@ interface Reporter {
 interface ReporterOptions {
   color?: boolean;
   verbose?: boolean;
-  [key: string]: unknown;  // Custom options
+  [key: string]: unknown; // Custom options
 }
 ```
 
@@ -319,7 +319,7 @@ export class HTMLReporter implements Reporter {
   </div>
 
   <h2>Findings</h2>
-  ${result.findings.map(finding => this.formatFinding(finding, severityColors)).join('\n')}
+  ${result.findings.map((finding) => this.formatFinding(finding, severityColors)).join('\n')}
 
 </body>
 </html>
@@ -404,9 +404,13 @@ export class EmailReporter implements Reporter {
 
 <h3>Top Issues</h3>
 <ul>
-${result.findings.slice(0, 10).map(f =>
-  `<li><strong>${f.severity.toUpperCase()}:</strong> ${f.title} (${f.location.file}:${f.location.line})</li>`
-).join('\n')}
+${result.findings
+  .slice(0, 10)
+  .map(
+    (f) =>
+      `<li><strong>${f.severity.toUpperCase()}:</strong> ${f.title} (${f.location.file}:${f.location.line})</li>`
+  )
+  .join('\n')}
 </ul>
 
 ${result.summary.total > 10 ? `<p><em>... and ${result.summary.total - 10} more issues</em></p>` : ''}
@@ -449,7 +453,7 @@ await emailReporter.format(result);
 
 Generate GitHub-friendly markdown:
 
-```typescript
+````typescript
 import { Reporter, ScanResult, Finding } from 'vibesec';
 
 export class MarkdownReporter implements Reporter {
@@ -462,7 +466,9 @@ export class MarkdownReporter implements Reporter {
     lines.push(`# 🔒 VibeSec Security Report\n`);
     lines.push(`**Project:** ${result.scan.path}`);
     lines.push(`**Scanned:** ${new Date(result.scan.timestamp).toLocaleString()}`);
-    lines.push(`**Files:** ${result.scan.filesScanned} | **Duration:** ${result.scan.duration.toFixed(2)}s\n`);
+    lines.push(
+      `**Files:** ${result.scan.filesScanned} | **Duration:** ${result.scan.duration.toFixed(2)}s\n`
+    );
 
     // Summary
     lines.push(`## Summary\n`);
@@ -531,7 +537,7 @@ export class MarkdownReporter implements Reporter {
     return emojis[severity] || '⚪';
   }
 }
-```
+````
 
 ---
 
@@ -647,8 +653,8 @@ export class TemplateReporter implements Reporter {
     return this.template
       .replace('{{path}}', result.scan.path)
       .replace('{{total}}', result.summary.total.toString())
-      .replace('{{critical}}', result.summary.bySeverity.critical.toString())
-      // ... more replacements
+      .replace('{{critical}}', result.summary.bySeverity.critical.toString());
+    // ... more replacements
   }
 }
 

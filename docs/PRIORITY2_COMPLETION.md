@@ -17,21 +17,25 @@ Priority 2 successfully integrated all Priority 1 components into a unified scan
 ### Files Created (13 files)
 
 **Type System** (`scanner/types/`):
+
 - `rule.ts` - Rule interface with severity levels
 - `finding.ts` - Finding interface with location tracking
 - `scan-result.ts` - Aggregated scan results
 - `analyzer.ts` - Analyzer interface contract
 
 **Analyzers** (`scanner/analyzers/`):
+
 - `analyzer-factory.ts` - Intelligent routing (AST vs Regex)
 - `ast-analyzer.ts` - AST-based pattern matching
 - `regex-analyzer.ts` - Regex-based fallback
 
 **Core Engine** (`scanner/core/`):
+
 - `engine.ts` - Main orchestration with all P1 integrations
 - `engine.test.ts` - 6 integration tests (all passing)
 
 **Examples**:
+
 - `examples/scanner-integration.ts` - Usage demo
 - `examples/vulnerable-code.ts` - Test fixtures
 - `scanner/index.ts` - Public API exports
@@ -64,6 +68,7 @@ Priority 2 successfully integrated all Priority 1 components into a unified scan
 ### Files Created (4 files)
 
 **CLI Structure** (`poc/ast-parser/src/cli/`):
+
 - `index.ts` - Main CLI entry point
 - `commands/init.ts` - Interactive config generator
 - `commands/scan.ts` - Enhanced scan command
@@ -72,6 +77,7 @@ Priority 2 successfully integrated all Priority 1 components into a unified scan
 ### Features Implemented
 
 **New Commands**:
+
 ```bash
 vibesec init              # Interactive config generation
 vibesec scan [path]       # Scan with config support
@@ -83,12 +89,14 @@ vibesec scan [path]       # Scan with config support
 ```
 
 **Interactive Init**:
+
 - Auto-detects project type (Node.js, Python, Go, Rust)
 - Prompts for languages to scan
 - Configures incremental scanning
 - Generates .vibesec.yaml with sensible defaults
 
 **Scan Enhancements**:
+
 - Loads .vibesec.yaml configuration
 - Shows cache statistics
 - Displays progress and timing
@@ -102,17 +110,20 @@ vibesec scan [path]       # Scan with config support
 ### Files Created (5 files)
 
 **AST Rules** (`rules/default/`):
+
 1. `ast-sql-injection.yaml` - SQL injection via variable tracking
 2. `ast-command-injection.yaml` - Command injection (critical severity)
 3. `ast-xss.yaml` - XSS via innerHTML/dangerouslySetInnerHTML
 4. `ast-path-traversal.yaml` - Path traversal in file operations
 
 **Schema Update**:
+
 - `rules/schema.json` - Extended with `astQuery` field
 
 ### Rule Structure
 
 Each rule includes:
+
 - **astQuery**: Array of AST patterns to match
 - **Node types**: FunctionCall, Assignment, Import, StringConcatenation
 - **Multi-language**: JavaScript, TypeScript, Python support
@@ -125,16 +136,16 @@ Each rule includes:
 ```yaml
 astQuery:
   - type: FunctionCall
-    name: "execute|query|raw|exec"
-    description: "Detect query execution functions"
-  
+    name: 'execute|query|raw|exec'
+    description: 'Detect query execution functions'
+
   - type: Assignment
-    pattern: ".*sql.*|.*query.*"
-    description: "Track SQL query assignments"
-  
+    pattern: '.*sql.*|.*query.*'
+    description: 'Track SQL query assignments'
+
   - type: StringConcatenation
     pattern: ".*\\+.*|.*\\$\\{.*\\}.*"
-    description: "Unsafe string concatenation"
+    description: 'Unsafe string concatenation'
 ```
 
 ---
@@ -144,27 +155,26 @@ astQuery:
 ### Files Created (7 files)
 
 **Integration Tests** (`tests/integration/`):
+
 1. `full-pipeline.test.ts` - End-to-end flow validation
 2. `config-loader.test.ts` - Config loading + validation
 3. `incremental-scanner.test.ts` - Cache + git diff tests
 
-**Performance Benchmarks** (`tests/performance/`):
-4. `priority2-benchmark.ts` - Full pipeline benchmarking
+**Performance Benchmarks** (`tests/performance/`): 4. `priority2-benchmark.ts` - Full pipeline benchmarking
 
-**Test Fixtures** (`tests/fixtures/complex-vulnerable/`):
-5. `sql-injection-complex.js` - Complex SQL injection patterns
-6. `command-injection-indirect.ts` - Indirect command injection
-7. `.vibesec.yaml` - Sample configuration
+**Test Fixtures** (`tests/fixtures/complex-vulnerable/`): 5. `sql-injection-complex.js` - Complex SQL injection patterns 6. `command-injection-indirect.ts` - Indirect command injection 7. `.vibesec.yaml` - Sample configuration
 
 ### Test Coverage
 
 **Full Pipeline Tests**:
+
 - ✓ Config → AST → Detection → Reporting flow
 - ✓ Incremental scanning skips unchanged files
 - ✓ Fallback to regex for unsupported languages
 - ✓ Mixed strategies in single scan
 
 **ConfigLoader Tests**:
+
 - ✓ Load .vibesec.yaml and apply settings
 - ✓ Use defaults when no config present
 - ✓ Validate schema and reject invalid configs
@@ -173,6 +183,7 @@ astQuery:
 - ✓ Apply rule overrides correctly
 
 **IncrementalScanner Tests**:
+
 - ✓ Detect changed files via git diff
 - ✓ Load and save cache correctly
 - ✓ Return cached results for unchanged files
@@ -180,6 +191,7 @@ astQuery:
 - ✓ Respect cache TTL settings
 
 **Performance Benchmarks**:
+
 - End-to-end scan timing (target: <2 min for 10K files)
 - Incremental scan speedup measurement
 - Memory profiling during large scans
@@ -188,13 +200,13 @@ astQuery:
 
 ## Performance Metrics
 
-| Metric | Target | Achieved | Status |
-|--------|--------|----------|--------|
-| Config Load | <5ms | ~1-2ms | ✅ Exceeded |
-| AST Parse/File | <1ms | 0.76ms | ✅ Met |
-| Detection Accuracy | 95% | 95%+ | ✅ Met |
-| False Positive Rate | <5% | 0% | ✅ Exceeded |
-| Incremental Speedup | 50-80% | ~80% | ✅ Met |
+| Metric                    | Target | Achieved        | Status      |
+| ------------------------- | ------ | --------------- | ----------- |
+| Config Load               | <5ms   | ~1-2ms          | ✅ Exceeded |
+| AST Parse/File            | <1ms   | 0.76ms          | ✅ Met      |
+| Detection Accuracy        | 95%    | 95%+            | ✅ Met      |
+| False Positive Rate       | <5%    | 0%              | ✅ Exceeded |
+| Incremental Speedup       | 50-80% | ~80%            | ✅ Met      |
 | Full Pipeline (10K files) | <2 min | Projected ~7-8s | ✅ Exceeded |
 
 ---
@@ -213,17 +225,20 @@ Total files created: **29 files**
 ## Next Steps
 
 Priority 3: Enhanced Reporting (Weeks 5-6)
+
 - SARIF reporter (GitHub Security tab)
 - HTML/Markdown reporters
 - Interactive filtering and search
 
 Priority 4: Distribution & UX (Week 7)
+
 - NPM package publishing
 - Homebrew formula
 - Docker image
 - Interactive first-run wizard
 
 Priority 5: Polish & Launch (Week 8)
+
 - Performance benchmarks
 - API documentation
 - Video tutorials

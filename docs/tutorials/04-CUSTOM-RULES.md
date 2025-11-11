@@ -13,9 +13,11 @@
 **Visual:** Code editor with YAML file
 
 **Narration:**
+
 > "Hey everyone! While VibeSec comes with 90+ built-in security rules, sometimes you need to detect patterns specific to your codebase - internal APIs, deprecated functions, or company security policies. In this tutorial, we'll create custom detection rules from scratch. Let's get started!"
 
 **Screen:**
+
 ```
 Creating Custom VibeSec Rules
 
@@ -35,18 +37,22 @@ Duration: 7 minutes
 **Visual:** Split screen - empty file → completed rule
 
 **Narration:**
+
 > "Custom rules are defined in YAML files. Let's create our first rule to detect usage of a deprecated internal API."
 
 **Screen - Create rules directory:**
+
 ```bash
 $ mkdir -p .vibesec/rules
 $ touch .vibesec/rules/my-custom-rules.yaml
 ```
 
 **Narration (continued):**
+
 > "Every rule needs six essential fields: id, name, description, severity, category, and patterns. Let's build one together."
 
 **Screen - Editor showing `.vibesec/rules/my-custom-rules.yaml`:**
+
 ```yaml
 # Empty file with just comments
 # VibeSec Custom Rules
@@ -62,18 +68,22 @@ $ touch .vibesec/rules/my-custom-rules.yaml
 **Visual:** Type out rule field by field with explanations
 
 **Narration:**
+
 > "We'll detect usage of our deprecated 'oldAuth' API. First, give it a unique ID and name."
 
 **Screen - Add ID and name:**
+
 ```yaml
 id: deprecated-old-auth-api
 name: Usage of Deprecated oldAuth API
 ```
 
 **Narration (continued):**
+
 > "Next, add a clear description so developers know what the issue is."
 
 **Screen - Add description:**
+
 ```yaml
 description: |
   The oldAuth API has been deprecated since v2.0 and will be
@@ -81,25 +91,31 @@ description: |
 ```
 
 **Narration (continued):**
+
 > "Set the severity - since this is a deprecation warning, 'medium' is appropriate."
 
 **Screen - Add severity:**
+
 ```yaml
 severity: medium
 ```
 
 **Narration (continued):**
+
 > "Choose a category. Since this is company-specific, we'll use 'custom'."
 
 **Screen - Add category:**
+
 ```yaml
 category: custom
 ```
 
 **Narration (continued):**
+
 > "Now the important part - the regex pattern that matches the problematic code."
 
 **Screen - Add pattern:**
+
 ```yaml
 patterns:
   - regex: oldAuth\.(login|logout|verify)
@@ -107,6 +123,7 @@ patterns:
 ```
 
 **Text overlay shows what the pattern matches:**
+
 ```javascript
 // Matches:
 oldAuth.login(...)
@@ -119,9 +136,11 @@ oldAuthentication.login(...)
 ```
 
 **Narration (continued):**
+
 > "Specify which languages this rule applies to."
 
 **Screen - Add languages:**
+
 ```yaml
 languages:
   - javascript
@@ -129,9 +148,11 @@ languages:
 ```
 
 **Narration (continued):**
+
 > "And finally, provide a fix recommendation with helpful links."
 
 **Screen - Complete rule:**
+
 ```yaml
 fix:
   template: |
@@ -162,9 +183,11 @@ enabled: true
 **Visual:** Terminal + test file
 
 **Narration:**
+
 > "Before rolling out your rule, let's test it. Create a simple test file with the pattern you're trying to catch."
 
 **Screen - Create test file `test-deprecated.js`:**
+
 ```javascript
 // test-deprecated.js
 import { oldAuth } from './legacy';
@@ -181,9 +204,11 @@ function verifyToken(token) {
 ```
 
 **Narration (continued):**
+
 > "Now run VibeSec with your custom rules directory."
 
 **Screen - Terminal:**
+
 ```bash
 $ vibesec scan test-deprecated.js --rules .vibesec/rules
 
@@ -219,9 +244,11 @@ Found 2 issues (0 critical, 0 high, 2 medium, 0 low)
 **Visual:** Side-by-side code examples
 
 **Narration:**
+
 > "Let's create a more complex rule that detects insecure random number generation."
 
 **Screen - New rule:**
+
 ```yaml
 id: insecure-random
 name: Insecure Random Number Generation
@@ -269,6 +296,7 @@ enabled: true
 **Visual:** Show examples this catches
 
 **Screen - Test code:**
+
 ```javascript
 // ❌ These will be caught:
 const token = Math.random().toString();
@@ -287,9 +315,11 @@ const colorIndex = Math.floor(Math.random() * colors.length);
 **Visual:** Editor showing rule with multiple patterns
 
 **Narration:**
+
 > "You can define multiple patterns in a single rule to catch different variations of the same issue."
 
 **Screen:**
+
 ```yaml
 id: hardcoded-production-urls
 name: Hardcoded Production URLs
@@ -337,9 +367,11 @@ enabled: true
 **Visual:** File structure
 
 **Narration:**
+
 > "For team collaboration, organize rules into separate files by category."
 
 **Screen - File structure:**
+
 ```
 .vibesec/
 ├── rules/
@@ -351,25 +383,31 @@ enabled: true
 ```
 
 **Narration (continued):**
+
 > "Add a README to document your custom rules."
 
 **Screen - `.vibesec/rules/README.md`:**
+
 ```markdown
 # Company Custom Security Rules
 
 ## deprecated-apis.yaml
+
 Rules for detecting deprecated internal APIs.
 Update this file when APIs are deprecated.
 
 ## company-security.yaml
+
 Company-specific security policies and patterns.
 Maintained by: Security Team
 
 ## internal-patterns.yaml
+
 Internal code patterns that should be avoided.
 Maintained by: Platform Team
 
 ## Adding New Rules
+
 1. Create rule in appropriate file
 2. Test with `vibesec scan --rules .vibesec/rules`
 3. Submit PR for team review
@@ -379,6 +417,7 @@ Maintained by: Platform Team
 **Visual:** Show git commit
 
 **Screen:**
+
 ```bash
 $ git add .vibesec/
 $ git commit -m "Add custom security rules for internal APIs"
@@ -394,9 +433,11 @@ $ git push origin main
 **Visual:** Config file
 
 **Narration:**
+
 > "Finally, configure your project to always use these custom rules."
 
 **Screen - `.vibesec.yaml`:**
+
 ```yaml
 version: 1
 
@@ -432,9 +473,11 @@ severity:
 **Visual:** Summary checklist
 
 **Narration:**
+
 > "Perfect! You can now create custom rules tailored to your codebase and security policies. Happy rule writing!"
 
 **Screen:**
+
 ```
 ✅ You've learned:
   • Rule file structure (YAML)
@@ -462,30 +505,36 @@ severity:
 ## Production Notes
 
 ### Visual Style
+
 - **Syntax highlighting:** Use proper YAML highlighting
 - **Diff view:** Show before/after when editing rules
 - **Test results:** Show actual scan output, not mocked
 - **Regex visualization:** Consider using regex101.com for pattern explanation
 
 ### Pacing
+
 - **YAML files:** Allow 4-5 seconds to read each complete rule
 - **Pattern matching:** Pause to explain regex patterns
 - **Test output:** Show full scan results with enough time to read
 
 ### Accessibility
+
 - **Captions:** Include regex patterns in captions
 - **Color coding:** Use consistent colors for severity levels
 - **Annotations:** Point out important YAML keys
 - **Examples:** Show concrete code that matches patterns
 
 ### Code Examples
+
 Use real, production-quality examples:
+
 - Actual deprecated API patterns
 - Real security vulnerabilities
 - Genuine company-specific patterns
 - Practical fix recommendations
 
 ### B-Roll Suggestions
+
 - Developer writing rules in VS Code
 - Team reviewing rule PRs on GitHub
 - Security scan catching custom rule violations
@@ -493,6 +542,7 @@ Use real, production-quality examples:
 - Regex testing on regex101.com
 
 ### Common Pitfalls to Address
+
 1. **Regex escaping:** Mention need to escape special chars
 2. **False positives:** Show how to make patterns specific
 3. **Performance:** Warn about complex multiline patterns
@@ -503,6 +553,7 @@ Use real, production-quality examples:
 ## Key Takeaways
 
 By the end of this tutorial, viewers should be able to:
+
 1. ✅ Create custom detection rules in YAML format
 2. ✅ Write regex patterns to match problematic code
 3. ✅ Test custom rules before deployment
@@ -518,24 +569,28 @@ By the end of this tutorial, viewers should be able to:
 Include links to example rules:
 
 ### Security Patterns
+
 ```yaml
 # Detect hardcoded credentials
 - regex: (password|secret|key)\s*=\s*['"]\w+['"]
 ```
 
 ### Deprecated APIs
+
 ```yaml
 # Detect old function calls
 - regex: oldFunction\(
 ```
 
 ### Code Quality
+
 ```yaml
 # Detect console.log in production
 - regex: console\.(log|debug|info)\(
 ```
 
 ### Company Policies
+
 ```yaml
 # Require specific import patterns
 - regex: import.*from\s+['"](?!@company/)

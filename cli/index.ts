@@ -16,10 +16,7 @@ try {
 
 const program = new Command();
 
-program
-  .name('vibesec')
-  .description('Security scanner for AI-generated code')
-  .version('0.1.0');
+program.name('vibesec').description('Security scanner for AI-generated code').version('0.1.0');
 
 program
   .command('scan')

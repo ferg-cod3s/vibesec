@@ -22,6 +22,7 @@ The Proof of Concept (POC) aims to demonstrate that VibeSec can:
 ### In Scope ✅
 
 #### 1. Core Scanner Engine
+
 - File system traversal with configurable paths
 - Basic code parsing (regex + simple AST for JS/Python)
 - Detection rule engine (YAML-based)
@@ -29,15 +30,16 @@ The Proof of Concept (POC) aims to demonstrate that VibeSec can:
 
 #### 2. Essential Detectors
 
-| Detector | Purpose | Priority |
-|----------|---------|----------|
-| **Secrets** | Hardcoded API keys, passwords, tokens | 🔴 Critical |
-| **Injection** | SQL injection, XSS, command injection | 🔴 Critical |
-| **Auth** | Weak auth patterns, missing validation | 🟡 High |
-| **Incomplete** | TODO/FIXME comments in security-critical code | 🟡 High |
-| **AI-Specific** | Over-permissive CORS, generic error handlers | 🟢 Medium |
+| Detector        | Purpose                                       | Priority    |
+| --------------- | --------------------------------------------- | ----------- |
+| **Secrets**     | Hardcoded API keys, passwords, tokens         | 🔴 Critical |
+| **Injection**   | SQL injection, XSS, command injection         | 🔴 Critical |
+| **Auth**        | Weak auth patterns, missing validation        | 🟡 High     |
+| **Incomplete**  | TODO/FIXME comments in security-critical code | 🟡 High     |
+| **AI-Specific** | Over-permissive CORS, generic error handlers  | 🟢 Medium   |
 
 #### 3. CLI Tool
+
 ```bash
 vibesec scan [path]              # Scan directory/file
 vibesec scan . --format json     # Output JSON
@@ -45,10 +47,12 @@ vibesec scan . --severity high   # Filter by severity
 ```
 
 #### 4. Output Formats
+
 - **Plain Text**: Terminal-friendly, human-readable
 - **JSON**: Machine-readable for CI/CD integration
 
 #### 5. Test Fixtures
+
 - 10 vulnerable code samples (5 JavaScript, 5 Python)
 - Known vulnerabilities across all detector categories
 - Validation: Each detector must find ≥5 issues
@@ -73,30 +77,30 @@ vibesec scan . --severity high   # Filter by severity
 
 ### Functional Requirements
 
-| ID | Requirement | Validation |
-|----|-------------|------------|
-| F1 | Scan a directory recursively | Successfully scans 100+ file repo |
-| F2 | Detect hardcoded secrets | Finds API keys with <5% false positives |
-| F3 | Detect injection vulnerabilities | Identifies SQL injection patterns in test fixtures |
-| F4 | Generate plain-text report | Non-technical user can understand findings |
-| F5 | Output JSON format | Valid JSON schema, parseable by CI tools |
-| F6 | Provide fix recommendations | Each finding includes a "how to fix" section |
+| ID  | Requirement                      | Validation                                         |
+| --- | -------------------------------- | -------------------------------------------------- |
+| F1  | Scan a directory recursively     | Successfully scans 100+ file repo                  |
+| F2  | Detect hardcoded secrets         | Finds API keys with <5% false positives            |
+| F3  | Detect injection vulnerabilities | Identifies SQL injection patterns in test fixtures |
+| F4  | Generate plain-text report       | Non-technical user can understand findings         |
+| F5  | Output JSON format               | Valid JSON schema, parseable by CI tools           |
+| F6  | Provide fix recommendations      | Each finding includes a "how to fix" section       |
 
 ### Performance Requirements
 
-| Metric | Target |
-|--------|--------|
-| Scan speed | <30 seconds for 1000 files |
-| Memory usage | <500MB for typical project |
-| CLI startup time | <2 seconds |
+| Metric           | Target                     |
+| ---------------- | -------------------------- |
+| Scan speed       | <30 seconds for 1000 files |
+| Memory usage     | <500MB for typical project |
+| CLI startup time | <2 seconds                 |
 
 ### Quality Requirements
 
-| Metric | Target |
-|--------|--------|
-| Detection accuracy | ≥90% precision (low false positives) |
-| Test coverage | ≥70% for core scanner |
-| False positive rate | <10% on test fixtures |
+| Metric              | Target                               |
+| ------------------- | ------------------------------------ |
+| Detection accuracy  | ≥90% precision (low false positives) |
+| Test coverage       | ≥70% for core scanner                |
+| False positive rate | <10% on test fixtures                |
 
 ---
 
@@ -105,17 +109,20 @@ vibesec scan . --severity high   # Filter by severity
 ### Week 1: Core Infrastructure
 
 **Day 1-2: Project Setup**
+
 - ✅ Repository structure
 - ✅ Documentation (this file)
 - ✅ Basic CLI skeleton (argument parsing)
 - ✅ File system traversal
 
 **Day 3-4: Detection Engine**
+
 - Rule loading from YAML
 - Regex-based pattern matching
 - Finding data structure and aggregation
 
 **Day 5: First Detectors**
+
 - Secrets detector (API keys, passwords)
 - Basic injection detector (SQL, XSS)
 
@@ -124,16 +131,19 @@ vibesec scan . --severity high   # Filter by severity
 ### Week 2: Detectors & Reporting
 
 **Day 6-7: Additional Detectors**
+
 - Auth detector (weak passwords, missing validation)
 - Incomplete code detector (TODO in security contexts)
 - AI-specific patterns (CORS, error handlers)
 
 **Day 8-9: Reporting**
+
 - Plain-text formatter (colorized terminal output)
 - JSON formatter
 - Fix recommendation engine
 
 **Day 10: Testing & Validation**
+
 - Create test fixtures (vulnerable code)
 - Run full test suite
 - Validate against success criteria
@@ -148,6 +158,7 @@ vibesec scan . --severity high   # Filter by severity
 **Language:** Node.js + TypeScript (for rapid development)
 
 **Key Libraries:**
+
 - `commander` - CLI framework
 - `glob` - File system traversal
 - `js-yaml` - Rule parsing
@@ -155,6 +166,7 @@ vibesec scan . --severity high   # Filter by severity
 - `fast-glob` - Fast file matching
 
 **File Structure:**
+
 ```
 vibesec/
 ├── cli/
@@ -310,12 +322,14 @@ Move the API key to an environment variable:
 ### JavaScript Examples
 
 **1. Hardcoded Secret** (`tests/fixtures/vulnerable/js/hardcoded-secret.js`)
+
 ```javascript
-const apiKey = "sk_live_abc123def456";
-const dbPassword = "MySuperSecretPassword123!";
+const apiKey = 'sk_live_abc123def456';
+const dbPassword = 'MySuperSecretPassword123!';
 ```
 
 **2. SQL Injection** (`tests/fixtures/vulnerable/js/sql-injection.js`)
+
 ```javascript
 app.get('/user', (req, res) => {
   const query = `SELECT * FROM users WHERE id = ${req.query.id}`;
@@ -326,6 +340,7 @@ app.get('/user', (req, res) => {
 ```
 
 **3. XSS Vulnerability** (`tests/fixtures/vulnerable/js/xss.js`)
+
 ```javascript
 app.get('/search', (req, res) => {
   res.send(`<h1>Results for: ${req.query.term}</h1>`);
@@ -333,19 +348,23 @@ app.get('/search', (req, res) => {
 ```
 
 **4. Weak Authentication** (`tests/fixtures/vulnerable/js/weak-auth.js`)
+
 ```javascript
 function login(username, password) {
   // TODO: Add proper password hashing
-  return password === "admin123";
+  return password === 'admin123';
 }
 ```
 
 **5. Over-permissive CORS** (`tests/fixtures/vulnerable/js/cors.js`)
+
 ```javascript
-app.use(cors({
-  origin: '*',
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: '*',
+    credentials: true,
+  })
+);
 ```
 
 ---
@@ -353,12 +372,14 @@ app.use(cors({
 ### Python Examples
 
 **1. Hardcoded Credentials** (`tests/fixtures/vulnerable/py/hardcoded-creds.py`)
+
 ```python
 DB_PASSWORD = "postgres123"
 API_SECRET = "fake_stripe_test_key_1234567890EXAMPLE"  # FAKE key for testing
 ```
 
 **2. SQL Injection** (`tests/fixtures/vulnerable/py/sql-injection.py`)
+
 ```python
 @app.route('/user/<user_id>')
 def get_user(user_id):
@@ -367,6 +388,7 @@ def get_user(user_id):
 ```
 
 **3. Command Injection** (`tests/fixtures/vulnerable/py/command-injection.py`)
+
 ```python
 import os
 def ping_host(host):
@@ -374,6 +396,7 @@ def ping_host(host):
 ```
 
 **4. Incomplete Security** (`tests/fixtures/vulnerable/py/incomplete-auth.py`)
+
 ```python
 def authenticate(user, password):
     # FIXME: Implement proper JWT validation
@@ -381,6 +404,7 @@ def authenticate(user, password):
 ```
 
 **5. Generic Error Handler** (`tests/fixtures/vulnerable/py/error-handler.py`)
+
 ```python
 @app.errorhandler(Exception)
 def handle_error(e):
@@ -392,12 +416,14 @@ def handle_error(e):
 ## Validation Plan
 
 ### Manual Testing
+
 1. Run `vibesec scan tests/fixtures/vulnerable/`
 2. Verify all 10 test cases are detected
 3. Check false positive rate on secure code samples
 4. Validate fix recommendations are clear and correct
 
 ### Automated Testing
+
 ```bash
 npm test                          # Run unit tests
 npm test -- --coverage            # Generate coverage report
@@ -405,6 +431,7 @@ npm run test:integration          # Test full scan workflow
 ```
 
 ### User Testing
+
 - 3 non-technical users (PMs, designers) review sample reports
 - Can they understand the issues?
 - Are fix recommendations actionable?
@@ -413,12 +440,12 @@ npm run test:integration          # Test full scan workflow
 
 ## Risks & Mitigation
 
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| High false positive rate | Users lose trust | Tune regex patterns, add confidence scoring |
-| Poor performance on large repos | Users abandon tool | Implement file filtering, parallel processing |
-| Unclear fix recommendations | Users don't know what to do | User testing, iterate on wording |
-| Detection rules too simplistic | Miss real vulnerabilities | Start with high-confidence patterns, expand in MVP |
+| Risk                            | Impact                      | Mitigation                                         |
+| ------------------------------- | --------------------------- | -------------------------------------------------- |
+| High false positive rate        | Users lose trust            | Tune regex patterns, add confidence scoring        |
+| Poor performance on large repos | Users abandon tool          | Implement file filtering, parallel processing      |
+| Unclear fix recommendations     | Users don't know what to do | User testing, iterate on wording                   |
+| Detection rules too simplistic  | Miss real vulnerabilities   | Start with high-confidence patterns, expand in MVP |
 
 ---
 

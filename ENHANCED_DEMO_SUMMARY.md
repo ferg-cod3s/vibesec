@@ -9,7 +9,9 @@ An **enhanced demo that includes complete installation walkthrough** from start 
 ## 🎬 Two Demo Versions Now Available
 
 ### 1. **Quick Demo** - `vibesec-demo.cast` (16 KB, 90 seconds)
+
 **Content:**
+
 - What VibeSec detects
 - List security rules
 - Scan hardcoded secrets
@@ -24,6 +26,7 @@ An **enhanced demo that includes complete installation walkthrough** from start 
 ### 2. **Full Demo with Setup** - `vibesec-demo-full.cast` (25 KB, 3 minutes) ⭐ NEW!
 
 **Part 1: Installation & Setup (60 seconds)**
+
 1. **Clone repository**
    - `git clone https://github.com/ferg-cod3s/vibesec.git`
    - Shows complete git output
@@ -48,6 +51,7 @@ An **enhanced demo that includes complete installation walkthrough** from start 
    - "✓ VibeSec is ready to use!"
 
 **Part 2: VibeSec in Action (120 seconds)**
+
 - Same as quick demo
 - Shows vulnerability detection
 - Complete summary with setup time
@@ -60,6 +64,7 @@ An **enhanced demo that includes complete installation walkthrough** from start 
 ## 🚀 Try It Right Now
 
 ### Preview Both Demos
+
 ```bash
 # Quick demo (90 seconds)
 asciinema play demo-automation/vibesec-demo.cast
@@ -69,6 +74,7 @@ asciinema play demo-automation/vibesec-demo-full.cast
 ```
 
 ### Share Instantly
+
 ```bash
 # Upload quick demo
 asciinema upload demo-automation/vibesec-demo.cast
@@ -78,6 +84,7 @@ asciinema upload demo-automation/vibesec-demo-full.cast
 ```
 
 ### Create GIFs
+
 ```bash
 # Quick demo for Twitter
 agg demo-automation/vibesec-demo.cast quick.gif
@@ -90,56 +97,66 @@ agg demo-automation/vibesec-demo-full.cast full.gif
 
 ## 📊 Demo Comparison
 
-| Feature | Quick Demo | Full Demo |
-|---------|-----------|-----------|
-| **Duration** | 90 seconds | 3 minutes |
-| **File Size** | 16 KB | 25 KB |
-| **Setup Shown** | ❌ No | ✅ Yes (complete) |
-| **Clone Repo** | ❌ | ✅ |
-| **Install Deps** | ❌ | ✅ |
-| **Configure MCP** | ❌ | ✅ |
-| **Verify Install** | ❌ | ✅ |
-| **Scan Demos** | ✅ | ✅ |
-| **Best For** | Twitter, Reddit | YouTube, Blogs |
-| **Target Audience** | Experienced | First-timers |
+| Feature             | Quick Demo      | Full Demo         |
+| ------------------- | --------------- | ----------------- |
+| **Duration**        | 90 seconds      | 3 minutes         |
+| **File Size**       | 16 KB           | 25 KB             |
+| **Setup Shown**     | ❌ No           | ✅ Yes (complete) |
+| **Clone Repo**      | ❌              | ✅                |
+| **Install Deps**    | ❌              | ✅                |
+| **Configure MCP**   | ❌              | ✅                |
+| **Verify Install**  | ❌              | ✅                |
+| **Scan Demos**      | ✅              | ✅                |
+| **Best For**        | Twitter, Reddit | YouTube, Blogs    |
+| **Target Audience** | Experienced     | First-timers      |
 
 ---
 
 ## 🎯 Platform-Specific Recommendations
 
 ### Twitter/X
+
 **Use:** Quick Demo
 **Why:** Fast-paced, want quick impact
+
 ```bash
 agg demo-automation/vibesec-demo.cast twitter.gif
 ```
 
 ### YouTube
+
 **Use:** Full Demo with Setup
 **Why:** Educational, viewers expect thoroughness
+
 ```bash
 agg demo-automation/vibesec-demo-full.cast temp.gif
 ffmpeg -i temp.gif -c:v libx264 -crf 18 youtube.mp4
 ```
 
 ### GitHub README
+
 **Use:** Quick Demo
 **Why:** Fast page load, quick overview
+
 ```bash
 agg demo-automation/vibesec-demo.cast readme.gif
 gifsicle -O3 --resize-width 800 readme.gif -o demo.gif
 ```
 
 ### Blog Post (Dev.to, Medium)
+
 **Use:** Full Demo with Setup
 **Why:** Complete walkthrough for readers
+
 ```bash
 agg demo-automation/vibesec-demo-full.cast blog.gif
 ```
 
 ### LinkedIn
+
 **Use:** Full Demo with Setup
 **Why:** Professional audience, complete picture
+
 ```bash
 agg demo-automation/vibesec-demo-full.cast linkedin.gif
 ```
@@ -165,6 +182,7 @@ demo-automation/
 ### Setup Section (New in Full Demo)
 
 **Step 1: Clone Repository**
+
 ```
 $ git clone https://github.com/ferg-cod3s/vibesec.git
 Cloning into 'vibesec'...
@@ -175,6 +193,7 @@ $ cd vibesec
 ```
 
 **Step 2: Install Dependencies**
+
 ```
 $ bun install
 Installing dependencies...
@@ -188,6 +207,7 @@ Installing dependencies...
 ```
 
 **Step 3: Configure MCP**
+
 ```
 $ nano ~/.claude/mcp.json
 
@@ -205,6 +225,7 @@ $ nano ~/.claude/mcp.json
 ```
 
 **Step 4: Restart & Verify**
+
 ```
 Step 4: Restart Claude Code
 
@@ -216,6 +237,7 @@ VibeSec is now available in Claude Code
 ```
 
 **Verification**
+
 ```
 In Claude Code, ask:
   "What MCP tools do you have?"
@@ -235,18 +257,21 @@ Then transitions to the vulnerability detection demos!
 ## 💡 Why This Is Powerful
 
 ### For New Users
+
 - **Zero guesswork** - Shows every single step
 - **Builds confidence** - See it work before trying
 - **Clear expectations** - "2 minutes" setup time shown
 - **Verification included** - Proof it's working
 
 ### For Content Creators
+
 - **Complete story** - Start to finish in one video
 - **SEO-friendly** - Tutorial content ranks well
 - **Educational value** - Helps viewers actually use it
 - **Shareable** - Self-contained, no external docs needed
 
 ### For Marketing
+
 - **Low barrier** - "Just 2 minutes" is compelling
 - **Professional** - Shows polish and attention to detail
 - **Trustworthy** - Demonstrates it actually works
@@ -257,12 +282,15 @@ Then transitions to the vulnerability detection demos!
 ## 🚀 Next Steps
 
 ### Immediate (Now)
+
 1. **Preview both demos:**
+
    ```bash
    asciinema play demo-automation/vibesec-demo-full.cast
    ```
 
 2. **Share full demo on YouTube:**
+
    ```bash
    agg demo-automation/vibesec-demo-full.cast temp.gif
    ffmpeg -i temp.gif -c:v libx264 -crf 18 youtube.mp4
@@ -274,12 +302,14 @@ Then transitions to the vulnerability detection demos!
    ```
 
 ### This Week
+
 - Use full demo for YouTube announcement
 - Use quick demo for Twitter/Reddit
 - Embed quick demo in GitHub README
 - Use full demo in blog post walkthrough
 
 ### This Month
+
 - Create platform-specific variants
 - A/B test which demo converts better
 - Collect feedback and iterate
@@ -307,6 +337,7 @@ All documentation updated to include both versions!
 2. **Full Demo** (3min) - For tutorials and complete walkthroughs
 
 **Both are:**
+
 - ✅ Pre-generated and ready to use
 - ✅ Convertible to any format (GIF, MP4, SVG)
 - ✅ Platform-optimized
@@ -323,6 +354,7 @@ All documentation updated to include both versions!
 **Go share your demo!** 🎬
 
 Quick commands:
+
 ```bash
 # Preview
 asciinema play demo-automation/vibesec-demo-full.cast

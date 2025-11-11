@@ -11,6 +11,7 @@
 **Visual:** Terminal with Claude Code open
 
 **Script:**
+
 > "I just built a security scanner that works INSIDE my AI coding assistant. Watch it catch a vulnerability that Claude missed..."
 
 **Action:** Show Claude Code interface
@@ -22,11 +23,14 @@
 **Visual:** Split screen - Claude Code generating code with vulnerability
 
 **Script:**
+
 > "AI coding assistants like Claude Code, Cursor, and Copilot are amazing for productivity. But sometimes they generate code with security issues."
 
 **Action:**
+
 1. Ask Claude: "Create a simple Express API endpoint that queries users by name"
 2. Show Claude generating code like:
+
 ```typescript
 app.get('/users', (req, res) => {
   const name = req.query.name;
@@ -38,6 +42,7 @@ app.get('/users', (req, res) => {
 ```
 
 **Script:**
+
 > "This looks fine, right? But there's a critical SQL injection vulnerability here."
 
 ---
@@ -47,9 +52,11 @@ app.get('/users', (req, res) => {
 **Visual:** Using VibeSec to scan the code
 
 **Script:**
+
 > "This is where VibeSec comes in. It integrates directly with Claude Code through MCP - the Model Context Protocol."
 
 **Action:**
+
 1. In Claude Code, type: "Can you scan this file for security issues using VibeSec?"
 2. Show Claude invoking `vibesec_scan` tool
 3. Show VibeSec results:
@@ -69,6 +76,7 @@ Recommendation: Use parameterized queries instead:
 ```
 
 **Script:**
+
 > "VibeSec caught it immediately. It not only identifies the vulnerability, but explains WHY it's dangerous and HOW to fix it."
 
 ---
@@ -78,11 +86,13 @@ Recommendation: Use parameterized queries instead:
 **Visual:** Show vibesec_list_rules tool
 
 **Script:**
+
 > "VibeSec is built specifically for AI-generated code. It catches patterns that AI assistants commonly miss:"
 
 **Action:** Run `vibesec_list_rules` to show detection categories
 
 **Show list:**
+
 - 🔑 Hardcoded secrets & API keys
 - 💉 SQL injection vulnerabilities
 - 🖥️ Command injection risks
@@ -92,6 +102,7 @@ Recommendation: Use parameterized queries instead:
 - 🤖 AI-specific risks (prompt injection)
 
 **Script:**
+
 > "And it works IN your workflow - not as a separate tool you have to remember to run."
 
 ---
@@ -101,9 +112,11 @@ Recommendation: Use parameterized queries instead:
 **Visual:** Show configuration file
 
 **Script:**
+
 > "Setup takes 2 minutes. Just add VibeSec to your MCP configuration:"
 
 **Action:** Show `~/.claude/mcp.json`:
+
 ```json
 {
   "mcpServers": {
@@ -116,6 +129,7 @@ Recommendation: Use parameterized queries instead:
 ```
 
 **Script:**
+
 > "Restart Claude Code, and you're done. That's it."
 
 ---
@@ -125,15 +139,18 @@ Recommendation: Use parameterized queries instead:
 **Visual:** GitHub repo README
 
 **Script:**
+
 > "VibeSec is open source and completely free. Your code never leaves your machine - everything runs locally."
 
 **Show on screen:**
+
 - GitHub: github.com/ferg-cod3s/vibesec
 - MIT License
 - 100% Local Scanning
 - Works with Claude Code, Cursor, Cline
 
 **Script:**
+
 > "Try it yourself. Link in the description. What vulnerabilities will it find in YOUR code?"
 
 ---
@@ -143,6 +160,7 @@ Recommendation: Use parameterized queries instead:
 **Visual:** Terminal showing successful scan
 
 **Script:**
+
 > "Code fast. Code safe. Code with VibeSec."
 
 **Show:** Star button on GitHub repo
@@ -152,18 +170,21 @@ Recommendation: Use parameterized queries instead:
 ## Recording Tips
 
 ### Camera Setup
+
 - **Screen recording:** OBS Studio or Loom
 - **Resolution:** 1920x1080 minimum
 - **Frame rate:** 30fps
 - **Audio:** Clear mic, minimize background noise
 
 ### Editing
+
 - **Tool:** DaVinci Resolve (free) or Loom (no editing)
 - **Transitions:** Simple cuts, no fancy effects
 - **Text overlays:** Key points and URLs
 - **Background music:** Optional, keep it subtle
 
 ### Best Practices
+
 - Practice the script 2-3 times before recording
 - Speak clearly and at moderate pace
 - Show real vulnerabilities, not contrived examples
@@ -175,18 +196,21 @@ Recommendation: Use parameterized queries instead:
 ## Variations for Different Platforms
 
 ### YouTube (Full 3-minute version)
+
 - Include all scenes
 - Add intro/outro bumpers
 - Detailed explanations
 - Links in description
 
 ### Twitter/X (30-second clip)
+
 - Hook + Problem + Solution only
 - Fast-paced editing
 - Text overlays for context
 - Direct link to GitHub in thread
 
 ### LinkedIn (90-second professional version)
+
 - Hook + Solution + Business value
 - Emphasize security and compliance
 - Professional tone
@@ -210,6 +234,7 @@ Recommendation: Use parameterized queries instead:
 Create these example files before recording:
 
 ### 1. `vulnerable-api.ts` (SQL Injection)
+
 ```typescript
 import express from 'express';
 import { db } from './database';
@@ -226,17 +251,19 @@ app.get('/users', (req, res) => {
 ```
 
 ### 2. `vulnerable-secrets.ts` (Hardcoded Secrets)
+
 ```typescript
 const config = {
   apiKey: 'sk-1234567890abcdef',
   dbPassword: 'admin123',
-  jwtSecret: 'my-secret-key'
+  jwtSecret: 'my-secret-key',
 };
 
 export default config;
 ```
 
 ### 3. `vulnerable-command.ts` (Command Injection)
+
 ```typescript
 import { exec } from 'child_process';
 

@@ -40,32 +40,38 @@ bun --expose-gc run scripts/run-benchmarks.ts
 The suite includes 6 comprehensive scenarios:
 
 ### 1. Small Project (50 files)
+
 - **Purpose:** Typical small application
 - **Files:** 50 JavaScript files
 - **Use Case:** Small tools, prototypes, micro-services
 
 ### 2. Medium Project (500 files)
+
 - **Purpose:** Medium-sized application
 - **Files:** 500 mixed files
 - **Use Case:** Standard web applications, APIs
 
 ### 3. Large Project (2,000 files)
+
 - **Purpose:** Enterprise-scale application
 - **Files:** 2,000 files (extrapolated to 10K target)
 - **Use Case:** Large monoliths, enterprise systems
 - **Note:** Testing 2K files for practical test duration; performance extrapolates to 10K
 
 ### 4. Vulnerable Code (100 files)
+
 - **Purpose:** Files with multiple security issues
 - **Files:** 100 files with various vulnerabilities
 - **Use Case:** Stress test detection engine with high finding density
 
 ### 5. Clean Code (100 files)
+
 - **Purpose:** Files with no security issues
 - **Files:** 100 secure files
 - **Use Case:** Measure baseline scanning overhead
 
 ### 6. Mixed Languages (200 files)
+
 - **Purpose:** Multi-language project
 - **Files:** 100 JavaScript + 100 Python
 - **Use Case:** Polyglot applications
@@ -74,23 +80,24 @@ The suite includes 6 comprehensive scenarios:
 
 ### Speed Targets
 
-| Metric | Target | Rationale |
-|--------|--------|-----------|
-| 10K files | <2 minutes | Enterprise CI/CD pipeline requirement |
-| Per-file average | <12ms | Derived from 10K file target |
-| Throughput | >83 files/sec | Minimum for 2-minute target |
+| Metric           | Target        | Rationale                             |
+| ---------------- | ------------- | ------------------------------------- |
+| 10K files        | <2 minutes    | Enterprise CI/CD pipeline requirement |
+| Per-file average | <12ms         | Derived from 10K file target          |
+| Throughput       | >83 files/sec | Minimum for 2-minute target           |
 
 ### Memory Targets
 
-| Metric | Target | Rationale |
-|--------|--------|-----------|
-| Peak heap usage | <500MB | CI/CD container constraints |
-| Memory growth | <1MB/sec | Leak detection threshold |
-| RSS | <750MB | Total process memory limit |
+| Metric          | Target   | Rationale                   |
+| --------------- | -------- | --------------------------- |
+| Peak heap usage | <500MB   | CI/CD container constraints |
+| Memory growth   | <1MB/sec | Leak detection threshold    |
+| RSS             | <750MB   | Total process memory limit  |
 
 ## Metrics Collected
 
 ### Performance Metrics
+
 - **Duration:** Total scan time in milliseconds
 - **Files Scanned:** Number of files processed
 - **Throughput:** Files per second
@@ -98,6 +105,7 @@ The suite includes 6 comprehensive scenarios:
 - **10K Projection:** Estimated time for 10,000 files
 
 ### Memory Metrics
+
 - **Peak Heap Used:** Maximum heap memory used
 - **Peak RSS:** Maximum resident set size
 - **Average Heap:** Mean heap usage during scan
@@ -109,6 +117,7 @@ The suite includes 6 comprehensive scenarios:
 The benchmark system automatically detects performance regressions by comparing results against baseline measurements:
 
 ### Regression Thresholds (Default: 10%)
+
 - **Duration:** Alert if scan time increases >10%
 - **Memory:** Alert if memory usage increases >10%
 - **Throughput:** Alert if throughput decreases >10%
@@ -143,6 +152,7 @@ if (leak.detected) {
 ```
 
 ### Leak Indicators
+
 - Sustained memory growth >1MB/sec
 - No garbage collection effectiveness
 - Linear heap growth pattern
@@ -248,9 +258,7 @@ const suite = new BenchmarkSuite();
 const reports = await suite.runAll();
 
 // Check if all passed
-const allPass = reports.every(r =>
-  r.meetsTargets.speed && r.meetsTargets.memory
-);
+const allPass = reports.every((r) => r.meetsTargets.speed && r.meetsTargets.memory);
 
 // Generate report
 const reportText = BenchmarkSuite.generateReport(reports);
@@ -339,11 +347,13 @@ node scripts/compare-benchmarks.js \
 ### Speed Results
 
 **Pass Criteria:**
+
 - 10K file projection <2 minutes
 - Consistent throughput across scenarios
 - No significant regression vs baseline
 
 **Red Flags:**
+
 - Throughput <50 files/sec
 - Large variance between runs
 - Linear slowdown with file count
@@ -351,11 +361,13 @@ node scripts/compare-benchmarks.js \
 ### Memory Results
 
 **Pass Criteria:**
+
 - Peak heap <500MB
 - Stable memory growth
 - Effective garbage collection
 
 **Red Flags:**
+
 - Continuous memory growth
 - Peak heap >500MB
 - Memory not released after scan
@@ -367,6 +379,7 @@ node scripts/compare-benchmarks.js \
 **Symptom:** Benchmarks fail to meet targets
 
 **Possible Causes:**
+
 1. **Slow hardware:** Run on dedicated CI/CD infrastructure
 2. **Background processes:** Close other applications
 3. **Code regression:** Review recent changes
@@ -377,6 +390,7 @@ node scripts/compare-benchmarks.js \
 **Symptom:** Memory growth rate >1MB/sec
 
 **Debugging Steps:**
+
 1. Enable memory profiling: `--expose-gc`
 2. Run single scenario in isolation
 3. Use Node.js inspector: `--inspect`
@@ -388,12 +402,14 @@ node scripts/compare-benchmarks.js \
 **Symptom:** High variance between runs
 
 **Possible Causes:**
+
 1. Insufficient warm-up
 2. Disk I/O contention
 3. Node.js JIT compilation
 4. Garbage collection timing
 
 **Solutions:**
+
 - Run multiple iterations
 - Use SSD storage
 - Increase warm-up period
@@ -425,6 +441,7 @@ npm run benchmark
 ### Interpreting Trends
 
 Track these metrics over time:
+
 - Throughput trend (should be stable/improving)
 - Memory usage trend (should be stable)
 - P95 latency (should be stable)

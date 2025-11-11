@@ -38,12 +38,12 @@ vibesec scan . --format json | jq '.summary.bySeverity.critical' | grep -q '^0$'
 
 ### Root Fields
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `version` | string | VibeSec scanner version (e.g., "0.1.0") |
-| `scan` | object | Metadata about the scan execution |
-| `summary` | object | Aggregate statistics of findings |
-| `findings` | array | Detailed list of all security issues found |
+| Field      | Type   | Description                                |
+| ---------- | ------ | ------------------------------------------ |
+| `version`  | string | VibeSec scanner version (e.g., "0.1.0")    |
+| `scan`     | object | Metadata about the scan execution          |
+| `summary`  | object | Aggregate statistics of findings           |
+| `findings` | array  | Detailed list of all security issues found |
 
 ---
 
@@ -65,13 +65,13 @@ Contains information about the scan execution.
 
 ### Scan Fields
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `path` | string | ✅ | Absolute or relative path that was scanned |
-| `filesScanned` | number | ✅ | Total number of files analyzed |
-| `duration` | number | ✅ | Scan duration in seconds (float) |
-| `timestamp` | string | ✅ | ISO 8601 timestamp when scan started |
-| `version` | string | ✅ | VibeSec version used for scan |
+| Field          | Type   | Required | Description                                |
+| -------------- | ------ | -------- | ------------------------------------------ |
+| `path`         | string | ✅       | Absolute or relative path that was scanned |
+| `filesScanned` | number | ✅       | Total number of files analyzed             |
+| `duration`     | number | ✅       | Scan duration in seconds (float)           |
+| `timestamp`    | string | ✅       | ISO 8601 timestamp when scan started       |
+| `version`      | string | ✅       | VibeSec version used for scan              |
 
 ---
 
@@ -102,16 +102,16 @@ Aggregated statistics of all findings.
 
 ### Summary Fields
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `total` | number | Total number of findings |
-| `bySeverity` | object | Breakdown by severity level |
-| `bySeverity.critical` | number | Count of CRITICAL issues |
-| `bySeverity.high` | number | Count of HIGH issues |
-| `bySeverity.medium` | number | Count of MEDIUM issues |
-| `bySeverity.low` | number | Count of LOW issues |
-| `byCategory` | object | Breakdown by vulnerability category |
-| `byCategory.*` | number | Count per category (keys: secrets, injection, auth, incomplete, ai-specific, custom) |
+| Field                 | Type   | Description                                                                          |
+| --------------------- | ------ | ------------------------------------------------------------------------------------ |
+| `total`               | number | Total number of findings                                                             |
+| `bySeverity`          | object | Breakdown by severity level                                                          |
+| `bySeverity.critical` | number | Count of CRITICAL issues                                                             |
+| `bySeverity.high`     | number | Count of HIGH issues                                                                 |
+| `bySeverity.medium`   | number | Count of MEDIUM issues                                                               |
+| `bySeverity.low`      | number | Count of LOW issues                                                                  |
+| `byCategory`          | object | Breakdown by vulnerability category                                                  |
+| `byCategory.*`        | number | Count per category (keys: secrets, injection, auth, incomplete, ai-specific, custom) |
 
 ---
 
@@ -140,18 +140,18 @@ Array of finding objects, each representing a detected security issue.
 
 ### Finding Fields
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `id` | string | ✅ | Unique identifier for this finding |
-| `rule` | string | ✅ | Rule ID that triggered (e.g., "sql-injection") |
-| `severity` | string | ✅ | Severity level: "critical", "high", "medium", "low" |
-| `category` | string | ✅ | Category: "secrets", "injection", "auth", "incomplete", "ai-specific", "custom" |
-| `title` | string | ✅ | Human-readable title of the vulnerability |
-| `description` | string | ✅ | Detailed explanation of the security risk |
-| `location` | object | ✅ | Source code location of the issue |
-| `snippet` | string | ✅ | Code snippet showing the vulnerability in context |
-| `fix` | object | ✅ | Remediation guidance |
-| `metadata` | object | ✅ | Additional metadata (CWE, OWASP, confidence) |
+| Field         | Type   | Required | Description                                                                     |
+| ------------- | ------ | -------- | ------------------------------------------------------------------------------- |
+| `id`          | string | ✅       | Unique identifier for this finding                                              |
+| `rule`        | string | ✅       | Rule ID that triggered (e.g., "sql-injection")                                  |
+| `severity`    | string | ✅       | Severity level: "critical", "high", "medium", "low"                             |
+| `category`    | string | ✅       | Category: "secrets", "injection", "auth", "incomplete", "ai-specific", "custom" |
+| `title`       | string | ✅       | Human-readable title of the vulnerability                                       |
+| `description` | string | ✅       | Detailed explanation of the security risk                                       |
+| `location`    | object | ✅       | Source code location of the issue                                               |
+| `snippet`     | string | ✅       | Code snippet showing the vulnerability in context                               |
+| `fix`         | object | ✅       | Remediation guidance                                                            |
+| `metadata`    | object | ✅       | Additional metadata (CWE, OWASP, confidence)                                    |
 
 ---
 
@@ -173,13 +173,13 @@ Identifies the exact location of a finding in source code.
 
 ### Location Fields
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `file` | string | ✅ | Absolute path to the file containing the issue |
-| `line` | number | ✅ | Line number where issue starts (1-indexed) |
-| `column` | number | ✅ | Column number where issue starts (0-indexed) |
-| `endLine` | number | ❌ | Line number where issue ends (1-indexed) |
-| `endColumn` | number | ❌ | Column number where issue ends (0-indexed) |
+| Field       | Type   | Required | Description                                    |
+| ----------- | ------ | -------- | ---------------------------------------------- |
+| `file`      | string | ✅       | Absolute path to the file containing the issue |
+| `line`      | number | ✅       | Line number where issue starts (1-indexed)     |
+| `column`    | number | ✅       | Column number where issue starts (0-indexed)   |
+| `endLine`   | number | ❌       | Line number where issue ends (1-indexed)       |
+| `endColumn` | number | ❌       | Column number where issue ends (0-indexed)     |
 
 ---
 
@@ -203,12 +203,12 @@ Provides remediation guidance and references.
 
 ### Fix Fields
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `recommendation` | string | ✅ | High-level guidance on how to fix the issue |
-| `before` | string | ✅ | The vulnerable code line |
-| `after` | string | ❌ | Example of fixed code (may be empty for complex fixes) |
-| `references` | array | ✅ | URLs to documentation, CVEs, or resources |
+| Field            | Type   | Required | Description                                            |
+| ---------------- | ------ | -------- | ------------------------------------------------------ |
+| `recommendation` | string | ✅       | High-level guidance on how to fix the issue            |
+| `before`         | string | ✅       | The vulnerable code line                               |
+| `after`          | string | ❌       | Example of fixed code (may be empty for complex fixes) |
+| `references`     | array  | ✅       | URLs to documentation, CVEs, or resources              |
 
 ---
 
@@ -228,20 +228,20 @@ Additional metadata about the finding.
 
 ### Metadata Fields
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `confidence` | number | ✅ | Confidence score (0.0-1.0) for detection accuracy |
-| `cwe` | string | ❌ | Common Weakness Enumeration identifier (e.g., "CWE-89") |
-| `owasp` | string | ❌ | OWASP Top 10 classification (e.g., "A1:2017") |
+| Field        | Type   | Required | Description                                             |
+| ------------ | ------ | -------- | ------------------------------------------------------- |
+| `confidence` | number | ✅       | Confidence score (0.0-1.0) for detection accuracy       |
+| `cwe`        | string | ❌       | Common Weakness Enumeration identifier (e.g., "CWE-89") |
+| `owasp`      | string | ❌       | OWASP Top 10 classification (e.g., "A1:2017")           |
 
 ### Confidence Score Interpretation
 
-| Range | Interpretation |
-|-------|----------------|
+| Range     | Interpretation                                    |
+| --------- | ------------------------------------------------- |
 | 0.9 - 1.0 | Very High - Almost certainly a real vulnerability |
-| 0.8 - 0.9 | High - Likely a real vulnerability |
-| 0.7 - 0.8 | Medium - May require manual review |
-| < 0.7 | Low - Higher chance of false positive |
+| 0.8 - 0.9 | High - Likely a real vulnerability                |
+| 0.7 - 0.8 | Medium - May require manual review                |
+| < 0.7     | Low - Higher chance of false positive             |
 
 ---
 
@@ -348,13 +348,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Install VibeSec
         run: npm install -g vibesec
-      
+
       - name: Run Security Scan
         run: vibesec scan . --format json > results.json
-      
+
       - name: Check for Critical Issues
         run: |
           CRITICAL=$(jq '.summary.bySeverity.critical' results.json)
@@ -363,7 +363,7 @@ jobs:
             jq '.findings[] | select(.severity=="critical") | .title' results.json
             exit 1
           fi
-      
+
       - name: Upload Results
         uses: actions/upload-artifact@v3
         with:
@@ -397,13 +397,13 @@ security_scan:
 ```groovy
 pipeline {
   agent any
-  
+
   stages {
     stage('Security Scan') {
       steps {
         sh 'npm install -g vibesec'
         sh 'vibesec scan . --format json > results.json'
-        
+
         script {
           def results = readJSON file: 'results.json'
           if (results.summary.bySeverity.critical > 0) {
@@ -413,7 +413,7 @@ pipeline {
       }
     }
   }
-  
+
   post {
     always {
       archiveArtifacts artifacts: 'results.json'
@@ -453,41 +453,49 @@ exit 0
 ## JQ Query Examples
 
 ### Count Issues by Severity
+
 ```bash
 jq '.summary.bySeverity' results.json
 ```
 
 ### List All Critical Issues
+
 ```bash
 jq '.findings[] | select(.severity=="critical") | {title, file: .location.file, line: .location.line}' results.json
 ```
 
 ### Find All SQL Injection Issues
+
 ```bash
 jq '.findings[] | select(.rule=="sql-injection")' results.json
 ```
 
 ### Get Total Issue Count
+
 ```bash
 jq '.summary.total' results.json
 ```
 
 ### Extract File Paths with Issues
+
 ```bash
 jq -r '.findings[].location.file' results.json | sort -u
 ```
 
 ### Group by Category
+
 ```bash
 jq '.summary.byCategory' results.json
 ```
 
 ### Filter High Confidence Issues
+
 ```bash
 jq '.findings[] | select(.metadata.confidence > 0.8)' results.json
 ```
 
 ### Export CSV Format
+
 ```bash
 jq -r '.findings[] | [.severity, .category, .title, .location.file, .location.line] | @csv' results.json > issues.csv
 ```
@@ -564,9 +572,9 @@ interface FindingMetadata {
 
 ## Version History
 
-| Version | Date | Changes |
-|---------|------|---------|
-| 0.1.0 | 2025-10-09 | Initial JSON schema with CWE/OWASP metadata |
+| Version | Date       | Changes                                     |
+| ------- | ---------- | ------------------------------------------- |
+| 0.1.0   | 2025-10-09 | Initial JSON schema with CWE/OWASP metadata |
 
 ---
 

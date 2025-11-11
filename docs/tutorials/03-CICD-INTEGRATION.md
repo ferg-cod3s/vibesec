@@ -13,9 +13,11 @@
 **Visual:** Code pipeline visualization
 
 **Narration:**
+
 > "Welcome! In this tutorial, we'll integrate VibeSec into your CI/CD pipeline to automatically scan every pull request and commit. By the end, you'll have security checks running automatically, catching issues before they reach production. Let's get started!"
 
 **Screen:**
+
 ```
 Continuous Security with VibeSec
 
@@ -35,9 +37,11 @@ Duration: 10 minutes
 **Visual:** GitHub repository, then workflow file
 
 **Narration:**
+
 > "We'll start with GitHub Actions since it's the most popular CI platform. First, let's create a workflow file."
 
 **Screen:**
+
 ```bash
 # Create workflow directory
 $ mkdir -p .github/workflows
@@ -47,9 +51,11 @@ $ touch .github/workflows/vibesec.yml
 ```
 
 **Narration (continued):**
+
 > "Now let's add our security scanning workflow. This will run on every push and pull request."
 
 **Screen - Editor showing `.github/workflows/vibesec.yml`:**
+
 ```yaml
 name: Security Scan
 
@@ -93,30 +99,33 @@ jobs:
 **Visual:** Split screen - workflow file + GitHub UI
 
 **Narration:**
+
 > "Now let's make this workflow actually block builds when critical or high-severity issues are found. We'll add a script that checks the results."
 
 **Screen - Add new step to workflow:**
+
 ```yaml
-      - name: Check for Critical Issues
-        run: |
-          # Parse JSON and count critical/high issues
-          CRITICAL=$(jq '.summary.bySeverity.critical' report.json)
-          HIGH=$(jq '.summary.bySeverity.high' report.json)
+- name: Check for Critical Issues
+  run: |
+    # Parse JSON and count critical/high issues
+    CRITICAL=$(jq '.summary.bySeverity.critical' report.json)
+    HIGH=$(jq '.summary.bySeverity.high' report.json)
 
-          echo "Critical issues: $CRITICAL"
-          echo "High issues: $HIGH"
+    echo "Critical issues: $CRITICAL"
+    echo "High issues: $HIGH"
 
-          if [ "$CRITICAL" -gt 0 ] || [ "$HIGH" -gt 0 ]; then
-            echo "❌ Build blocked: Found $CRITICAL critical and $HIGH high severity issues"
-            exit 1
-          fi
+    if [ "$CRITICAL" -gt 0 ] || [ "$HIGH" -gt 0 ]; then
+      echo "❌ Build blocked: Found $CRITICAL critical and $HIGH high severity issues"
+      exit 1
+    fi
 
-          echo "✅ Security scan passed"
+    echo "✅ Security scan passed"
 ```
 
 **Visual:** Show GitHub PR with failed check
 
 **Screen - GitHub PR view:**
+
 ```
 Checks
   ❌ Security Scan - Failed
@@ -136,57 +145,60 @@ Checks
 **Visual:** GitHub PR interface
 
 **Narration:**
+
 > "Let's make our security scans even more useful by adding automatic comments to pull requests. We'll use a GitHub Action to post findings directly in the PR."
 
 **Screen - Add PR comment step:**
+
 ```yaml
-      - name: Comment on PR
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const fs = require('fs');
-            const report = JSON.parse(fs.readFileSync('report.json', 'utf8'));
+- name: Comment on PR
+  if: github.event_name == 'pull_request'
+  uses: actions/github-script@v6
+  with:
+    script: |
+      const fs = require('fs');
+      const report = JSON.parse(fs.readFileSync('report.json', 'utf8'));
 
-            const body = `
-            ## 🔒 VibeSec Security Scan Results
+      const body = `
+      ## 🔒 VibeSec Security Scan Results
 
-            **Status:** ${report.summary.total === 0 ? '✅ No issues found' : '⚠️ Issues found'}
+      **Status:** ${report.summary.total === 0 ? '✅ No issues found' : '⚠️ Issues found'}
 
-            | Severity | Count |
-            |----------|-------|
-            | Critical | ${report.summary.bySeverity.critical} |
-            | High | ${report.summary.bySeverity.high} |
-            | Medium | ${report.summary.bySeverity.medium} |
-            | Low | ${report.summary.bySeverity.low} |
+      | Severity | Count |
+      |----------|-------|
+      | Critical | ${report.summary.bySeverity.critical} |
+      | High | ${report.summary.bySeverity.high} |
+      | Medium | ${report.summary.bySeverity.medium} |
+      | Low | ${report.summary.bySeverity.low} |
 
-            **Total Issues:** ${report.summary.total}
+      **Total Issues:** ${report.summary.total}
 
-            ${report.findings.slice(0, 5).map(f => `
-            ### ${f.severity.toUpperCase()}: ${f.title}
-            **Location:** \`${f.location.file}:${f.location.line}\`
+      ${report.findings.slice(0, 5).map(f => `
+      ### ${f.severity.toUpperCase()}: ${f.title}
+      **Location:** \`${f.location.file}:${f.location.line}\`
 
-            ${f.description}
+      ${f.description}
 
-            **Fix:** ${f.fix.recommendation}
-            `).join('\n\n')}
+      **Fix:** ${f.fix.recommendation}
+      `).join('\n\n')}
 
-            ${report.summary.total > 5 ? `\n*... and ${report.summary.total - 5} more issues*` : ''}
+      ${report.summary.total > 5 ? `\n*... and ${report.summary.total - 5} more issues*` : ''}
 
-            [View Full Report](https://github.com/${{github.repository}}/actions/runs/${{github.run_id}})
-            `;
+      [View Full Report](https://github.com/${{github.repository}}/actions/runs/${{github.run_id}})
+      `;
 
-            github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: body
-            });
+      github.rest.issues.createComment({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        issue_number: context.issue.number,
+        body: body
+      });
 ```
 
 **Visual:** Show PR with VibeSec comment
 
 **Screen - GitHub PR comment:**
+
 ```
 vibesec-bot commented 2 minutes ago
 
@@ -219,23 +231,26 @@ Fix: Use process.env.API_KEY instead
 **Visual:** GitHub Security tab
 
 **Narration:**
+
 > "GitHub has a built-in Security tab that can show your security findings in a beautiful interface. Let's integrate with it using SARIF format."
 
 **Screen - Update workflow to use SARIF:**
-```yaml
-      - name: Run Security Scan (SARIF)
-        run: vibesec scan . --format sarif --output results.sarif
 
-      - name: Upload SARIF to GitHub Security
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: results.sarif
-          category: vibesec
+```yaml
+- name: Run Security Scan (SARIF)
+  run: vibesec scan . --format sarif --output results.sarif
+
+- name: Upload SARIF to GitHub Security
+  uses: github/codeql-action/upload-sarif@v2
+  with:
+    sarif_file: results.sarif
+    category: vibesec
 ```
 
 **Visual:** Navigate to Security tab
 
 **Screen - GitHub Security tab:**
+
 ```
 Security › Code scanning alerts
 
@@ -263,9 +278,11 @@ Alerts:
 **Visual:** GitLab interface
 
 **Narration:**
+
 > "Using GitLab? No problem! Here's how to set up VibeSec in GitLab CI/CD."
 
 **Screen - Create `.gitlab-ci.yml`:**
+
 ```yaml
 security-scan:
   stage: test
@@ -300,6 +317,7 @@ security-scan:
 **Visual:** GitLab MR with security widget
 
 **Screen - GitLab MR view:**
+
 ```
 Security scanning detected 2 potential vulnerabilities
 
@@ -317,22 +335,24 @@ Security scanning detected 2 potential vulnerabilities
 **Visual:** Config file + workflow
 
 **Narration:**
+
 > "For advanced users, you can customize which issues block your builds using a config file."
 
 **Screen - Create `.vibesec.yaml`:**
+
 ```yaml
 version: 1
 
 ci:
-  fail_on: high  # Fail build if high or critical issues found
+  fail_on: high # Fail build if high or critical issues found
   allow_list:
-    - rule-id-123  # Temporarily allow specific findings
+    - rule-id-123 # Temporarily allow specific findings
 
 scan:
   exclude:
     - node_modules/**
     - dist/**
-    - "*.test.js"
+    - '*.test.js'
 
 severity:
   # Treat specific categories as more severe
@@ -344,11 +364,11 @@ severity:
 **Visual:** Show workflow using config
 
 **Screen - Simplified workflow:**
-```yaml
-      - name: Run Security Scan
-        run: vibesec scan . --config .vibesec.yaml --format json
 
-      # Config file handles blocking logic automatically!
+```yaml
+- name: Run Security Scan
+  run: vibesec scan . --config .vibesec.yaml --format json
+# Config file handles blocking logic automatically!
 ```
 
 ---
@@ -358,45 +378,48 @@ severity:
 **Visual:** Slack/Discord integration
 
 **Narration:**
+
 > "Finally, let's add Slack or Discord notifications so your team knows about security issues immediately."
 
 **Screen - Add notification step:**
+
 ```yaml
-      - name: Notify Slack
-        if: failure()
-        uses: slackapi/slack-github-action@v1
-        with:
-          payload: |
+- name: Notify Slack
+  if: failure()
+  uses: slackapi/slack-github-action@v1
+  with:
+    payload: |
+      {
+        "text": "🚨 Security scan failed on ${{ github.repository }}",
+        "attachments": [{
+          "color": "danger",
+          "fields": [
             {
-              "text": "🚨 Security scan failed on ${{ github.repository }}",
-              "attachments": [{
-                "color": "danger",
-                "fields": [
-                  {
-                    "title": "Branch",
-                    "value": "${{ github.ref }}",
-                    "short": true
-                  },
-                  {
-                    "title": "Commit",
-                    "value": "${{ github.sha }}",
-                    "short": true
-                  }
-                ],
-                "actions": [{
-                  "type": "button",
-                  "text": "View Report",
-                  "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-                }]
-              }]
+              "title": "Branch",
+              "value": "${{ github.ref }}",
+              "short": true
+            },
+            {
+              "title": "Commit",
+              "value": "${{ github.sha }}",
+              "short": true
             }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          ],
+          "actions": [{
+            "type": "button",
+            "text": "View Report",
+            "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }]
+        }]
+      }
+  env:
+    SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 ```
 
 **Visual:** Show Slack notification
 
 **Screen - Slack message:**
+
 ```
 VibeSec Bot  2:34 PM
 🚨 Security scan failed on acme/api-service
@@ -414,9 +437,11 @@ Commit: abc123d
 **Visual:** Summary checklist
 
 **Narration:**
+
 > "Great job! You've now got automated security scanning in your CI/CD pipeline. Every commit is checked, PRs are annotated, and your team is notified of issues. Your code is now much safer!"
 
 **Screen:**
+
 ```
 ✅ What you've learned:
   • GitHub Actions integration
@@ -443,29 +468,34 @@ Commit: abc123d
 ## Production Notes
 
 ### Visual Style
+
 - **Dark IDE theme:** Use VS Code or similar for file editing
 - **Split screens:** Show code + result simultaneously when possible
 - **Highlight changes:** Use diff view or annotations
 - **Animated arrows:** Point out important configuration options
 
 ### Pacing
+
 - **Technical audience:** Can move faster than beginner tutorials
 - **Pause on configs:** Allow 5-6 seconds to read YAML files
 - **Show real results:** Use actual GitHub/GitLab UI, not mockups
 
 ### Accessibility
+
 - **Code contrast:** Ensure syntax highlighting is readable
 - **Captions:** Include command names and file paths
 - **Shortcuts:** Show keyboard shortcuts being used
 - **Zoom:** Zoom in on small text or icons
 
 ### Demo Environment
+
 - **Real repository:** Use actual project, not fake examples
 - **Show failures:** Demo both passing and failing scans
 - **Live results:** Show real GitHub Actions running
 - **Actual PRs:** Use genuine pull request interface
 
 ### B-Roll Suggestions
+
 - GitHub Actions tab showing running workflow
 - Security tab with findings
 - PR with checks pending/failed/passed
@@ -477,6 +507,7 @@ Commit: abc123d
 ## Key Takeaways
 
 By the end of this tutorial, viewers should be able to:
+
 1. ✅ Set up VibeSec in GitHub Actions
 2. ✅ Block builds when security issues are found
 3. ✅ Add PR comments and annotations
@@ -490,17 +521,20 @@ By the end of this tutorial, viewers should be able to:
 ## Platform-Specific Variations
 
 ### GitHub Actions (Covered)
+
 - ✅ Basic workflow
 - ✅ PR comments
 - ✅ SARIF upload
 - ✅ Slack notifications
 
 ### GitLab CI/CD (Covered)
+
 - ✅ .gitlab-ci.yml
 - ✅ Security reports
 - ✅ MR widgets
 
 ### CircleCI (Brief mention)
+
 ```yaml
 version: 2.1
 jobs:
@@ -514,6 +548,7 @@ jobs:
 ```
 
 ### Jenkins (Brief mention)
+
 ```groovy
 pipeline {
   agent any

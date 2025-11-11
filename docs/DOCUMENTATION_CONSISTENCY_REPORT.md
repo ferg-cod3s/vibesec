@@ -15,10 +15,10 @@ This report tracks consistency across all VibeSec documentation files.
 
 ### Current State
 
-| Version | Count | Files |
-|---------|-------|-------|
-| 1.0.0 | 7 | Most documentation |
-| 0.1.0 | 1 | JSON_SCHEMA.md (outdated) |
+| Version | Count | Files                     |
+| ------- | ----- | ------------------------- |
+| 1.0.0   | 7     | Most documentation        |
+| 0.1.0   | 1     | JSON_SCHEMA.md (outdated) |
 
 ### Issues Found
 
@@ -35,15 +35,16 @@ This report tracks consistency across all VibeSec documentation files.
 
 ### Current State
 
-| Date | Count | Notes |
-|------|-------|-------|
-| 2025-10-10 | 8 | Most recent (API.md, INTEGRATIONS.md, INDEX.md) |
-| 2025-10-09 | 11 | Previous update batch |
-| 2025-01-09 | 2 | Older documents |
+| Date       | Count | Notes                                           |
+| ---------- | ----- | ----------------------------------------------- |
+| 2025-10-10 | 8     | Most recent (API.md, INTEGRATIONS.md, INDEX.md) |
+| 2025-10-09 | 11    | Previous update batch                           |
+| 2025-01-09 | 2     | Older documents                                 |
 
 ### Issues Found
 
 ⚠️ **Mixed date formats:**
+
 - Some use `**Last Updated:** 2025-10-09` (with colon)
 - Some use `**Last Updated**: 2025-10-09` (without colon after "Updated")
 
@@ -59,6 +60,7 @@ This report tracks consistency across all VibeSec documentation files.
 ### Current State
 
 ✅ **Good:**
+
 - Major docs use UPPERCASE: `README.md`, `ARCHITECTURE.md`, `API.md`
 - SOP docs use lowercase: `agents.md`, `claude.md`, `common-mistakes.md`
 - Clear, descriptive names
@@ -75,6 +77,7 @@ This report tracks consistency across all VibeSec documentation files.
 ### Missing Elements
 
 Some documents lack:
+
 - Table of contents (for long docs)
 - Version headers
 - Last updated dates
@@ -82,6 +85,7 @@ Some documents lack:
 ### Documents Missing Version/Date Headers
 
 Need to check:
+
 - CONTRIBUTING.md
 - RESEARCH.md
 - Some SOP documents
@@ -98,6 +102,7 @@ Need to check:
 ### Current State
 
 ✅ **Good:**
+
 - Most docs link to related documentation
 - INDEX.md provides comprehensive navigation
 - README.md updated with complete doc links
@@ -118,6 +123,7 @@ Need to check:
 ### Terminology
 
 ✅ **Consistent usage:**
+
 - "VibeSec" (not "Vibe Sec" or "vibe-sec")
 - "AI-generated code" (not "AI code" or "generated code")
 - "vibe coders" (lowercase, not "Vibe Coders")
@@ -125,6 +131,7 @@ Need to check:
 ### Tone
 
 ✅ **Consistent:**
+
 - Professional but approachable
 - Developer-friendly
 - Clear, concise language
@@ -136,6 +143,7 @@ Need to check:
 ### Complete Documentation
 
 ✅ **Core Documentation:**
+
 - [x] README.md
 - [x] ARCHITECTURE.md
 - [x] POC_SPEC.md
@@ -148,6 +156,7 @@ Need to check:
 - [x] INDEX.md ✨ NEW
 
 ✅ **SOP Documentation:**
+
 - [x] agents.md
 - [x] claude.md
 - [x] common-mistakes.md
@@ -155,6 +164,7 @@ Need to check:
 ### Missing Documentation
 
 ⏳ **Planned:**
+
 - [ ] DEPLOYMENT.md - Production deployment guide
 - [ ] SECURITY.md - Security best practices
 - [ ] TROUBLESHOOTING.md - Common issues and solutions
@@ -192,17 +202,17 @@ Brief description...
 
 ### Current Compliance
 
-| Document | Has Version | Has Date | Has ToC | Status |
-|----------|-------------|----------|---------|--------|
-| ARCHITECTURE.md | ✅ | ✅ | ✅ | ✅ |
-| POC_SPEC.md | ✅ | ✅ | ✅ | ✅ |
-| MVP_ROADMAP.md | ✅ | ✅ | ✅ | ✅ |
-| DETECTION_RULES.md | ✅ | ✅ | ✅ | ✅ |
-| API.md | ✅ | ✅ | ✅ | ✅ |
-| INTEGRATIONS.md | ✅ | ✅ | ✅ | ✅ |
-| INDEX.md | ✅ | ✅ | ✅ | ✅ |
-| CONTRIBUTING.md | ❌ | ❌ | ✅ | ⚠️ |
-| RESEARCH.md | ❌ | ✅ | ❌ | ⚠️ |
+| Document           | Has Version | Has Date | Has ToC | Status |
+| ------------------ | ----------- | -------- | ------- | ------ |
+| ARCHITECTURE.md    | ✅          | ✅       | ✅      | ✅     |
+| POC_SPEC.md        | ✅          | ✅       | ✅      | ✅     |
+| MVP_ROADMAP.md     | ✅          | ✅       | ✅      | ✅     |
+| DETECTION_RULES.md | ✅          | ✅       | ✅      | ✅     |
+| API.md             | ✅          | ✅       | ✅      | ✅     |
+| INTEGRATIONS.md    | ✅          | ✅       | ✅      | ✅     |
+| INDEX.md           | ✅          | ✅       | ✅      | ✅     |
+| CONTRIBUTING.md    | ❌          | ❌       | ✅      | ⚠️     |
+| RESEARCH.md        | ❌          | ✅       | ❌      | ⚠️     |
 
 ---
 
@@ -293,13 +303,13 @@ jobs:
 
 **Breakdown:**
 
-| Category | Score | Weight | Notes |
-|----------|-------|--------|-------|
-| **Completeness** | 90/100 | 30% | Most core docs exist |
-| **Consistency** | 85/100 | 25% | Minor version/date inconsistencies |
-| **Structure** | 90/100 | 20% | Good organization, clear headers |
-| **Accessibility** | 80/100 | 15% | New INDEX.md helps navigation |
-| **Accuracy** | 85/100 | 10% | Some docs may need updates |
+| Category          | Score  | Weight | Notes                              |
+| ----------------- | ------ | ------ | ---------------------------------- |
+| **Completeness**  | 90/100 | 30%    | Most core docs exist               |
+| **Consistency**   | 85/100 | 25%    | Minor version/date inconsistencies |
+| **Structure**     | 90/100 | 20%    | Good organization, clear headers   |
+| **Accessibility** | 80/100 | 15%    | New INDEX.md helps navigation      |
+| **Accuracy**      | 85/100 | 10%    | Some docs may need updates         |
 
 **Overall:** Strong documentation with minor improvements needed
 
@@ -348,10 +358,12 @@ jobs:
 ## Contact
 
 **Documentation Maintainers:**
+
 - VibeSec Team
 - [email protected]
 
 **Contribute:**
+
 - See [CONTRIBUTING.md](CONTRIBUTING.md)
 - Join [Discord #documentation](https://discord.gg/vibesec)
 

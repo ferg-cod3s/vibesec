@@ -12,16 +12,16 @@ VibeSec is a well-architected security scanner for AI-generated code with strong
 
 ### Overall Assessment
 
-| Category | Status | Score | Blocking? |
-|----------|--------|-------|-----------|
-| **Code Quality** | ✅ Good | 8/10 | No |
-| **Architecture** | ✅ Excellent | 9/10 | No |
-| **Testing** | 🔴 Broken | 3/10 | **YES** |
-| **Documentation** | 🟡 Partial | 7/10 | No |
-| **Security** | ✅ Good | 8/10 | No |
-| **Build Process** | 🟡 Partial | 6/10 | **YES** |
-| **Observability** | ✅ Good | 8/10 | No |
-| **Deployment Config** | 🔴 Missing | 2/10 | **YES** |
+| Category              | Status       | Score | Blocking? |
+| --------------------- | ------------ | ----- | --------- |
+| **Code Quality**      | ✅ Good      | 8/10  | No        |
+| **Architecture**      | ✅ Excellent | 9/10  | No        |
+| **Testing**           | 🔴 Broken    | 3/10  | **YES**   |
+| **Documentation**     | 🟡 Partial   | 7/10  | No        |
+| **Security**          | ✅ Good      | 8/10  | No        |
+| **Build Process**     | 🟡 Partial   | 6/10  | **YES**   |
+| **Observability**     | ✅ Good      | 8/10  | No        |
+| **Deployment Config** | 🔴 Missing   | 2/10  | **YES**   |
 
 **VERDICT:** Cannot deploy to production until test suite is fixed, build process is standardized, and deployment infrastructure is added.
 
@@ -34,23 +34,27 @@ VibeSec is a well-architected security scanner for AI-generated code with strong
 **Issue:** All 7 test suites fail with TypeScript compilation errors.
 
 **Impact:**
+
 - Cannot verify code functionality
 - Cannot ensure regression safety
 - CI/CD pipeline would fail
 
 **Errors Found:**
+
 ```
 tests/mcp/integration.test.ts - 22 TypeScript errors (unknown types)
 tests/unit/reporters.test.ts - 6 TypeScript errors (enum mismatches)
 ```
 
 **Root Causes:**
+
 1. Type mismatches between test expectations and actual types
 2. Category enum values in tests don't match scanner/core/types.ts
 3. Timestamp type mismatch (Date vs string)
 4. Missing type assertions for MCP response objects
 
 **Fix Required:**
+
 - Update test type assertions in `tests/mcp/integration.test.ts:254-448`
 - Fix Category enum usage in `tests/unit/reporters.test.ts:10-54`
 - Convert Date objects to ISO strings in test fixtures
@@ -65,6 +69,7 @@ tests/unit/reporters.test.ts - 6 TypeScript errors (enum mismatches)
 **Issue:** Build script requires Bun runtime, but deployment environment may only have Node.js.
 
 **Current Build Command:**
+
 ```bash
 npm run build
 # Runs: tsc && bun copy-assets.js
@@ -72,20 +77,25 @@ npm run build
 ```
 
 **Impact:**
+
 - Cannot build in CI/CD environments without Bun
 - Inconsistent between development and production environments
 - npm package cannot be built by contributors without Bun
 
 **Workaround Applied:**
+
 - ✅ TypeScript compilation works: `npx tsc`
 - ✅ Asset copying works: `node copy-assets.js`
 
 **Fix Required:**
 Replace in `package.json`:
+
 ```json
 "build": "tsc && bun copy-assets.js"
 ```
+
 With:
+
 ```json
 "build": "tsc && node copy-assets.js"
 ```
@@ -99,6 +109,7 @@ With:
 **Issue:** No Docker, CI/CD, or deployment files exist.
 
 **Missing Files:**
+
 - ❌ Dockerfile
 - ❌ .dockerignore
 - ❌ docker-compose.yml
@@ -108,6 +119,7 @@ With:
 - ❌ Helm charts
 
 **Impact:**
+
 - Cannot deploy to containerized environments
 - No automated testing in CI/CD
 - No automated publishing to npm
@@ -126,14 +138,17 @@ With:
 **Problem:** Project uses Bun shebang (`#!/usr/bin/env bun`) in entry point but supports Node.js.
 
 **Files Affected:**
+
 - `bin/vibesec-mcp` - Uses `#!/usr/bin/env bun`
 - `package.json` - Declares both Node >=16 and Bun >=1.0 in engines
 
 **Impact:**
+
 - MCP server won't start if user only has Node.js installed
 - Confusing for contributors and users
 
 **Recommendation:**
+
 1. Choose primary runtime: **Node.js** (wider compatibility) or **Bun** (better performance)
 2. If Bun-first: Document Node.js compatibility and provide fallback entry point
 3. If Node-first: Change shebang to `#!/usr/bin/env node` and use ESM imports
@@ -145,17 +160,20 @@ With:
 ### 🟡 ISSUE #2: Documentation Inconsistencies
 
 **Problems Found:**
+
 1. **Broken Link:** `./docs/demo.gif` referenced in README (line 34) doesn't exist
 2. **Status Confusion:** Different docs claim different phases (Phase 4/Phase 5/MVP)
 3. **Feature Claims:** Integrations listed as "✅ Current" but documented as "Planned"
 4. **Component READMEs:** cli/README.md and scanner/README.md say "Coming soon" despite being implemented
 
 **Impact:**
+
 - Confuses potential users and contributors
 - Reduces professional credibility
 - Makes it hard to understand actual project status
 
 **Fix Required:**
+
 - Remove or create demo.gif
 - Consolidate phase/status documentation into single source of truth (STATUS.md)
 - Update component READMEs with actual implementation details
@@ -208,6 +226,7 @@ With:
 **Gap:** No troubleshooting guide for common errors.
 
 **Recommendation:** Create `docs/TROUBLESHOOTING.md` with:
+
 - MCP connection issues
 - Build failures
 - Common scan errors
@@ -222,6 +241,7 @@ With:
 **Gap:** .env.example exists but no central guide explaining variables.
 
 **Recommendation:** Create `docs/ENVIRONMENT_VARIABLES.md` with:
+
 - Required vs optional variables
 - Where to get API tokens (Sentry, Snyk, Socket.dev)
 - Default values
@@ -236,6 +256,7 @@ With:
 **Gap:** `examples/sample-api/` exists but has no README or usage guide.
 
 **Recommendation:** Add examples/sample-api/README.md explaining:
+
 - What vulnerabilities are present
 - How to scan with VibeSec
 - Expected findings
@@ -338,6 +359,7 @@ $ npm audit
 **Dependencies:** 480 total (135 prod, 346 dev)
 
 **Outdated Critical Dependencies:**
+
 - eslint@8.57.1 - No longer supported (use v9+) ⚠️
 - glob@7.2.3 - No longer supported (use v9+) ⚠️
 - rimraf@3.0.2 - No longer supported (use v4+) ⚠️
@@ -349,17 +371,20 @@ $ npm audit
 ### Secrets Management
 
 **Current Approach:**
+
 - ✅ .env.example template provided
 - ✅ .env in .gitignore
 - ✅ Environment variable usage throughout
 - ⚠️ Some hardcoded paths in .env.example (e.g., `/home/f3rg/...`)
 
 **Issues:**
+
 1. MCP configuration may contain credentials (documented warning exists)
 2. No secrets rotation automation
 3. No vault integration for production
 
 **Recommendation for Production:**
+
 - Use secret management service (AWS Secrets Manager, HashiCorp Vault)
 - Implement credential rotation
 - Add secrets scanning to CI/CD
@@ -369,9 +394,10 @@ $ npm audit
 ### Configuration Security
 
 **Files Reviewed:**
-- ✅ .gitignore properly excludes sensitive files (.env, *.key, *.pem)
+
+- ✅ .gitignore properly excludes sensitive files (.env, _.key, _.pem)
 - ✅ .mcp.json excluded from git
-- ✅ Database files excluded (*.db, *.sqlite)
+- ✅ Database files excluded (_.db, _.sqlite)
 - ✅ Logs excluded from version control
 
 ---
@@ -381,12 +407,14 @@ $ npm audit
 ### Current Build Process
 
 **Steps:**
+
 1. `npm install` - ✅ Works (tested)
 2. `npx tsc` - ✅ Works (tested)
 3. `node copy-assets.js` - ✅ Works (tested)
 4. Build output: `dist/` directory created
 
 **Build Outputs:**
+
 ```
 dist/
 ├── cli/
@@ -406,27 +434,27 @@ dist/
 
 ### Deployment Readiness Checklist
 
-| Item | Status | Priority | Notes |
-|------|--------|----------|-------|
-| Build succeeds | ✅ | P0 | Works with node |
-| Tests pass | 🔴 | P0 | **Blocker** |
-| No dependency vulnerabilities | ✅ | P0 | Clean |
-| Documentation exists | 🟡 | P1 | Needs updates |
-| LICENSE file present | ✅ | P0 | MIT |
-| .gitignore configured | ✅ | P0 | Complete |
-| Environment variables documented | ✅ | P1 | .env.example exists |
-| Dockerfile | 🔴 | P0 | **Missing** |
-| CI/CD pipeline | 🔴 | P0 | **Missing** |
-| Release process documented | 🔴 | P1 | **Missing** |
-| Version strategy | 🟡 | P1 | 0.1.0 in package.json |
-| npm publish script | 🔴 | P0 | **Missing** |
-| Health check endpoint | 🟡 | P2 | N/A for CLI |
-| Monitoring configured | ✅ | P1 | Sentry ready |
-| Logging configured | ✅ | P1 | Logger exists |
-| Error handling | ✅ | P1 | Good coverage |
-| Performance benchmarks | 🟡 | P2 | Scripts exist |
-| Security scanning | 🔴 | P0 | **Missing from CI** |
-| Load testing | 🔴 | P2 | **Not done** |
+| Item                             | Status | Priority | Notes                 |
+| -------------------------------- | ------ | -------- | --------------------- |
+| Build succeeds                   | ✅     | P0       | Works with node       |
+| Tests pass                       | 🔴     | P0       | **Blocker**           |
+| No dependency vulnerabilities    | ✅     | P0       | Clean                 |
+| Documentation exists             | 🟡     | P1       | Needs updates         |
+| LICENSE file present             | ✅     | P0       | MIT                   |
+| .gitignore configured            | ✅     | P0       | Complete              |
+| Environment variables documented | ✅     | P1       | .env.example exists   |
+| Dockerfile                       | 🔴     | P0       | **Missing**           |
+| CI/CD pipeline                   | 🔴     | P0       | **Missing**           |
+| Release process documented       | 🔴     | P1       | **Missing**           |
+| Version strategy                 | 🟡     | P1       | 0.1.0 in package.json |
+| npm publish script               | 🔴     | P0       | **Missing**           |
+| Health check endpoint            | 🟡     | P2       | N/A for CLI           |
+| Monitoring configured            | ✅     | P1       | Sentry ready          |
+| Logging configured               | ✅     | P1       | Logger exists         |
+| Error handling                   | ✅     | P1       | Good coverage         |
+| Performance benchmarks           | 🟡     | P2       | Scripts exist         |
+| Security scanning                | 🔴     | P0       | **Missing from CI**   |
+| Load testing                     | 🔴     | P2       | **Not done**          |
 
 ---
 
@@ -435,11 +463,13 @@ dist/
 ### Supported Platforms
 
 **Operating Systems:**
+
 - ✅ Linux (primary development platform)
 - ⚠️ macOS (should work, not explicitly tested)
 - ⚠️ Windows (unknown, may have path issues)
 
 **Runtime:**
+
 - ✅ Node.js >= 16.0.0 (declared in package.json)
 - ⚠️ Bun >= 1.0.0 (preferred but creates compatibility issues)
 
@@ -450,6 +480,7 @@ dist/
 ### Resource Requirements
 
 **Estimates (not tested):**
+
 - Memory: ~50-100MB base + file size dependent
 - CPU: Regex-heavy (benefits from multiple cores)
 - Disk: Minimal (~10MB for application, rules cached)
@@ -466,6 +497,7 @@ dist/
 **Status:** ✅ Fully implemented and functional
 
 **Components:**
+
 - ✅ JSON-RPC 2.0 protocol handler
 - ✅ Stdio transport
 - ✅ Tool registration system
@@ -473,6 +505,7 @@ dist/
 - ✅ Type system
 
 **Tools:**
+
 1. ✅ vibesec_scan - Scans files for vulnerabilities
 2. ✅ vibesec_list_rules - Lists detection rules
 
@@ -485,6 +518,7 @@ dist/
 ### MCP Configuration
 
 **Claude Code Setup:**
+
 ```json
 {
   "mcpServers": {
@@ -497,11 +531,13 @@ dist/
 ```
 
 **Issues:**
+
 1. Requires Bun runtime
 2. Absolute path required (not portable)
 3. No npm package installation method
 
 **Recommendation:** Publish to npm and allow:
+
 ```json
 {
   "mcpServers": {
@@ -522,6 +558,7 @@ dist/
 **Implementation:** Custom Logger class (`src/observability/logger.ts`)
 
 **Features:**
+
 - ✅ Log levels (DEBUG, INFO, WARN, ERROR, FATAL)
 - ✅ Structured logging
 - ✅ Context-aware loggers
@@ -537,6 +574,7 @@ dist/
 **Implementation:** Sentry integration (`src/observability/integrations/sentry.ts`)
 
 **Features:**
+
 - ✅ Error capture with context
 - ✅ Breadcrumb tracking
 - ✅ Performance tracing
@@ -544,6 +582,7 @@ dist/
 - ✅ Proper shutdown flushing
 
 **Configuration:**
+
 ```env
 SENTRY_DSN=https://YOUR_KEY_HERE@sentry.fergify.work/14
 SENTRY_TRACES_SAMPLE_RATE=0.1
@@ -559,6 +598,7 @@ SENTRY_PROFILES_SAMPLE_RATE=0.1
 **Implementation:** MetricsCollector singleton (`src/observability/metrics.ts`)
 
 **Features:**
+
 - ✅ Counter metrics
 - ✅ Timing metrics
 - ✅ Memory tracking
@@ -573,6 +613,7 @@ SENTRY_PROFILES_SAMPLE_RATE=0.1
 ## Documentation Review Summary
 
 **Documentation exists for:**
+
 - ✅ README with quick start
 - ✅ Architecture documentation
 - ✅ API reference
@@ -583,6 +624,7 @@ SENTRY_PROFILES_SAMPLE_RATE=0.1
 - ✅ User testing guide
 
 **Missing documentation:**
+
 - 🔴 Deployment guide
 - 🔴 Troubleshooting guide
 - 🔴 Release process
@@ -592,6 +634,7 @@ SENTRY_PROFILES_SAMPLE_RATE=0.1
 - 🟡 Security best practices for deployment
 
 **Documentation Quality Issues:**
+
 1. Broken link to demo.gif
 2. Inconsistent phase/status claims
 3. Some component READMEs say "coming soon" despite implementation
@@ -604,6 +647,7 @@ SENTRY_PROFILES_SAMPLE_RATE=0.1
 ### Immediate Actions (Before Any Deployment)
 
 **Critical (P0) - Must Fix:**
+
 1. ✅ Fix test suite TypeScript errors (2-3 hours)
 2. ✅ Change build script from Bun to Node (5 minutes)
 3. ✅ Create Dockerfile (1 hour)
@@ -617,6 +661,7 @@ SENTRY_PROFILES_SAMPLE_RATE=0.1
 ### Short-Term (Before Public Launch)
 
 **High Priority (P1) - Should Fix:**
+
 1. Resolve runtime environment (Node vs Bun) (2 hours)
 2. Fix documentation inconsistencies (3 hours)
 3. Remove code duplication (0.5 hours)
@@ -631,6 +676,7 @@ SENTRY_PROFILES_SAMPLE_RATE=0.1
 ### Medium-Term (Post-Launch Improvements)
 
 **Medium Priority (P2) - Nice to Have:**
+
 1. Add regex caching for performance (1 hour)
 2. Fix silent failures in dependency analyzer (0.5 hours)
 3. Add metrics export (Prometheus) (3 hours)
@@ -647,6 +693,7 @@ SENTRY_PROFILES_SAMPLE_RATE=0.1
 See `DEPLOYMENT_PLAN.md` for complete step-by-step deployment instructions.
 
 **Timeline:**
+
 - **Phase 1:** Fix critical blockers (7 hours)
 - **Phase 2:** Testing and validation (4 hours)
 - **Phase 3:** Documentation updates (3 hours)
@@ -704,6 +751,7 @@ VibeSec is a well-architected, feature-rich security scanner with strong potenti
 **Current State:** Not ready for production deployment due to test failures and missing deployment infrastructure.
 
 **Path to Production:**
+
 1. Fix test suite (3 hours)
 2. Standardize build process (1 hour)
 3. Add deployment infrastructure (6 hours)

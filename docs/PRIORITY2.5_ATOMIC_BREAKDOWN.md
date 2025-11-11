@@ -18,15 +18,19 @@ Transform VibeSec from a CLI-only tool into the **first AI-native security scann
 ## Phase Breakdown
 
 ### Phase 1: Core MCP Infrastructure (16 hours)
+
 Build the foundational MCP server with stdio transport and tool registration.
 
 ### Phase 2: Basic Tools (16 hours)
+
 Implement `vibesec_scan` and `vibesec_list_rules` for core functionality.
 
 ### Phase 3: Advanced Tools (12 hours)
+
 Implement `vibesec_fix_suggestion`, `vibesec_validate_fix`, and `vibesec_init_config`.
 
 ### Phase 4: Testing & Documentation (4 hours)
+
 Comprehensive tests, integration testing, and documentation.
 
 ---
@@ -38,7 +42,9 @@ Comprehensive tests, integration testing, and documentation.
 **Objective**: Create the base MCP server structure with proper type definitions.
 
 **Atomic Tasks**:
+
 1. **Create directory structure** (15min)
+
    ```
    src/mcp/
    ├── server.ts           # Main MCP server class
@@ -50,6 +56,7 @@ Comprehensive tests, integration testing, and documentation.
    ```
 
 2. **Define MCP types** (45min) - `src/mcp/types.ts`
+
    ```typescript
    // MCP Protocol Types
    export interface MCPRequest {
@@ -93,6 +100,7 @@ Comprehensive tests, integration testing, and documentation.
    ```
 
 3. **Create base transport interface** (30min) - `src/mcp/transport/base.ts`
+
    ```typescript
    export abstract class BaseTransport {
      abstract send(message: MCPResponse): Promise<void>;
@@ -102,6 +110,7 @@ Comprehensive tests, integration testing, and documentation.
    ```
 
 4. **Implement stdio transport** (1h 30min) - `src/mcp/transport/stdio.ts`
+
    ```typescript
    export class StdioTransport extends BaseTransport {
      private reader: ReadableStreamDefaultReader;
@@ -133,18 +142,20 @@ Comprehensive tests, integration testing, and documentation.
 5. **Add error handling utilities** (30min)
    ```typescript
    export class MCPErrorHandler {
-     static createError(code: number, message: string, data?: unknown): MCPError
-     static isValidRequest(req: unknown): req is MCPRequest
-     static sanitizeParams(params: unknown): Record<string, unknown>
+     static createError(code: number, message: string, data?: unknown): MCPError;
+     static isValidRequest(req: unknown): req is MCPRequest;
+     static sanitizeParams(params: unknown): Record<string, unknown>;
    }
    ```
 
 **Deliverables**:
+
 - ✅ Type-safe MCP protocol implementation
 - ✅ Stdio transport (Claude Code compatible)
 - ✅ Error handling framework
 
 **Validation**:
+
 ```bash
 bun test src/mcp/transport/stdio.test.ts
 ```
@@ -156,7 +167,9 @@ bun test src/mcp/transport/stdio.test.ts
 **Objective**: Implement the main server class with tool registration and request routing.
 
 **Atomic Tasks**:
+
 1. **Create MCPServer class** (2h) - `src/mcp/server.ts`
+
    ```typescript
    export class MCPServer {
      private tools: Map<string, MCPTool> = new Map();
@@ -196,10 +209,10 @@ bun test src/mcp/transport/stdio.test.ts
      }
 
      private listTools(id: string): MCPResponse {
-       const tools = Array.from(this.tools.values()).map(t => ({
+       const tools = Array.from(this.tools.values()).map((t) => ({
          name: t.name,
          description: t.description,
-         inputSchema: t.inputSchema
+         inputSchema: t.inputSchema,
        }));
        return { id, result: { tools } };
      }
@@ -218,14 +231,15 @@ bun test src/mcp/transport/stdio.test.ts
          id,
          error: {
            code: -32603,
-           message: error instanceof Error ? error.message : 'Internal error'
-         }
+           message: error instanceof Error ? error.message : 'Internal error',
+         },
        };
      }
    }
    ```
 
 2. **Add logging integration** (30min)
+
    ```typescript
    import { Logger } from '../observability/logger';
 
@@ -236,13 +250,14 @@ bun test src/mcp/transport/stdio.test.ts
        this.logger.info('Tool called', {
          tool: toolName,
          duration,
-         success
+         success,
        });
      }
    }
    ```
 
 3. **Add metrics tracking** (30min)
+
    ```typescript
    import { MetricsCollector } from '../observability/metrics';
 
@@ -257,6 +272,7 @@ bun test src/mcp/transport/stdio.test.ts
    ```
 
 4. **Add graceful shutdown** (1h)
+
    ```typescript
    export class MCPServer {
      private running = false;
@@ -283,6 +299,7 @@ bun test src/mcp/transport/stdio.test.ts
    ```
 
 **Deliverables**:
+
 - ✅ Fully functional MCP server
 - ✅ Tool registration system
 - ✅ Request routing
@@ -290,6 +307,7 @@ bun test src/mcp/transport/stdio.test.ts
 - ✅ Graceful shutdown
 
 **Validation**:
+
 ```bash
 bun test src/mcp/server.test.ts
 ```
@@ -301,7 +319,9 @@ bun test src/mcp/server.test.ts
 **Objective**: Create executable for running the MCP server.
 
 **Atomic Tasks**:
+
 1. **Create entry point script** (1h) - `bin/vibesec-mcp`
+
    ```typescript
    #!/usr/bin/env bun
    import { MCPServer } from '../src/mcp/server';
@@ -318,7 +338,7 @@ bun test src/mcp/server.test.ts
      {
        name: 'vibesec',
        version: process.env.VIBESEC_VERSION || '1.0.0',
-       capabilities: ['tools']
+       capabilities: ['tools'],
      },
      new StdioTransport()
    );
@@ -332,6 +352,7 @@ bun test src/mcp/server.test.ts
    ```
 
 2. **Add to package.json** (15min)
+
    ```json
    {
      "bin": {
@@ -345,6 +366,7 @@ bun test src/mcp/server.test.ts
    ```
 
 3. **Create example .mcp.json** (15min) - `docs/examples/mcp-config.json`
+
    ```json
    {
      "mcpServers": {
@@ -364,12 +386,14 @@ bun test src/mcp/server.test.ts
    - Troubleshooting guide
 
 **Deliverables**:
+
 - ✅ Executable MCP server binary
 - ✅ npm run script
 - ✅ Configuration examples
 - ✅ Installation documentation
 
 **Validation**:
+
 ```bash
 # Test stdio communication
 echo '{"id":"1","method":"tools/list"}' | bun run mcp
@@ -382,7 +406,9 @@ echo '{"id":"1","method":"tools/list"}' | bun run mcp
 **Objective**: Build testing infrastructure for MCP server and tools.
 
 **Atomic Tasks**:
+
 1. **Create MCP test client** (2h) - `tests/mcp/client.ts`
+
    ```typescript
    export class MCPTestClient {
      private server: ChildProcess;
@@ -396,7 +422,7 @@ echo '{"id":"1","method":"tools/list"}' | bun run mcp
        const request = {
          id,
          method: 'tools/call',
-         params: { name, arguments: args }
+         params: { name, arguments: args },
        };
 
        this.server.stdin.write(JSON.stringify(request) + '\n');
@@ -415,22 +441,24 @@ echo '{"id":"1","method":"tools/list"}' | bun run mcp
    ```
 
 2. **Create test fixtures** (1h)
+
    ```typescript
    // tests/mcp/fixtures/vulnerable-code.ts
    export const VULNERABLE_CODE = {
      sqlInjection: `const query = "SELECT * FROM users WHERE id=" + userId;`,
      xss: `element.innerHTML = userInput;`,
-     commandInjection: `exec(userCommand);`
+     commandInjection: `exec(userCommand);`,
    };
 
    export const SECURE_CODE = {
      sqlInjection: `const query = db.prepare("SELECT * FROM users WHERE id=?");`,
      xss: `element.textContent = userInput;`,
-     commandInjection: `execFile(command, [arg1, arg2]);`
+     commandInjection: `execFile(command, [arg1, arg2]);`,
    };
    ```
 
 3. **Write server lifecycle tests** (1h) - `tests/mcp/server.test.ts`
+
    ```typescript
    describe('MCP Server', () => {
      test('starts and responds to tools/list', async () => {
@@ -454,6 +482,7 @@ echo '{"id":"1","method":"tools/list"}' | bun run mcp
    ```
 
 4. **Write transport tests** (1h) - `tests/mcp/transport/stdio.test.ts`
+
    ```typescript
    describe('Stdio Transport', () => {
      test('reads JSON-RPC messages from stdin', async () => {
@@ -483,6 +512,7 @@ echo '{"id":"1","method":"tools/list"}' | bun run mcp
    ```
 
 **Deliverables**:
+
 - ✅ MCP test client
 - ✅ Test fixtures
 - ✅ Server lifecycle tests
@@ -490,6 +520,7 @@ echo '{"id":"1","method":"tools/list"}' | bun run mcp
 - ✅ Performance benchmarks
 
 **Validation**:
+
 ```bash
 bun test tests/mcp/
 ```
@@ -503,7 +534,9 @@ bun test tests/mcp/
 **Objective**: Implement the core scanning tool that AI assistants can call.
 
 **Atomic Tasks**:
+
 1. **Define tool schema** (30min) - `src/mcp/tools/scan.ts`
+
    ```typescript
    export const SCAN_TOOL_SCHEMA: MCPTool = {
      name: 'vibesec_scan',
@@ -514,39 +547,40 @@ bun test tests/mcp/
          files: {
            type: 'array',
            items: { type: 'string' },
-           description: 'Paths to files to scan (relative or absolute)'
+           description: 'Paths to files to scan (relative or absolute)',
          },
          rules: {
            type: 'array',
            items: { type: 'string' },
            description: 'Optional: specific rule IDs to check',
-           optional: true
+           optional: true,
          },
          severity: {
            type: 'string',
            enum: ['critical', 'high', 'medium', 'low', 'info'],
            description: 'Optional: minimum severity level',
-           optional: true
+           optional: true,
          },
          incremental: {
            type: 'boolean',
            description: 'Optional: only scan changed files (git diff)',
-           optional: true
+           optional: true,
          },
          format: {
            type: 'string',
            enum: ['json', 'text', 'sarif'],
            description: 'Optional: output format',
-           optional: true
-         }
+           optional: true,
+         },
        },
-       required: ['files']
+       required: ['files'],
      },
-     handler: handleScan
+     handler: handleScan,
    };
    ```
 
 2. **Implement scan handler** (3h)
+
    ```typescript
    async function handleScan(params: unknown): Promise<ScanResult> {
      const args = validateScanParams(params);
@@ -565,12 +599,12 @@ bun test tests/mcp/
 
      // Apply severity filter
      const filteredFindings = args.severity
-       ? findings.filter(f => severityLevel(f.severity) >= severityLevel(args.severity))
+       ? findings.filter((f) => severityLevel(f.severity) >= severityLevel(args.severity))
        : findings;
 
      // Apply rule filter
      const ruleFilteredFindings = args.rules
-       ? filteredFindings.filter(f => args.rules.includes(f.ruleId))
+       ? filteredFindings.filter((f) => args.rules.includes(f.ruleId))
        : filteredFindings;
 
      // Calculate score
@@ -583,16 +617,17 @@ bun test tests/mcp/
        summary: {
          total: ruleFilteredFindings.length,
          bySeverity: groupBySeverity(ruleFilteredFindings),
-         byCategory: groupByCategory(ruleFilteredFindings)
+         byCategory: groupByCategory(ruleFilteredFindings),
        },
        status: ruleFilteredFindings.length === 0 ? 'SECURE' : 'VULNERABLE',
        scannedFiles: filesToScan.length,
-       timestamp: new Date().toISOString()
+       timestamp: new Date().toISOString(),
      };
    }
    ```
 
 3. **Add result formatting** (1h)
+
    ```typescript
    function formatScanResult(findings: Finding[], format: string): unknown {
      switch (format) {
@@ -609,16 +644,18 @@ bun test tests/mcp/
    ```
 
 4. **Implement incremental scanning support** (2h)
+
    ```typescript
    async function filterChangedFiles(files: string[]): Promise<string[]> {
      // Use existing IncrementalScanner
      const scanner = new IncrementalScanner();
      const changedFiles = await scanner.getChangedFiles();
-     return files.filter(f => changedFiles.includes(f));
+     return files.filter((f) => changedFiles.includes(f));
    }
    ```
 
 5. **Add caching** (1h 30min)
+
    ```typescript
    export class ScanCache {
      private cache = new Map<string, CacheEntry>();
@@ -632,13 +669,14 @@ bun test tests/mcp/
      async set(fileHash: string, findings: Finding[]): Promise<void> {
        this.cache.set(fileHash, {
          findings,
-         timestamp: Date.now()
+         timestamp: Date.now(),
        });
      }
    }
    ```
 
 6. **Add error handling** (1h)
+
    ```typescript
    async function handleScan(params: unknown): Promise<ScanResult> {
      try {
@@ -647,15 +685,15 @@ bun test tests/mcp/
        if (error instanceof ParseError) {
          throw new MCPError(-32001, 'Parse error', {
            file: error.file,
-           message: error.message
+           message: error.message,
          });
        } else if (error instanceof ConfigError) {
          throw new MCPError(-32002, 'Config error', {
-           message: error.message
+           message: error.message,
          });
        } else {
          throw new MCPError(-32603, 'Internal error', {
-           message: error instanceof Error ? error.message : 'Unknown error'
+           message: error instanceof Error ? error.message : 'Unknown error',
          });
        }
      }
@@ -663,11 +701,12 @@ bun test tests/mcp/
    ```
 
 7. **Write tests** (1h)
+
    ```typescript
    describe('vibesec_scan', () => {
      test('scans files and returns findings', async () => {
        const result = await client.callTool('vibesec_scan', {
-         files: ['tests/fixtures/vulnerable/sql-injection.js']
+         files: ['tests/fixtures/vulnerable/sql-injection.js'],
        });
 
        expect(result.findings.length).toBeGreaterThan(0);
@@ -677,12 +716,10 @@ bun test tests/mcp/
      test('filters by severity', async () => {
        const result = await client.callTool('vibesec_scan', {
          files: ['tests/fixtures/vulnerable/'],
-         severity: 'high'
+         severity: 'high',
        });
 
-       expect(result.findings.every(f =>
-         ['critical', 'high'].includes(f.severity)
-       )).toBe(true);
+       expect(result.findings.every((f) => ['critical', 'high'].includes(f.severity))).toBe(true);
      });
 
      test('incremental scan only checks changed files', async () => {
@@ -692,6 +729,7 @@ bun test tests/mcp/
    ```
 
 **Deliverables**:
+
 - ✅ vibesec_scan tool fully functional
 - ✅ Support for all filtering options
 - ✅ Caching for performance
@@ -699,6 +737,7 @@ bun test tests/mcp/
 - ✅ Unit tests
 
 **Validation**:
+
 ```bash
 bun test src/mcp/tools/scan.test.ts
 ```
@@ -710,7 +749,9 @@ bun test src/mcp/tools/scan.test.ts
 **Objective**: Allow AI to discover available detection rules.
 
 **Atomic Tasks**:
+
 1. **Define tool schema** (30min)
+
    ```typescript
    export const LIST_RULES_TOOL_SCHEMA: MCPTool = {
      name: 'vibesec_list_rules',
@@ -721,27 +762,28 @@ bun test src/mcp/tools/scan.test.ts
          category: {
            type: 'string',
            description: 'Optional: filter by category (injection, auth, etc.)',
-           optional: true
+           optional: true,
          },
          severity: {
            type: 'string',
            enum: ['critical', 'high', 'medium', 'low', 'info'],
            description: 'Optional: filter by minimum severity',
-           optional: true
+           optional: true,
          },
          language: {
            type: 'string',
            description: 'Optional: filter by language (javascript, python, etc.)',
-           optional: true
-         }
+           optional: true,
+         },
        },
-       required: []
+       required: [],
      },
-     handler: handleListRules
+     handler: handleListRules,
    };
    ```
 
 2. **Implement rules loader** (2h)
+
    ```typescript
    async function handleListRules(params: unknown): Promise<RulesListResult> {
      const args = validateListRulesParams(params);
@@ -752,35 +794,39 @@ bun test src/mcp/tools/scan.test.ts
 
      // Apply filters
      if (args.category) {
-       rules = rules.filter(r => r.category === args.category);
+       rules = rules.filter((r) => r.category === args.category);
      }
 
      if (args.severity) {
        const minLevel = severityLevel(args.severity);
-       rules = rules.filter(r => severityLevel(r.severity) >= minLevel);
+       rules = rules.filter((r) => severityLevel(r.severity) >= minLevel);
      }
 
      if (args.language) {
-       rules = rules.filter(r =>
-         r.languages?.includes(args.language) || !r.languages
-       );
+       rules = rules.filter((r) => r.languages?.includes(args.language) || !r.languages);
      }
 
      // Group by category
-     const categories = Array.from(new Set(rules.map(r => r.category || 'other')));
-     const byCategory = categories.reduce((acc, cat) => {
-       acc[cat] = rules.filter(r => (r.category || 'other') === cat);
-       return acc;
-     }, {} as Record<string, Rule[]>);
+     const categories = Array.from(new Set(rules.map((r) => r.category || 'other')));
+     const byCategory = categories.reduce(
+       (acc, cat) => {
+         acc[cat] = rules.filter((r) => (r.category || 'other') === cat);
+         return acc;
+       },
+       {} as Record<string, Rule[]>
+     );
 
      return {
        rules: rules.map(formatRuleInfo),
        categories,
        totalRules: rules.length,
-       byCategory: Object.entries(byCategory).reduce((acc, [cat, rules]) => {
-         acc[cat] = rules.length;
-         return acc;
-       }, {} as Record<string, number>)
+       byCategory: Object.entries(byCategory).reduce(
+         (acc, [cat, rules]) => {
+           acc[cat] = rules.length;
+           return acc;
+         },
+         {} as Record<string, number>
+       ),
      };
    }
 
@@ -793,12 +839,13 @@ bun test src/mcp/tools/scan.test.ts
        description: rule.description,
        languages: rule.languages,
        cwe: rule.cwe,
-       owasp: rule.owasp
+       owasp: rule.owasp,
      };
    }
    ```
 
 3. **Add caching for rules** (1h)
+
    ```typescript
    class RulesCache {
      private cache: Rule[] | null = null;
@@ -823,12 +870,13 @@ bun test src/mcp/tools/scan.test.ts
    ```
 
 4. **Add search functionality** (1h 30min)
+
    ```typescript
    interface ListRulesParams {
      category?: string;
      severity?: string;
      language?: string;
-     search?: string;  // NEW: text search
+     search?: string; // NEW: text search
    }
 
    async function handleListRules(params: unknown): Promise<RulesListResult> {
@@ -837,10 +885,11 @@ bun test src/mcp/tools/scan.test.ts
      // Add text search
      if (args.search) {
        const searchLower = args.search.toLowerCase();
-       rules = rules.filter(r =>
-         r.id.toLowerCase().includes(searchLower) ||
-         r.name.toLowerCase().includes(searchLower) ||
-         r.description?.toLowerCase().includes(searchLower)
+       rules = rules.filter(
+         (r) =>
+           r.id.toLowerCase().includes(searchLower) ||
+           r.name.toLowerCase().includes(searchLower) ||
+           r.description?.toLowerCase().includes(searchLower)
        );
      }
 
@@ -849,6 +898,7 @@ bun test src/mcp/tools/scan.test.ts
    ```
 
 5. **Write tests** (1h)
+
    ```typescript
    describe('vibesec_list_rules', () => {
      test('lists all rules', async () => {
@@ -859,34 +909,36 @@ bun test src/mcp/tools/scan.test.ts
 
      test('filters by category', async () => {
        const result = await client.callTool('vibesec_list_rules', {
-         category: 'injection'
+         category: 'injection',
        });
-       expect(result.rules.every(r => r.category === 'injection')).toBe(true);
+       expect(result.rules.every((r) => r.category === 'injection')).toBe(true);
      });
 
      test('filters by severity', async () => {
        const result = await client.callTool('vibesec_list_rules', {
-         severity: 'high'
+         severity: 'high',
        });
-       expect(result.rules.every(r =>
-         ['critical', 'high'].includes(r.severity)
-       )).toBe(true);
+       expect(result.rules.every((r) => ['critical', 'high'].includes(r.severity))).toBe(true);
      });
 
      test('searches by text', async () => {
        const result = await client.callTool('vibesec_list_rules', {
-         search: 'sql'
+         search: 'sql',
        });
-       expect(result.rules.every(r =>
-         r.id.includes('sql') ||
-         r.name.toLowerCase().includes('sql') ||
-         r.description?.toLowerCase().includes('sql')
-       )).toBe(true);
+       expect(
+         result.rules.every(
+           (r) =>
+             r.id.includes('sql') ||
+             r.name.toLowerCase().includes('sql') ||
+             r.description?.toLowerCase().includes('sql')
+         )
+       ).toBe(true);
      });
    });
    ```
 
 **Deliverables**:
+
 - ✅ vibesec_list_rules tool
 - ✅ Filtering by category, severity, language
 - ✅ Text search functionality
@@ -894,6 +946,7 @@ bun test src/mcp/tools/scan.test.ts
 - ✅ Unit tests
 
 **Validation**:
+
 ```bash
 bun test src/mcp/tools/list-rules.test.ts
 ```
@@ -907,7 +960,9 @@ bun test src/mcp/tools/list-rules.test.ts
 **Objective**: Provide AI-friendly fix recommendations for vulnerabilities.
 
 **Atomic Tasks**:
+
 1. **Define tool schema** (30min)
+
    ```typescript
    export const FIX_SUGGESTION_TOOL_SCHEMA: MCPTool = {
      name: 'vibesec_fix_suggestion',
@@ -922,23 +977,24 @@ bun test src/mcp/tools/list-rules.test.ts
              ruleId: { type: 'string' },
              filePath: { type: 'string' },
              line: { type: 'number' },
-             message: { type: 'string' }
+             message: { type: 'string' },
            },
-           required: ['ruleId', 'filePath', 'line']
+           required: ['ruleId', 'filePath', 'line'],
          },
          context: {
            type: 'string',
            description: 'Optional: surrounding code context',
-           optional: true
-         }
+           optional: true,
+         },
        },
-       required: ['finding']
+       required: ['finding'],
      },
-     handler: handleFixSuggestion
+     handler: handleFixSuggestion,
    };
    ```
 
 2. **Create fix template system** (1h 30min)
+
    ```typescript
    // src/mcp/tools/fix-templates.ts
    export const FIX_TEMPLATES: Record<string, FixTemplate> = {
@@ -946,31 +1002,32 @@ bun test src/mcp/tools/list-rules.test.ts
        recommendation: 'Use parameterized queries instead of string concatenation',
        codeExample: {
          vulnerable: `const query = "SELECT * FROM users WHERE id=" + userId;`,
-         fixed: `const query = db.prepare("SELECT * FROM users WHERE id=?");\nconst result = query.get(userId);`
+         fixed: `const query = db.prepare("SELECT * FROM users WHERE id=?");\nconst result = query.get(userId);`,
        },
        difficulty: 'easy',
        references: [
          'https://owasp.org/www-community/attacks/SQL_Injection',
-         'https://cwe.mitre.org/data/definitions/89.html'
-       ]
+         'https://cwe.mitre.org/data/definitions/89.html',
+       ],
      },
-     'xss': {
+     xss: {
        recommendation: 'Use textContent or sanitize with DOMPurify instead of innerHTML',
        codeExample: {
          vulnerable: `element.innerHTML = userInput;`,
-         fixed: `element.textContent = userInput;\n// Or: element.innerHTML = DOMPurify.sanitize(userInput);`
+         fixed: `element.textContent = userInput;\n// Or: element.innerHTML = DOMPurify.sanitize(userInput);`,
        },
        difficulty: 'easy',
        references: [
          'https://owasp.org/www-project-top-ten/2017/A7_2017-Cross-Site_Scripting_(XSS)',
-         'https://cwe.mitre.org/data/definitions/79.html'
-       ]
+         'https://cwe.mitre.org/data/definitions/79.html',
+       ],
      },
      // ... more templates
    };
    ```
 
 3. **Implement AI-friendly fix suggestions** (1h 30min)
+
    ```typescript
    async function handleFixSuggestion(params: unknown): Promise<FixSuggestionResult> {
      const args = validateFixSuggestionParams(params);
@@ -986,7 +1043,8 @@ bun test src/mcp/tools/list-rules.test.ts
      const template = FIX_TEMPLATES[finding.ruleId];
 
      // Generate context-aware recommendation
-     let recommendation = template?.recommendation || rule.fixRecommendation || 'Review and fix this vulnerability';
+     let recommendation =
+       template?.recommendation || rule.fixRecommendation || 'Review and fix this vulnerability';
 
      // If context provided, try to generate specific fix
      let specificFix = null;
@@ -1001,15 +1059,15 @@ bun test src/mcp/tools/list-rules.test.ts
        references: [
          ...(template?.references || []),
          ...(rule.cwe ? [`https://cwe.mitre.org/data/definitions/${rule.cwe}.html`] : []),
-         ...(rule.owasp ? [`https://owasp.org/www-project-top-ten/`] : [])
+         ...(rule.owasp ? [`https://owasp.org/www-project-top-ten/`] : []),
        ],
        difficulty: template?.difficulty || 'medium',
        ruleDetails: {
          id: rule.id,
          name: rule.name,
          severity: rule.severity,
-         category: rule.category
-       }
+         category: rule.category,
+       },
      };
    }
 
@@ -1018,15 +1076,12 @@ bun test src/mcp/tools/list-rules.test.ts
      // This can be enhanced with AST analysis later
      try {
        const lines = context.split('\n');
-       const vulnerableLine = lines.find(line =>
+       const vulnerableLine = lines.find((line) =>
          template.codeExample.vulnerable.includes(line.trim())
        );
 
        if (vulnerableLine) {
-         return vulnerableLine.replace(
-           template.codeExample.vulnerable,
-           template.codeExample.fixed
-         );
+         return vulnerableLine.replace(template.codeExample.vulnerable, template.codeExample.fixed);
        }
      } catch {
        return null;
@@ -1036,6 +1091,7 @@ bun test src/mcp/tools/list-rules.test.ts
    ```
 
 4. **Write tests** (30min)
+
    ```typescript
    describe('vibesec_fix_suggestion', () => {
      test('provides fix for SQL injection', async () => {
@@ -1044,8 +1100,8 @@ bun test src/mcp/tools/list-rules.test.ts
            ruleId: 'sql-injection',
            filePath: 'src/api.ts',
            line: 42,
-           message: 'SQL injection detected'
-         }
+           message: 'SQL injection detected',
+         },
        });
 
        expect(result.recommendation).toContain('parameterized');
@@ -1064,9 +1120,9 @@ bun test src/mcp/tools/list-rules.test.ts
          finding: {
            ruleId: 'sql-injection',
            filePath: 'src/api.ts',
-           line: 2
+           line: 2,
          },
-         context
+         context,
        });
 
        expect(result.specificFix).toContain('db.prepare');
@@ -1075,6 +1131,7 @@ bun test src/mcp/tools/list-rules.test.ts
    ```
 
 **Deliverables**:
+
 - ✅ vibesec_fix_suggestion tool
 - ✅ Fix template system
 - ✅ Context-aware recommendations
@@ -1088,7 +1145,9 @@ bun test src/mcp/tools/list-rules.test.ts
 **Objective**: Verify that AI-generated fixes actually resolve vulnerabilities.
 
 **Atomic Tasks**:
+
 1. **Define tool schema** (30min)
+
    ```typescript
    export const VALIDATE_FIX_TOOL_SCHEMA: MCPTool = {
      name: 'vibesec_validate_fix',
@@ -1098,28 +1157,29 @@ bun test src/mcp/tools/list-rules.test.ts
        properties: {
          originalCode: {
            type: 'string',
-           description: 'Original vulnerable code'
+           description: 'Original vulnerable code',
          },
          fixedCode: {
            type: 'string',
-           description: 'Modified code with attempted fix'
+           description: 'Modified code with attempted fix',
          },
          findingId: {
            type: 'string',
-           description: 'ID of the finding being fixed'
+           description: 'ID of the finding being fixed',
          },
          ruleId: {
            type: 'string',
-           description: 'ID of the rule that detected the vulnerability'
-         }
+           description: 'ID of the rule that detected the vulnerability',
+         },
        },
-       required: ['originalCode', 'fixedCode', 'ruleId']
+       required: ['originalCode', 'fixedCode', 'ruleId'],
      },
-     handler: handleValidateFix
+     handler: handleValidateFix,
    };
    ```
 
 2. **Implement validation logic** (2h)
+
    ```typescript
    async function handleValidateFix(params: unknown): Promise<ValidateFixResult> {
      const args = validateFixParams(params);
@@ -1138,8 +1198,8 @@ bun test src/mcp/tools/list-rules.test.ts
 
      // 4. Check for new issues
      const allFixedFindings = await scanCodeSnippet(fixedCode);
-     const newIssues = allFixedFindings.filter(f =>
-       !originalFindings.some(of => of.ruleId === f.ruleId)
+     const newIssues = allFixedFindings.filter(
+       (f) => !originalFindings.some((of) => of.ruleId === f.ruleId)
      );
 
      // 5. Calculate score
@@ -1156,7 +1216,7 @@ bun test src/mcp/tools/list-rules.test.ts
        originalScore,
        fixedScore,
        improvement,
-       recommendation: generateValidationRecommendation(fixed, newIssues, improvement)
+       recommendation: generateValidationRecommendation(fixed, newIssues, improvement),
      };
    }
 
@@ -1171,9 +1231,7 @@ bun test src/mcp/tools/list-rules.test.ts
        const findings = await engine.scanFile(tempFile);
 
        // Filter to specific rule if provided
-       return specificRuleId
-         ? findings.filter(f => f.ruleId === specificRuleId)
-         : findings;
+       return specificRuleId ? findings.filter((f) => f.ruleId === specificRuleId) : findings;
      } finally {
        // Cleanup
        await unlink(tempFile);
@@ -1198,6 +1256,7 @@ bun test src/mcp/tools/list-rules.test.ts
    ```
 
 3. **Add diff visualization** (1h)
+
    ```typescript
    import * as diff from 'diff';
 
@@ -1209,11 +1268,12 @@ bun test src/mcp/tools/list-rules.test.ts
    // Add to result:
    return {
      // ... existing fields
-     diff: generateCodeDiff(originalCode, fixedCode)
+     diff: generateCodeDiff(originalCode, fixedCode),
    };
    ```
 
 4. **Write tests** (30min)
+
    ```typescript
    describe('vibesec_validate_fix', () => {
      test('validates successful SQL injection fix', async () => {
@@ -1223,7 +1283,7 @@ bun test src/mcp/tools/list-rules.test.ts
        const result = await client.callTool('vibesec_validate_fix', {
          originalCode,
          fixedCode,
-         ruleId: 'sql-injection'
+         ruleId: 'sql-injection',
        });
 
        expect(result.fixed).toBe(true);
@@ -1238,7 +1298,7 @@ bun test src/mcp/tools/list-rules.test.ts
        const result = await client.callTool('vibesec_validate_fix', {
          originalCode,
          fixedCode,
-         ruleId: 'xss'
+         ruleId: 'xss',
        });
 
        expect(result.fixed).toBe(false);
@@ -1251,7 +1311,7 @@ bun test src/mcp/tools/list-rules.test.ts
        const result = await client.callTool('vibesec_validate_fix', {
          originalCode,
          fixedCode,
-         ruleId: 'command-injection'
+         ruleId: 'command-injection',
        });
 
        expect(result.newIssues.length).toBeGreaterThan(0);
@@ -1260,6 +1320,7 @@ bun test src/mcp/tools/list-rules.test.ts
    ```
 
 **Deliverables**:
+
 - ✅ vibesec_validate_fix tool
 - ✅ Code snippet scanning
 - ✅ Diff visualization
@@ -1273,7 +1334,9 @@ bun test src/mcp/tools/list-rules.test.ts
 **Objective**: Generate project configuration automatically.
 
 **Atomic Tasks**:
+
 1. **Define tool schema** (30min)
+
    ```typescript
    export const INIT_CONFIG_TOOL_SCHEMA: MCPTool = {
      name: 'vibesec_init_config',
@@ -1283,46 +1346,47 @@ bun test src/mcp/tools/list-rules.test.ts
        properties: {
          projectPath: {
            type: 'string',
-           description: 'Path to project root'
+           description: 'Path to project root',
          },
          languages: {
            type: 'array',
            items: { type: 'string' },
            description: 'Optional: languages to scan (auto-detected if not provided)',
-           optional: true
+           optional: true,
          },
          framework: {
            type: 'string',
            description: 'Optional: framework (react, vue, express, etc.)',
-           optional: true
+           optional: true,
          },
          strictMode: {
            type: 'boolean',
            description: 'Optional: enable strict mode (fail on any finding)',
-           optional: true
-         }
+           optional: true,
+         },
        },
-       required: ['projectPath']
+       required: ['projectPath'],
      },
-     handler: handleInitConfig
+     handler: handleInitConfig,
    };
    ```
 
 2. **Implement project detection** (1h 30min)
+
    ```typescript
    async function handleInitConfig(params: unknown): Promise<InitConfigResult> {
      const args = validateInitConfigParams(params);
      const { projectPath, languages, framework, strictMode } = args;
 
      // Detect project type
-     const detectedLanguages = languages || await detectProjectLanguages(projectPath);
-     const detectedFramework = framework || await detectFramework(projectPath);
+     const detectedLanguages = languages || (await detectProjectLanguages(projectPath));
+     const detectedFramework = framework || (await detectFramework(projectPath));
 
      // Generate config
      const config = await generateConfig({
        languages: detectedLanguages,
        framework: detectedFramework,
-       strictMode: strictMode || false
+       strictMode: strictMode || false,
      });
 
      // Get recommended rules
@@ -1333,7 +1397,7 @@ bun test src/mcp/tools/list-rules.test.ts
        detectedLanguages,
        detectedFramework,
        recommendedRules: recommendedRules.length,
-       configPath: join(projectPath, '.vibesec.yaml')
+       configPath: join(projectPath, '.vibesec.yaml'),
      };
    }
 
@@ -1343,8 +1407,10 @@ bun test src/mcp/tools/list-rules.test.ts
      if (await exists(join(projectPath, 'package.json'))) {
        languages.push('javascript', 'typescript');
      }
-     if (await exists(join(projectPath, 'requirements.txt')) ||
-         await exists(join(projectPath, 'pyproject.toml'))) {
+     if (
+       (await exists(join(projectPath, 'requirements.txt'))) ||
+       (await exists(join(projectPath, 'pyproject.toml')))
+     ) {
        languages.push('python');
      }
      if (await exists(join(projectPath, 'go.mod'))) {
@@ -1378,6 +1444,7 @@ bun test src/mcp/tools/list-rules.test.ts
    ```
 
 3. **Create config templates** (1h)
+
    ```typescript
    async function generateConfig(options: ConfigOptions): Promise<VibeSec Configuration> {
      const baseConfig = {
@@ -1414,11 +1481,12 @@ bun test src/mcp/tools/list-rules.test.ts
    ```
 
 4. **Write tests** (1h)
+
    ```typescript
    describe('vibesec_init_config', () => {
      test('detects Node.js project', async () => {
        const result = await client.callTool('vibesec_init_config', {
-         projectPath: '/path/to/node-project'
+         projectPath: '/path/to/node-project',
        });
 
        expect(result.detectedLanguages).toContain('javascript');
@@ -1428,7 +1496,7 @@ bun test src/mcp/tools/list-rules.test.ts
 
      test('detects React framework', async () => {
        const result = await client.callTool('vibesec_init_config', {
-         projectPath: '/path/to/react-app'
+         projectPath: '/path/to/react-app',
        });
 
        expect(result.detectedFramework).toBe('react');
@@ -1437,7 +1505,7 @@ bun test src/mcp/tools/list-rules.test.ts
      test('generates strict mode config', async () => {
        const result = await client.callTool('vibesec_init_config', {
          projectPath: '/path/to/project',
-         strictMode: true
+         strictMode: true,
        });
 
        const config = yaml.parse(result.config);
@@ -1447,6 +1515,7 @@ bun test src/mcp/tools/list-rules.test.ts
    ```
 
 **Deliverables**:
+
 - ✅ vibesec_init_config tool
 - ✅ Project type detection
 - ✅ Framework detection
@@ -1462,7 +1531,9 @@ bun test src/mcp/tools/list-rules.test.ts
 **Objective**: End-to-end testing of MCP server with real AI assistant workflows.
 
 **Atomic Tasks**:
+
 1. **Create workflow tests** (1h)
+
    ```typescript
    describe('MCP Workflows', () => {
      test('AI generates code → scans → gets fix → validates', async () => {
@@ -1475,13 +1546,13 @@ bun test src/mcp/tools/list-rules.test.ts
 
        // 2. Scan the code
        const scanResult = await client.callTool('vibesec_scan', {
-         files: ['test-file.js']
+         files: ['test-file.js'],
        });
        expect(scanResult.findings.length).toBeGreaterThan(0);
 
        // 3. Get fix suggestion
        const fixSuggestion = await client.callTool('vibesec_fix_suggestion', {
-         finding: scanResult.findings[0]
+         finding: scanResult.findings[0],
        });
        expect(fixSuggestion.codeExample).toBeDefined();
 
@@ -1492,7 +1563,7 @@ bun test src/mcp/tools/list-rules.test.ts
        const validation = await client.callTool('vibesec_validate_fix', {
          originalCode: vulnerableCode,
          fixedCode,
-         ruleId: scanResult.findings[0].ruleId
+         ruleId: scanResult.findings[0].ruleId,
        });
        expect(validation.fixed).toBe(true);
 
@@ -1502,10 +1573,13 @@ bun test src/mcp/tools/list-rules.test.ts
    ```
 
 2. **Performance testing** (1h)
+
    ```typescript
    describe('MCP Performance', () => {
      test('scan 100 files <5s', async () => {
-       const files = Array(100).fill(0).map((_, i) => `test-${i}.js`);
+       const files = Array(100)
+         .fill(0)
+         .map((_, i) => `test-${i}.js`);
 
        const start = performance.now();
        await client.callTool('vibesec_scan', { files });
@@ -1537,6 +1611,7 @@ bun test src/mcp/tools/list-rules.test.ts
 **Objective**: Comprehensive user and developer documentation.
 
 **Atomic Tasks**:
+
 1. **User guide** (1h) - `docs/MCP_USER_GUIDE.md`
    - Installation instructions
    - Configuration examples
@@ -1557,6 +1632,7 @@ bun test src/mcp/tools/list-rules.test.ts
    - Contributing guidelines
 
 **Deliverables**:
+
 - ✅ Complete integration tests
 - ✅ Performance benchmarks
 - ✅ User documentation
@@ -1568,6 +1644,7 @@ bun test src/mcp/tools/list-rules.test.ts
 ## Success Criteria
 
 ### Technical
+
 - [ ] All 5 MCP tools functional
 - [ ] Tool call overhead <200ms
 - [ ] Scan 100 files in <5s
@@ -1575,12 +1652,14 @@ bun test src/mcp/tools/list-rules.test.ts
 - [ ] 0 crashes on invalid input
 
 ### Functional
+
 - [ ] Claude Code integration working
 - [ ] AI can scan, fix, and validate automatically
 - [ ] Error messages are clear and actionable
 - [ ] Documentation is comprehensive
 
 ### User Experience
+
 - [ ] Installation takes <5 minutes
 - [ ] First scan completes in <30 seconds
 - [ ] Fix suggestions are actionable
@@ -1591,6 +1670,7 @@ bun test src/mcp/tools/list-rules.test.ts
 ## Deliverables Checklist
 
 ### Code
+
 - [ ] `src/mcp/server.ts` - Main MCP server
 - [ ] `src/mcp/types.ts` - Type definitions
 - [ ] `src/mcp/transport/stdio.ts` - Stdio transport
@@ -1602,6 +1682,7 @@ bun test src/mcp/tools/list-rules.test.ts
 - [ ] `bin/vibesec-mcp` - MCP server executable
 
 ### Tests
+
 - [ ] `tests/mcp/server.test.ts` - Server tests
 - [ ] `tests/mcp/transport/stdio.test.ts` - Transport tests
 - [ ] `tests/mcp/tools/*.test.ts` - Tool tests (5 files)
@@ -1609,6 +1690,7 @@ bun test src/mcp/tools/list-rules.test.ts
 - [ ] `tests/mcp/performance/benchmarks.test.ts` - Performance tests
 
 ### Documentation
+
 - [ ] `docs/MCP_INSTALLATION.md` - Installation guide
 - [ ] `docs/MCP_USER_GUIDE.md` - User guide
 - [ ] `docs/MCP_API_REFERENCE.md` - API reference
@@ -1617,6 +1699,7 @@ bun test src/mcp/tools/list-rules.test.ts
 - [ ] `README.md` updated with MCP info
 
 ### Configuration
+
 - [ ] `.mcp.json.example` - Example config
 - [ ] `package.json` updated with bin entry
 - [ ] GitHub issue created
@@ -1627,26 +1710,29 @@ bun test src/mcp/tools/list-rules.test.ts
 ## Risk Mitigation
 
 ### Risk 1: Performance Overhead
+
 **Mitigation**: Implement aggressive caching, incremental scanning, streaming results
 
 ### Risk 2: Complex Error Handling
+
 **Mitigation**: Comprehensive error codes, clear error messages, detailed logging
 
 ### Risk 3: AI Integration Complexity
+
 **Mitigation**: Start with Claude Code (simplest), document thoroughly, provide examples
 
 ---
 
 ## Timeline
 
-| Day | Hours | Tasks |
-|-----|-------|-------|
-| 1 | 8h | Phase 1.1-1.2: MCP infrastructure |
-| 2 | 8h | Phase 1.3-1.4: CLI entry + testing |
-| 3 | 8h | Phase 2.1: vibesec_scan tool |
-| 4 | 8h | Phase 2.2 + 3.1: list_rules + fix_suggestion |
-| 5 | 8h | Phase 3.2-3.3: validate_fix + init_config |
-| 6 | 8h | Phase 4: Integration testing + docs |
+| Day | Hours | Tasks                                        |
+| --- | ----- | -------------------------------------------- |
+| 1   | 8h    | Phase 1.1-1.2: MCP infrastructure            |
+| 2   | 8h    | Phase 1.3-1.4: CLI entry + testing           |
+| 3   | 8h    | Phase 2.1: vibesec_scan tool                 |
+| 4   | 8h    | Phase 2.2 + 3.1: list_rules + fix_suggestion |
+| 5   | 8h    | Phase 3.2-3.3: validate_fix + init_config    |
+| 6   | 8h    | Phase 4: Integration testing + docs          |
 
 **Total: 48 hours over 6 working days**
 

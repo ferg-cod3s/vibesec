@@ -65,6 +65,7 @@ After the initial manual publish, GitHub Actions will handle future releases aut
 ### Release Process
 
 1. **Update version** in `package.json`:
+
    ```bash
    # For bug fixes (0.1.0 → 0.1.1)
    npm version patch
@@ -79,6 +80,7 @@ After the initial manual publish, GitHub Actions will handle future releases aut
 2. **Update CHANGELOG.md** with changes in the new version
 
 3. **Commit and push** to main:
+
    ```bash
    git add package.json CHANGELOG.md
    git commit -m "chore: Release v0.2.0"
@@ -95,6 +97,7 @@ After the initial manual publish, GitHub Actions will handle future releases aut
 ### Workflow Triggers
 
 The publish workflow (`.github/workflows/publish.yml`) triggers on:
+
 - Push to `main` branch
 - Changes to: `package.json`, `src/**`, `cli/**`, `bin/**`, `rules/**`
 - Only publishes if package.json version changed
@@ -102,21 +105,25 @@ The publish workflow (`.github/workflows/publish.yml`) triggers on:
 ## Troubleshooting
 
 ### "Permission denied" error
+
 - Check NPM_TOKEN secret is set correctly
 - Verify npm token is "Automation" type, not "Read Only"
 - Ensure token hasn't expired
 
 ### "Package already exists" error
+
 - Version in package.json must be unique
 - Can't republish the same version
 - Increment version and try again
 
 ### Tests fail in CI
+
 - Run `bun test` locally first
 - Check GitHub Actions logs for specific error
 - Ensure all dependencies are in package.json
 
 ### Build fails
+
 - Run `bun run build` locally
 - Check for TypeScript errors
 - Verify all source files are committed

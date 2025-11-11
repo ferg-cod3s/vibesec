@@ -5,11 +5,13 @@ This document describes the Model Context Protocol (MCP) servers configured for 
 ## Configured Servers
 
 ### 1. Playwright (`@playwright/mcp@latest`)
+
 **Purpose**: Browser automation for web-based security testing
 
 **Command**: `npx @playwright/mcp@latest`
 
 **Use Cases**:
+
 - Testing web vulnerabilities (XSS, CSRF)
 - Dynamic analysis of web applications
 - Automated security test scenarios
@@ -17,11 +19,13 @@ This document describes the Model Context Protocol (MCP) servers configured for 
 ---
 
 ### 2. Context7 (`@upstash/context7-mcp`)
+
 **Purpose**: AI-powered code context and documentation search
 
 **Command**: `npx -y @upstash/context7-mcp`
 
 **Use Cases**:
+
 - Searching library documentation
 - Understanding API usage patterns
 - Resolving package dependencies and compatibility
@@ -29,6 +33,7 @@ This document describes the Model Context Protocol (MCP) servers configured for 
 ---
 
 ### 3. Sentry (Self-Hosted)
+
 **Purpose**: Error monitoring and performance tracking
 
 **Command**: `npx @sentry/mcp-server@latest`
@@ -36,12 +41,14 @@ This document describes the Model Context Protocol (MCP) servers configured for 
 **Access Token**: Configured in `.mcp.json`
 
 **Use Cases**:
+
 - Real-time error tracking
 - Performance monitoring
 - Release health tracking
 - User feedback collection
 
 **Environment Variables**:
+
 ```bash
 SENTRY_DSN=https://xxx@sentry.fergify.work/xxx
 NODE_ENV=production
@@ -53,12 +60,14 @@ SENTRY_PROFILES_SAMPLE_RATE=0.1
 ---
 
 ### 4. GitHub MCP
+
 **Purpose**: GitHub integration for issue tracking, PR management
 
 **Command**: `docker run ghcr.io/github/github-mcp-server`
 **Authentication**: GitHub Personal Access Token
 
 **Use Cases**:
+
 - Creating and managing GitHub issues
 - Automating PR workflows
 - Repository management
@@ -67,12 +76,14 @@ SENTRY_PROFILES_SAMPLE_RATE=0.1
 ---
 
 ### 5. Conexus
+
 **Purpose**: Local knowledge graph and context management
 
 **Command**: `cd /home/f3rg/src/github/conexus && ./bin/conexus`
 **Database**: `/home/f3rg/src/github/conexus/data/conexus.db`
 
 **Use Cases**:
+
 - Project-specific context retention
 - Knowledge graph building
 - Dependency tracking
@@ -83,6 +94,7 @@ SENTRY_PROFILES_SAMPLE_RATE=0.1
 ## Remote Server (Not Currently Configured)
 
 ### Socket.dev MCP
+
 **URL**: `https://mcp.socket.dev/`
 **Type**: Remote MCP server
 
@@ -93,6 +105,7 @@ SENTRY_PROFILES_SAMPLE_RATE=0.1
 3. Check if Claude Code adds remote MCP support in future versions
 
 **What Socket.dev Provides**:
+
 - npm package security scanning
 - Supply chain vulnerability detection
 - Malicious package detection
@@ -119,11 +132,13 @@ All MCP servers are configured in `.mcp.json`:
 ## Testing MCP Servers
 
 ### Test Sentry Integration
+
 ```bash
 bun run src/observability/integrations/sentry-test.ts
 ```
 
 Expected output:
+
 - ✅ Sentry initialized
 - ✅ Test errors captured
 - ✅ Breadcrumbs added
@@ -132,9 +147,11 @@ Expected output:
 Check your Sentry dashboard at: https://sentry.fergify.work
 
 ### Test Playwright
+
 Playwright commands are available through Claude Code when the server is active.
 
 ### Test GitHub MCP
+
 ```bash
 # List issues
 gh issue list
@@ -144,11 +161,14 @@ gh issue create --title "Test Issue" --body "Testing MCP integration"
 ```
 
 ### Test Context7
+
 Context7 provides library documentation search through Claude Code prompts like:
+
 - "Show me the latest FastAPI documentation"
 - "How do I use Pydantic V2?"
 
 ### Test Conexus
+
 Conexus runs as a local knowledge graph server and provides context persistence.
 
 ---
@@ -158,29 +178,30 @@ Conexus runs as a local knowledge graph server and provides context persistence.
 ### Credentials in Configuration
 
 ⚠️ **IMPORTANT**: The `.mcp.json` file contains sensitive credentials:
+
 - Sentry access token
 - GitHub Personal Access Token
 
 **Security Best Practices**:
 
 1. **Add `.mcp.json` to `.gitignore`** (if not already):
+
    ```bash
    echo ".mcp.json" >> .gitignore
    ```
 
 2. **Create a template file** for team members:
+
    ```bash
    cp .mcp.json .mcp.json.example
    # Then manually remove sensitive tokens from .mcp.json.example
    ```
 
 3. **Use environment variables** for sensitive data:
+
    ```json
    {
-     "args": [
-       "--access-token=${SENTRY_ACCESS_TOKEN}",
-       "--host=${SENTRY_HOST}"
-     ]
+     "args": ["--access-token=${SENTRY_ACCESS_TOKEN}", "--host=${SENTRY_HOST}"]
    }
    ```
 
@@ -194,6 +215,7 @@ Conexus runs as a local knowledge graph server and provides context persistence.
 - **GitHub PAT**: `ghp_[REDACTED_EXAMPLE_TOKEN]`
 
 **Recommended Actions**:
+
 1. Rotate both tokens immediately
 2. Move to environment variable-based configuration
 3. Add `.mcp.json` to `.gitignore`
@@ -208,11 +230,13 @@ Conexus runs as a local knowledge graph server and provides context persistence.
 If Sentry is not receiving events:
 
 1. Check DSN is correctly configured:
+
    ```bash
    echo $SENTRY_DSN
    ```
 
 2. Verify self-hosted instance is accessible:
+
    ```bash
    curl -I https://sentry.fergify.work
    ```
@@ -229,11 +253,13 @@ If Sentry is not receiving events:
 If GitHub MCP server fails:
 
 1. Ensure Docker is running:
+
    ```bash
    docker ps
    ```
 
 2. Pull the latest image:
+
    ```bash
    docker pull ghcr.io/github/github-mcp-server
    ```
@@ -248,11 +274,13 @@ If GitHub MCP server fails:
 If Conexus fails to start:
 
 1. Verify the binary exists:
+
    ```bash
    ls -la /home/f3rg/src/github/conexus/bin/conexus
    ```
 
 2. Check database directory:
+
    ```bash
    ls -la /home/f3rg/src/github/conexus/data/
    ```
@@ -269,6 +297,7 @@ If Conexus fails to start:
 To add a new MCP server:
 
 1. **Edit `.mcp.json`**:
+
    ```json
    {
      "mcpServers": {

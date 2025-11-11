@@ -25,6 +25,7 @@ This document provides a step-by-step plan to take VibeSec from current state to
 **Steps:**
 
 1. **Fix MCP Integration Tests** (1.5 hours)
+
    ```bash
    # File: tests/mcp/integration.test.ts
 
@@ -35,18 +36,25 @@ This document provides a step-by-step plan to take VibeSec from current state to
    ```
 
    Changes needed:
+
    ```typescript
    // Before
    expect(lastResponse.result.findings).toBeInstanceOf(Array);
 
    // After
-   const result = lastResponse.result as { findings: any[], summary: any, scan: any, status: string };
+   const result = lastResponse.result as {
+     findings: any[];
+     summary: any;
+     scan: any;
+     status: string;
+   };
    expect(result.findings).toBeInstanceOf(Array);
    ```
 
    Do for all instances of `lastResponse.result` and `toolsResponse.result`.
 
 2. **Fix Reporter Tests** (1 hour)
+
    ```bash
    # File: tests/unit/reporters.test.ts
 
@@ -56,6 +64,7 @@ This document provides a step-by-step plan to take VibeSec from current state to
    ```
 
    Changes needed:
+
    ```typescript
    // Line 10: Change 'injection' to Category.INJECTION
    category: Category.INJECTION,
@@ -69,6 +78,7 @@ This document provides a step-by-step plan to take VibeSec from current state to
    ```
 
 3. **Verify All Tests Pass** (0.5 hours)
+
    ```bash
    npx jest --no-cache
    npx jest --coverage
@@ -79,11 +89,13 @@ This document provides a step-by-step plan to take VibeSec from current state to
    ```
 
 **Deliverables:**
+
 - [ ] All 7 test suites passing
 - [ ] Coverage report generated
 - [ ] No TypeScript compilation errors
 
 **Acceptance Criteria:**
+
 ```bash
 $ npx jest
 # Expected output:
@@ -103,11 +115,13 @@ $ npx jest
 **Steps:**
 
 1. **Update package.json Build Script**
+
    ```bash
    # File: package.json
    ```
 
    Change:
+
    ```json
    "scripts": {
      "build": "tsc && bun copy-assets.js"
@@ -115,6 +129,7 @@ $ npx jest
    ```
 
    To:
+
    ```json
    "scripts": {
      "build": "tsc && node copy-assets.js",
@@ -123,32 +138,38 @@ $ npx jest
    ```
 
 2. **Update MCP Entry Point Shebang**
+
    ```bash
    # File: bin/vibesec-mcp
    ```
 
    Change:
+
    ```bash
    #!/usr/bin/env bun
    ```
 
    To:
+
    ```bash
    #!/usr/bin/env node
    ```
 
    And update imports from:
+
    ```typescript
    import { MCPServer } from '../src/mcp/server';
    ```
 
    To:
+
    ```typescript
    // CommonJS require or ESM with proper extension
    const { MCPServer } = require('../dist/src/mcp/server');
    ```
 
 3. **Test Build Process**
+
    ```bash
    npm run build
    ls -la dist/
@@ -162,6 +183,7 @@ $ npx jest
    ```
 
 **Deliverables:**
+
 - [ ] Build works with `npm run build`
 - [ ] No dependency on Bun for standard build
 - [ ] Bun build still available via `npm run build:bun`
@@ -176,18 +198,13 @@ $ npx jest
 **Steps:**
 
 1. **Update tsconfig.json**
+
    ```json
    {
      "compilerOptions": {
        "outDir": "./dist"
      },
-     "include": [
-       "cli/**/*",
-       "scanner/**/*",
-       "reporters/**/*",
-       "src/**/*",
-       "lib/**/*"
-     ],
+     "include": ["cli/**/*", "scanner/**/*", "reporters/**/*", "src/**/*", "lib/**/*"],
      "exclude": [
        "node_modules",
        "dist",
@@ -200,6 +217,7 @@ $ npx jest
    ```
 
 2. **Verify Clean Build**
+
    ```bash
    rm -rf dist/
    npm run build
@@ -211,6 +229,7 @@ $ npx jest
    ```
 
 **Deliverables:**
+
 - [ ] Production build excludes test files
 - [ ] Build size reduced
 - [ ] No test code in dist/
@@ -225,6 +244,7 @@ $ npx jest
 **Steps:**
 
 1. **Create Dockerfile**
+
    ```dockerfile
    # File: Dockerfile
 
@@ -272,6 +292,7 @@ $ npx jest
    ```
 
 2. **Create .dockerignore**
+
    ```
    # File: .dockerignore
 
@@ -297,6 +318,7 @@ $ npx jest
    ```
 
 3. **Build and Test Docker Image**
+
    ```bash
    docker build -t vibesec:latest .
 
@@ -308,6 +330,7 @@ $ npx jest
    ```
 
 **Deliverables:**
+
 - [ ] Dockerfile created
 - [ ] .dockerignore created
 - [ ] Docker image builds successfully
@@ -324,6 +347,7 @@ $ npx jest
 **Steps:**
 
 1. **Create CI Workflow**
+
    ```yaml
    # File: .github/workflows/ci.yml
 
@@ -331,9 +355,9 @@ $ npx jest
 
    on:
      push:
-       branches: [ main, develop, 'claude/**' ]
+       branches: [main, develop, 'claude/**']
      pull_request:
-       branches: [ main, develop ]
+       branches: [main, develop]
 
    jobs:
      test:
@@ -435,6 +459,7 @@ $ npx jest
    ```
 
 2. **Create Publish Workflow**
+
    ```yaml
    # File: .github/workflows/publish.yml
 
@@ -500,6 +525,7 @@ $ npx jest
    ```
 
 3. **Create PR Template**
+
    ```markdown
    # File: .github/pull_request_template.md
 
@@ -533,6 +559,7 @@ $ npx jest
    ```
 
 **Deliverables:**
+
 - [ ] CI workflow created
 - [ ] Publish workflow created
 - [ ] PR template created
@@ -550,6 +577,7 @@ $ npx jest
 **Steps:**
 
 1. **Unit Test Validation**
+
    ```bash
    npm test -- --coverage
 
@@ -561,6 +589,7 @@ $ npx jest
    ```
 
 2. **Integration Testing**
+
    ```bash
    # Build the project
    npm run build
@@ -574,6 +603,7 @@ $ npx jest
    ```
 
 3. **Docker Testing**
+
    ```bash
    docker build -t vibesec:test .
 
@@ -586,6 +616,7 @@ $ npx jest
    ```
 
 4. **Performance Benchmarking**
+
    ```bash
    npm run benchmark
 
@@ -596,6 +627,7 @@ $ npx jest
    ```
 
 **Deliverables:**
+
 - [ ] All tests pass
 - [ ] Coverage meets thresholds
 - [ ] CLI works in all environments
@@ -612,6 +644,7 @@ $ npx jest
 **Steps:**
 
 1. **Dependency Audit**
+
    ```bash
    npm audit
    npm audit fix
@@ -620,6 +653,7 @@ $ npx jest
    ```
 
 2. **Secret Scanning**
+
    ```bash
    # Install gitleaks
    docker run --rm -v $(pwd):/path zricethezav/gitleaks:latest detect --source=/path -v
@@ -628,6 +662,7 @@ $ npx jest
    ```
 
 3. **SAST Scanning**
+
    ```bash
    # Use VibeSec on itself
    node dist/cli/index.js scan . --severity high
@@ -636,6 +671,7 @@ $ npx jest
    ```
 
 **Deliverables:**
+
 - [ ] No dependency vulnerabilities
 - [ ] No committed secrets
 - [ ] No high/critical security issues
@@ -650,6 +686,7 @@ $ npx jest
 **Test Cases:**
 
 1. **Installation Test**
+
    ```bash
    # In fresh directory
    npm install -g ./path/to/vibesec
@@ -658,6 +695,7 @@ $ npx jest
    ```
 
 2. **MCP Integration Test**
+
    ```bash
    # Configure in Claude Code
    # Restart Claude Code
@@ -666,6 +704,7 @@ $ npx jest
    ```
 
 3. **Error Handling Test**
+
    ```bash
    # Invalid input
    vibesec scan /nonexistent
@@ -684,6 +723,7 @@ $ npx jest
    ```
 
 **Deliverables:**
+
 - [ ] All test cases pass
 - [ ] No crashes or errors
 - [ ] User experience is smooth
@@ -706,6 +746,7 @@ $ npx jest
    - Update MCP setup to use `npx vibesec-mcp`
 
 2. **Update Component READMEs**
+
    ```bash
    # Files to update:
    # - cli/README.md
@@ -722,6 +763,7 @@ $ npx jest
    - Update README to reference STATUS.md
 
 **Deliverables:**
+
 - [ ] No broken links in documentation
 - [ ] Accurate implementation status
 - [ ] Clear installation instructions
@@ -736,50 +778,71 @@ $ npx jest
 **Documents to Create:**
 
 1. **docs/DEPLOYMENT.md**
+
    ```markdown
    # Deployment Guide
 
    ## Prerequisites
+
    ## Installation Methods
+
    ## Configuration
+
    ## Running in Production
+
    ## Monitoring
+
    ## Troubleshooting
    ```
 
 2. **docs/ENVIRONMENT_VARIABLES.md**
+
    ```markdown
    # Environment Variables
 
    ## Required Variables
+
    ## Optional Variables
+
    ## Integration Tokens
+
    ## Security Considerations
    ```
 
 3. **docs/TROUBLESHOOTING.md**
+
    ```markdown
    # Troubleshooting Guide
 
    ## Installation Issues
+
    ## Build Failures
+
    ## Runtime Errors
+
    ## MCP Connection Issues
+
    ## Performance Problems
    ```
 
 4. **docs/RELEASE_PROCESS.md**
+
    ```markdown
    # Release Process
 
    ## Versioning Strategy
+
    ## Creating a Release
+
    ## Publishing to npm
+
    ## Docker Image Publishing
+
    ## Changelog Management
    ```
 
 **Deliverables:**
+
 - [ ] Deployment guide complete
 - [ ] Environment variables documented
 - [ ] Troubleshooting guide created
@@ -797,6 +860,7 @@ $ npx jest
 **Steps:**
 
 1. **Update package.json for Publishing**
+
    ```json
    {
      "name": "vibesec",
@@ -808,12 +872,7 @@ $ npx jest
        "vibesec": "./dist/cli/index.js",
        "vibesec-mcp": "./bin/vibesec-mcp"
      },
-     "files": [
-       "dist/**/*",
-       "bin/**/*",
-       "!dist/**/*.test.*",
-       "!dist/tests/**/*"
-     ],
+     "files": ["dist/**/*", "bin/**/*", "!dist/**/*.test.*", "!dist/tests/**/*"],
      "repository": {
        "type": "git",
        "url": "https://github.com/ferg-cod3s/vibesec.git"
@@ -838,6 +897,7 @@ $ npx jest
    ```
 
 2. **Create .npmignore**
+
    ```
    # Source files
    cli/
@@ -870,6 +930,7 @@ $ npx jest
    ```
 
 3. **Test npm Package Locally**
+
    ```bash
    npm pack
    # Creates vibesec-0.1.0.tgz
@@ -882,6 +943,7 @@ $ npx jest
    ```
 
 4. **Dry Run Publish**
+
    ```bash
    npm publish --dry-run
 
@@ -892,6 +954,7 @@ $ npx jest
    ```
 
 **Deliverables:**
+
 - [ ] package.json configured for npm
 - [ ] .npmignore created
 - [ ] Local package test successful
@@ -912,6 +975,7 @@ $ npx jest
    - Set description and README
 
 2. **Test Manual Docker Push**
+
    ```bash
    docker build -t vibesec/vibesec:0.1.0 .
    docker tag vibesec/vibesec:0.1.0 vibesec/vibesec:latest
@@ -922,6 +986,7 @@ $ npx jest
    ```
 
 3. **Create Docker Compose for Testing**
+
    ```yaml
    # File: docker-compose.yml
 
@@ -947,6 +1012,7 @@ $ npx jest
    ```
 
 **Deliverables:**
+
 - [ ] Docker Hub repository created
 - [ ] Docker image published
 - [ ] docker-compose.yml created
@@ -970,12 +1036,14 @@ CODECOV_TOKEN          # Coverage reports (optional)
 ```
 
 **Steps:**
+
 1. Go to GitHub repository settings
 2. Navigate to Secrets and variables → Actions
 3. Add each secret
 4. Test with workflow dispatch
 
 **Deliverables:**
+
 - [ ] All secrets configured
 - [ ] Test workflow runs successfully
 
@@ -989,6 +1057,7 @@ CODECOV_TOKEN          # Coverage reports (optional)
 **Steps:**
 
 1. **Create Release Script**
+
    ```bash
    # File: scripts/release.sh
 
@@ -1043,6 +1112,7 @@ CODECOV_TOKEN          # Coverage reports (optional)
    ```
 
 2. **Add to package.json**
+
    ```json
    {
      "scripts": {
@@ -1052,6 +1122,7 @@ CODECOV_TOKEN          # Coverage reports (optional)
    ```
 
 3. **Create CHANGELOG.md Template**
+
    ```markdown
    # Changelog
 
@@ -1065,6 +1136,7 @@ CODECOV_TOKEN          # Coverage reports (optional)
    ## [0.1.0] - 2025-10-22
 
    ### Added
+
    - Initial release
    - MCP server integration
    - Core scanning engine
@@ -1074,6 +1146,7 @@ CODECOV_TOKEN          # Coverage reports (optional)
    ```
 
 **Deliverables:**
+
 - [ ] Release script created and tested
 - [ ] CHANGELOG.md created
 - [ ] Version bump process documented
@@ -1093,6 +1166,7 @@ CODECOV_TOKEN          # Coverage reports (optional)
    - Configure alerts
 
 2. **Set Up GitHub Status Checks**
+
    ```yaml
    # File: .github/workflows/status-check.yml
 
@@ -1117,6 +1191,7 @@ CODECOV_TOKEN          # Coverage reports (optional)
    - Expose metrics endpoint
 
 **Deliverables:**
+
 - [ ] Sentry configured
 - [ ] GitHub status checks configured
 - [ ] Monitoring plan documented
@@ -1152,6 +1227,7 @@ CODECOV_TOKEN          # Coverage reports (optional)
 ```
 
 **Deliverables:**
+
 - [ ] All checklist items verified
 - [ ] Sign-off from team lead
 
@@ -1165,11 +1241,13 @@ CODECOV_TOKEN          # Coverage reports (optional)
 **Steps:**
 
 1. **Create npm Account** (if needed)
+
    ```bash
    npm adduser
    ```
 
 2. **Publish Package**
+
    ```bash
    # Ensure you're on main branch with clean working directory
    git checkout main
@@ -1186,6 +1264,7 @@ CODECOV_TOKEN          # Coverage reports (optional)
    ```
 
 3. **Verify Publication**
+
    ```bash
    # Check on npm
    npm view vibesec
@@ -1196,6 +1275,7 @@ CODECOV_TOKEN          # Coverage reports (optional)
    ```
 
 **Deliverables:**
+
 - [ ] Package published to npm
 - [ ] Installation verified
 - [ ] npm page looks correct
@@ -1210,6 +1290,7 @@ CODECOV_TOKEN          # Coverage reports (optional)
 **Steps:**
 
 1. **Manual Push (if not using CI/CD)**
+
    ```bash
    docker build -t vibesec/vibesec:0.1.0 .
    docker tag vibesec/vibesec:0.1.0 vibesec/vibesec:latest
@@ -1224,6 +1305,7 @@ CODECOV_TOKEN          # Coverage reports (optional)
    ```
 
 **Deliverables:**
+
 - [ ] Docker image published
 - [ ] Pull and run verified
 - [ ] Docker Hub page updated
@@ -1244,12 +1326,13 @@ CODECOV_TOKEN          # Coverage reports (optional)
    - Title: `VibeSec v0.1.0 - Initial Release`
    - Description: (from CHANGELOG.md)
 
-   ```markdown
+   ````markdown
    ## 🎉 Initial Release
 
    VibeSec is a security scanner for AI-generated code with MCP integration.
 
    ### ✨ Features
+
    - 🔍 16 security detection rules
    - 🤖 MCP server for Claude Code integration
    - 📊 Multiple output formats (JSON, text, stakeholder)
@@ -1261,6 +1344,7 @@ CODECOV_TOKEN          # Coverage reports (optional)
    ```bash
    npm install -g vibesec
    ```
+   ````
 
    ### 🐳 Docker
 
@@ -1275,6 +1359,9 @@ CODECOV_TOKEN          # Coverage reports (optional)
    ### 🙏 Thanks
 
    Thanks to all contributors and testers!
+
+   ```
+
    ```
 
 2. **Attach Release Assets**
@@ -1282,6 +1369,7 @@ CODECOV_TOKEN          # Coverage reports (optional)
    - Attach `CHANGELOG.md`
 
 **Deliverables:**
+
 - [ ] GitHub release created
 - [ ] Release notes published
 - [ ] Assets attached
@@ -1351,19 +1439,20 @@ CODECOV_TOKEN          # Coverage reports (optional)
 
 ### High Risks
 
-| Risk | Impact | Probability | Mitigation |
-|------|--------|-------------|------------|
-| Tests fail in production | High | Low | Run full test suite before publish |
-| npm package broken | High | Medium | Test local install before publish |
-| Docker image doesn't work | Medium | Low | Test pull and run before announcing |
-| Documentation outdated | Medium | Medium | Review all docs before launch |
-| Security vulnerability | High | Low | Run npm audit, Snyk before publish |
+| Risk                      | Impact | Probability | Mitigation                          |
+| ------------------------- | ------ | ----------- | ----------------------------------- |
+| Tests fail in production  | High   | Low         | Run full test suite before publish  |
+| npm package broken        | High   | Medium      | Test local install before publish   |
+| Docker image doesn't work | Medium | Low         | Test pull and run before announcing |
+| Documentation outdated    | Medium | Medium      | Review all docs before launch       |
+| Security vulnerability    | High   | Low         | Run npm audit, Snyk before publish  |
 
 ### Rollback Plan
 
 **If critical issue found after publish:**
 
 1. **Immediate Actions**
+
    ```bash
    # Unpublish if within 72 hours
    npm unpublish vibesec@0.1.0
@@ -1407,16 +1496,17 @@ CODECOV_TOKEN          # Coverage reports (optional)
 
 ## Timeline Summary
 
-| Phase | Duration | Key Deliverable |
-|-------|----------|-----------------|
-| Phase 1 | 7 hours | Tests pass, build works, CI/CD configured |
-| Phase 2 | 4 hours | Full validation complete |
-| Phase 3 | 3 hours | Documentation updated |
-| Phase 4 | 6 hours | npm and Docker ready |
-| Phase 5 | 2 hours | Published and announced |
-| **Total** | **22 hours** | **Production deployment** |
+| Phase     | Duration     | Key Deliverable                           |
+| --------- | ------------ | ----------------------------------------- |
+| Phase 1   | 7 hours      | Tests pass, build works, CI/CD configured |
+| Phase 2   | 4 hours      | Full validation complete                  |
+| Phase 3   | 3 hours      | Documentation updated                     |
+| Phase 4   | 6 hours      | npm and Docker ready                      |
+| Phase 5   | 2 hours      | Published and announced                   |
+| **Total** | **22 hours** | **Production deployment**                 |
 
 **Recommended Schedule:**
+
 - Day 1: Phases 1-2 (11 hours)
 - Day 2: Phases 3-4 (9 hours)
 - Day 3: Phase 5 + buffer (2 hours + testing)
@@ -1426,17 +1516,20 @@ CODECOV_TOKEN          # Coverage reports (optional)
 ## Next Actions
 
 **Immediate (Start Now):**
+
 1. ✅ Fix test suite TypeScript errors
 2. ✅ Update build script to use Node instead of Bun
 3. ✅ Create Dockerfile
 
 **This Week:**
+
 1. ✅ Set up GitHub Actions CI/CD
 2. ✅ Fix documentation issues
 3. ✅ Prepare npm package
 4. ✅ First release (v0.1.0)
 
 **This Month:**
+
 1. Monitor for issues
 2. Fix bugs
 3. Add features based on feedback

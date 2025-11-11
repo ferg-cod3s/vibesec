@@ -82,15 +82,13 @@ function authenticateUser(username: string, password: string) {
     });
 
     it('should reject invalid severity', async () => {
-      await expect(
-        handleScan({ files: ['test.ts'], severity: 'invalid' })
-      ).rejects.toThrow('severity');
+      await expect(handleScan({ files: ['test.ts'], severity: 'invalid' })).rejects.toThrow(
+        'severity'
+      );
     });
 
     it('should reject invalid format', async () => {
-      await expect(
-        handleScan({ files: ['test.ts'], format: 'invalid' })
-      ).rejects.toThrow('format');
+      await expect(handleScan({ files: ['test.ts'], format: 'invalid' })).rejects.toThrow('format');
     });
   });
 

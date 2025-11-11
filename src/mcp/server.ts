@@ -15,12 +15,9 @@ import type {
   ServerInfo,
   InitializeParams,
   ToolListResponse,
-  ToolInfo
+  ToolInfo,
 } from './types';
-import {
-  createSuccessResponse,
-  createErrorResponse
-} from './types';
+import { createSuccessResponse, createErrorResponse } from './types';
 import { MCPErrorHandler, MCPOperationError, ToolExecutionError } from './error';
 import { Logger } from '../observability/logger';
 import { MetricsCollector } from '../observability/metrics';
@@ -81,10 +78,10 @@ export class MCPServer {
    * Get all registered tools
    */
   getTools(): ToolInfo[] {
-    return Array.from(this.tools.values()).map(tool => ({
+    return Array.from(this.tools.values()).map((tool) => ({
       name: tool.name,
       description: tool.description,
-      inputSchema: tool.inputSchema
+      inputSchema: tool.inputSchema,
     }));
   }
 
@@ -100,7 +97,7 @@ export class MCPServer {
     this.logger.info('Starting VibeSec MCP Server', {
       name: this.config.name,
       version: this.config.version,
-      tools: this.tools.size
+      tools: this.tools.size,
     });
 
     // Start transport
@@ -123,7 +120,7 @@ export class MCPServer {
         const request = await this.transport.receive();
 
         this.metrics.increment('mcp.requests.received', 1, {
-          method: request.method
+          method: request.method,
         });
 
         // Process request
@@ -133,9 +130,8 @@ export class MCPServer {
         await this.transport.send(response);
 
         this.metrics.increment('mcp.responses.sent', 1, {
-          success: String(!response.error)
+          success: String(!response.error),
         });
-
       } catch (error) {
         // Log error but continue running
         this.logger.error('Event loop error', {}, error as Error);
@@ -198,24 +194,27 @@ export class MCPServer {
       const duration = performance.now() - startTime;
       this.logger.info(`Request handled: ${req.method}`, {
         method: req.method,
-        duration: `${duration.toFixed(2)}ms`
+        duration: `${duration.toFixed(2)}ms`,
       });
       this.metrics.histogram('mcp.request.duration', duration, {
-        method: req.method
+        method: req.method,
       });
 
       return createSuccessResponse(req.id, result);
-
     } catch (error) {
       // Track error
       const duration = performance.now() - startTime;
-      this.logger.error(`Request failed: ${req.method}`, {
-        method: req.method,
-        duration: `${duration.toFixed(2)}ms`
-      }, error as Error);
+      this.logger.error(
+        `Request failed: ${req.method}`,
+        {
+          method: req.method,
+          duration: `${duration.toFixed(2)}ms`,
+        },
+        error as Error
+      );
 
       this.metrics.increment('mcp.requests.failed', 1, {
-        method: req.method
+        method: req.method,
       });
 
       return MCPErrorHandler.toErrorResponse(req.id, error);
@@ -230,7 +229,7 @@ export class MCPServer {
 
     this.logger.info('Client initialized', {
       clientName: params.clientName,
-      clientVersion: params.clientVersion
+      clientVersion: params.clientVersion,
     });
 
     // Return server capabilities
@@ -241,8 +240,8 @@ export class MCPServer {
         tools: this.config.capabilities.includes('tools'),
         prompts: this.config.capabilities.includes('prompts'),
         resources: this.config.capabilities.includes('resources'),
-        completion: this.config.capabilities.includes('completion')
-      }
+        completion: this.config.capabilities.includes('completion'),
+      },
     };
   }
 
@@ -255,7 +254,7 @@ export class MCPServer {
     this.logger.debug(`Listing ${tools.length} tools`);
 
     return {
-      tools
+      tools,
     };
   }
 
@@ -291,7 +290,7 @@ export class MCPServer {
     try {
       this.logger.info(`Executing tool: ${name}`, {
         tool: name,
-        hasArgs: !!args
+        hasArgs: !!args,
       });
 
       const result = await tool.handler(sanitizedArgs);
@@ -300,32 +299,35 @@ export class MCPServer {
 
       this.logger.info(`Tool executed successfully: ${name}`, {
         tool: name,
-        duration: `${duration.toFixed(2)}ms`
+        duration: `${duration.toFixed(2)}ms`,
       });
 
       this.metrics.histogram('mcp.tool.duration', duration, {
         tool: name,
-        success: 'true'
+        success: 'true',
       });
 
       this.metrics.increment('mcp.tool.calls', 1, {
         tool: name,
-        success: 'true'
+        success: 'true',
       });
 
       return result;
-
     } catch (error) {
       const duration = performance.now() - startTime;
 
-      this.logger.error(`Tool execution failed: ${name}`, {
-        tool: name,
-        duration: `${duration.toFixed(2)}ms`
-      }, error as Error);
+      this.logger.error(
+        `Tool execution failed: ${name}`,
+        {
+          tool: name,
+          duration: `${duration.toFixed(2)}ms`,
+        },
+        error as Error
+      );
 
       this.metrics.increment('mcp.tool.calls', 1, {
         tool: name,
-        success: 'false'
+        success: 'false',
       });
 
       throw new ToolExecutionError(name, error as Error);
@@ -413,7 +415,7 @@ export class MCPServer {
       running: this.running,
       initialized: this.initialized,
       tools: this.tools.size,
-      uptime: process.uptime()
+      uptime: process.uptime(),
     };
   }
 }

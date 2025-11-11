@@ -36,6 +36,7 @@ const config = await loader.loadConfig();
 ```
 
 **Example `.vibesec.yaml`**:
+
 ```yaml
 rules:
   enabled:
@@ -75,6 +76,7 @@ const cached = scanner.getCachedResults(cache, fileHash);
 ```
 
 **Cache Structure**:
+
 ```json
 {
   "files": [["file.ts", { "hash": "abc123", "timestamp": 1697... }]],
@@ -121,12 +123,12 @@ async scan(): Promise<ScanResult> {
 
 ## Performance Targets Met
 
-| Component | Target | Actual |
-|-----------|--------|--------|
-| Bun Config Load | <5ms | ~1-2ms (no external deps) |
-| AST Parse/File | <2ms | 0.76ms (validated) |
-| Git Changed Files | <100ms | ~50-80ms (local repo) |
-| Cache Lookup | <10ms | ~2-5ms (Map operations) |
+| Component               | Target | Actual                     |
+| ----------------------- | ------ | -------------------------- |
+| Bun Config Load         | <5ms   | ~1-2ms (no external deps)  |
+| AST Parse/File          | <2ms   | 0.76ms (validated)         |
+| Git Changed Files       | <100ms | ~50-80ms (local repo)      |
+| Cache Lookup            | <10ms  | ~2-5ms (Map operations)    |
 | 10K Files (incremental) | <2 min | ~5-8s (changed files only) |
 
 ## Next Steps
@@ -153,6 +155,7 @@ bun test src/incremental/incremental-scanner.test.ts
 ## Architecture Decision
 
 These components follow the design from tree-sitter benchmarking:
+
 - **Regex-based AST**: Fast lightweight parsing instead of native tree-sitter
 - **Git integration**: Enable incremental scanning for 80% speedup in practice
 - **Zero-dep config**: YAML parser with no external dependencies

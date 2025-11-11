@@ -46,7 +46,12 @@ export class Logger {
     return levels.indexOf(level) >= levels.indexOf(this.logLevel);
   }
 
-  private log(level: LogLevel, message: string, context?: Record<string, unknown>, error?: Error): void {
+  private log(
+    level: LogLevel,
+    message: string,
+    context?: Record<string, unknown>,
+    error?: Error
+  ): void {
     if (!this.shouldLog(level)) {
       return;
     }
@@ -124,7 +129,11 @@ export class Logger {
       return result;
     } catch (error) {
       const duration = performance.now() - start;
-      this.error(`Failed: ${operation}`, { ...context, duration: `${duration.toFixed(2)}ms` }, error as Error);
+      this.error(
+        `Failed: ${operation}`,
+        { ...context, duration: `${duration.toFixed(2)}ms` },
+        error as Error
+      );
       throw error;
     }
   }

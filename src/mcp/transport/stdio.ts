@@ -75,11 +75,7 @@ export class StdioTransport extends BaseTransport {
       // Write directly to stdout with newline
       process.stdout.write(json + '\n');
     } catch (error) {
-      throw new TransportError(
-        'Failed to send message',
-        'SEND_ERROR',
-        error as Error
-      );
+      throw new TransportError('Failed to send message', 'SEND_ERROR', error as Error);
     }
   }
 

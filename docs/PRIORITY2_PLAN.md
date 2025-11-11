@@ -19,6 +19,7 @@ Priority 2 integrates Priority 1 components into the main Scanner engine and enh
 **Goal**: Integrate AST Parser, Config System, and Incremental Scanner into main engine
 
 **Tasks**:
+
 1. **Refactor Scanner Engine** (`scanner/core/engine.ts`)
    - Load configuration via ConfigLoader
    - Initialize AST parser based on file type
@@ -36,15 +37,18 @@ Priority 2 integrates Priority 1 components into the main Scanner engine and enh
    - Maintain backward compatibility
 
 **Files Modified**:
+
 - `scanner/core/engine.ts` (major refactor)
 - `scanner/core/types.ts` (add AST types)
 - `scanner/analyzers/regex.ts` (minor updates)
 
 **Files Created**:
+
 - `scanner/analyzers/analyzer-factory.ts`
 - `scanner/analyzers/ast-analyzer.ts`
 
 **Success Criteria**:
+
 - Scanner uses config file when present
 - AST parser invoked for supported languages
 - Incremental scanning reduces scan time by 80%
@@ -57,6 +61,7 @@ Priority 2 integrates Priority 1 components into the main Scanner engine and enh
 **Goal**: Update CLI to support configuration, incremental mode, and new options
 
 **Tasks**:
+
 1. **Add Configuration Options** (`cli/index.ts`)
    - `--config <path>` - Specify config file
    - `--init` - Generate .vibesec.yaml template
@@ -75,13 +80,16 @@ Priority 2 integrates Priority 1 components into the main Scanner engine and enh
    - Generate .vibesec.yaml with sensible defaults
 
 **Files Modified**:
+
 - `cli/index.ts`
 - `cli/commands/scan.ts`
 
 **Files Created**:
+
 - `cli/commands/init.ts`
 
 **Success Criteria**:
+
 - `vibesec --init` generates working config
 - `vibesec scan --config .vibesec.yaml` uses config
 - `vibesec scan --incremental` uses cache
@@ -94,6 +102,7 @@ Priority 2 integrates Priority 1 components into the main Scanner engine and enh
 **Goal**: Add detection rules that leverage AST parsing for higher accuracy
 
 **Tasks**:
+
 1. **Create AST Rule Schema** (`rules/schema-ast.json`)
    - Define AST query patterns
    - Node type matching
@@ -113,6 +122,7 @@ Priority 2 integrates Priority 1 components into the main Scanner engine and enh
    - `ast-path-traversal.yaml` - Track file path construction
 
 **Files Created**:
+
 - `rules/schema-ast.json`
 - `rules/default/ast-sql-injection.yaml`
 - `rules/default/ast-command-injection.yaml`
@@ -121,6 +131,7 @@ Priority 2 integrates Priority 1 components into the main Scanner engine and enh
 - `scanner/analyzers/ast-analyzer.ts`
 
 **Success Criteria**:
+
 - AST rules detect issues missed by regex
 - Detection accuracy improves from 90% → 95%
 - False positive rate remains <5%
@@ -133,6 +144,7 @@ Priority 2 integrates Priority 1 components into the main Scanner engine and enh
 **Goal**: Comprehensive tests for full pipeline with all Priority 1+2 components
 
 **Tasks**:
+
 1. **Create End-to-End Tests** (`tests/integration/full-pipeline.test.ts`)
    - Test config loading → AST parsing → detection → reporting
    - Test incremental scanning with cache
@@ -150,6 +162,7 @@ Priority 2 integrates Priority 1 components into the main Scanner engine and enh
    - Memory profiling with AST
 
 **Files Created**:
+
 - `tests/integration/full-pipeline.test.ts`
 - `tests/integration/config-loader.test.ts`
 - `tests/integration/incremental-scanner.test.ts`
@@ -157,6 +170,7 @@ Priority 2 integrates Priority 1 components into the main Scanner engine and enh
 - `tests/fixtures/complex-vulnerable/` (directory)
 
 **Success Criteria**:
+
 - All integration tests pass
 - Performance: <2 min for 10K files
 - Incremental: <10s for typical PR (100 files)
@@ -178,6 +192,7 @@ Launch 4 specialized subagents in parallel:
 ### GitHub Project Updates
 
 Create issues for each component:
+
 - Issue: "P2.1 - Scanner Engine Integration"
 - Issue: "P2.2 - CLI Enhancement"
 - Issue: "P2.3 - AST-Based Detection Rules"
@@ -189,20 +204,21 @@ Track progress in VibeSec Development project.
 
 ## Performance Targets
 
-| Metric | Current | After P2 | Status |
-|--------|---------|----------|--------|
-| Detection Accuracy | 90% | 95% | 🎯 Target |
-| False Positive Rate | 0% | <5% | 🎯 Target |
-| Scan Speed (10K files) | ~7-8s | <2 min | ✅ On Track |
-| Incremental Scan (100 files) | N/A | <10s | 🎯 Target |
-| AST Parse Time | 0.76ms/file | <1ms/file | ✅ Validated |
-| Memory Usage | ~15MB | <100MB | ✅ On Track |
+| Metric                       | Current     | After P2  | Status       |
+| ---------------------------- | ----------- | --------- | ------------ |
+| Detection Accuracy           | 90%         | 95%       | 🎯 Target    |
+| False Positive Rate          | 0%          | <5%       | 🎯 Target    |
+| Scan Speed (10K files)       | ~7-8s       | <2 min    | ✅ On Track  |
+| Incremental Scan (100 files) | N/A         | <10s      | 🎯 Target    |
+| AST Parse Time               | 0.76ms/file | <1ms/file | ✅ Validated |
+| Memory Usage                 | ~15MB       | <100MB    | ✅ On Track  |
 
 ---
 
 ## Success Criteria
 
 **Priority 2 Complete When**:
+
 - ✅ All P1 components integrated into main Scanner
 - ✅ CLI supports configuration, incremental, and init
 - ✅ AST-based rules detect complex vulnerabilities
@@ -252,12 +268,15 @@ Track progress in VibeSec Development project.
 ## Risk Mitigation
 
 **Risk**: AST parsing slower than expected
+
 - **Mitigation**: Regex fallback always available, incremental scanning compensates
 
 **Risk**: Integration complexity causes regressions
+
 - **Mitigation**: Comprehensive integration tests, backward compatibility maintained
 
 **Risk**: Configuration complexity confuses users
+
 - **Mitigation**: Interactive `--init` wizard, sensible defaults, clear documentation
 
 ---

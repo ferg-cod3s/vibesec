@@ -70,6 +70,7 @@ Most security tools assume you already know what "CWE-79" means. VibeSec explain
 
 **Example Finding**:
 ```
+
 🔴 HIGH: Cross-Site Scripting (XSS) Detected
 
 Your code renders user input as HTML without sanitization.
@@ -77,6 +78,7 @@ An attacker could inject <script> tags to steal user sessions.
 
 ❌ Vulnerable: innerHTML = userInput
 ✅ Secure: textContent = userInput (or use DOMPurify)
+
 ```
 
 ### I need your feedback:
@@ -169,14 +171,14 @@ Hi [Name],
 
 ### What's Next:
 
-**1. Early Access Code** (If promised)  
+**1. Early Access Code** (If promised)
 I'll send your VibeSec Pro early access code within **2 weeks** via email. Keep an eye out!
 
-**2. Contributor Badge**  
-You'll be featured on our "Founding Testers" page:  
+**2. Contributor Badge**
+You'll be featured on our "Founding Testers" page:
 [Link to contributors page - TBD]
 
-**3. Results & Changes**  
+**3. Results & Changes**
 I'll share a summary of all feedback and how we're improving VibeSec in early November. Stay tuned!
 
 ### Want to Help More?
@@ -236,6 +238,7 @@ I've been working on **VibeSec**, a security scanner designed specifically for *
 
 ### Example Output:
 ```
+
 🔴 HIGH: SQL Injection Detected
 
 Your code constructs SQL queries using template literals with user input.
@@ -243,6 +246,7 @@ An attacker could input: ' OR '1'='1 to bypass authentication.
 
 ❌ Vulnerable: `SELECT * FROM users WHERE id = ${userId}`
 ✅ Secure: Use parameterized queries or an ORM
+
 ```
 
 ### I need beta testers!
@@ -314,17 +318,17 @@ DM me if you have questions! Thanks 🙏
 
 **File**: `docs/RECRUITMENT_TRACKER.md`
 
-| Channel | Date Sent | Recipients | Responses | Conversion Rate |
-|---------|-----------|------------|-----------|-----------------|
-| Email (pilot) | 2025-10-10 | 5 | 4 | 80% |
-| Email (main) | 2025-10-15 | 20 | 8 | 40% |
-| Reddit | 2025-10-15 | ~1000 views | 3 | 0.3% |
-| Twitter | 2025-10-15 | 150 impressions | 1 | 0.6% |
-| Discord | 2025-10-16 | 200 members | 2 | 1% |
-| **TOTAL** | - | - | **18** | - |
+| Channel       | Date Sent  | Recipients      | Responses | Conversion Rate |
+| ------------- | ---------- | --------------- | --------- | --------------- |
+| Email (pilot) | 2025-10-10 | 5               | 4         | 80%             |
+| Email (main)  | 2025-10-15 | 20              | 8         | 40%             |
+| Reddit        | 2025-10-15 | ~1000 views     | 3         | 0.3%            |
+| Twitter       | 2025-10-15 | 150 impressions | 1         | 0.6%            |
+| Discord       | 2025-10-16 | 200 members     | 2         | 1%              |
+| **TOTAL**     | -          | -               | **18**    | -               |
 
 **Target**: 15-20 responses  
-**Current**: ____ responses  
+**Current**: \_\_\_\_ responses  
 **Status**: 🟢 On track / 🟡 Needs boost / 🔴 Behind
 
 ---
@@ -332,16 +336,19 @@ DM me if you have questions! Thanks 🙏
 ## Best Practices
 
 ### Timing
+
 - **Pilot**: Tuesday-Thursday (best response rates)
 - **Main wave**: Avoid Mondays (inbox overload) and weekends
 - **Reminder**: Send 3-5 days before deadline
 
 ### Personalization
+
 - Use recipient's first name when possible
 - Reference specific context (e.g., "I saw you're active on r/learnprogramming")
 - Mention mutual connections if applicable
 
 ### Subject Line A/B Testing
+
 If you have a large email list, test 2 subject lines:
 
 **Version A (Specific)**:  
@@ -353,6 +360,7 @@ If you have a large email list, test 2 subject lines:
 Track which gets higher open rate.
 
 ### Follow-Up Cadence
+
 - **Pilot**: 1 reminder after 3 days
 - **Main**: 1 reminder after 7 days, final reminder at day 12
 - **Max**: 2 reminders total (avoid spam perception)
@@ -362,12 +370,14 @@ Track which gets higher open rate.
 ## Compliance & Ethics
 
 ### GDPR Considerations
+
 - Only email people who opted in or have prior relationship
 - Include unsubscribe option in every email
 - Don't share email addresses with third parties
 - Delete test data after Phase 4 completes (unless consent given)
 
 ### Anti-Spam
+
 - BCC recipients (don't expose emails to each other)
 - Use professional email (not Gmail/Yahoo if possible)
 - Include physical mailing address (required by CAN-SPAM)

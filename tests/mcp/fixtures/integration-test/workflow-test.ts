@@ -1,1 +1,1 @@
-const secret = "sk-prod-key123";
+const secret = 'sk-prod-key123';

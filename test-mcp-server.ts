@@ -201,7 +201,6 @@ function query(userInput: string) {
     console.log('\n✅ VibeSec MCP server is working correctly');
     console.log('✅ Ready to use with Claude Code, Cursor, or Cline');
     console.log('\n💡 Next step: Restart Claude Code to activate VibeSec');
-
   } catch (error) {
     console.error('\n❌ Test failed:', error);
     process.exit(1);

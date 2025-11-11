@@ -38,12 +38,14 @@ export class SentryIntegration {
       release: config.release,
 
       // Self-hosted Sentry support
-      ...(config.serverUrl ? {
-        tunnel: config.serverUrl,
-        transportOptions: {
-          url: config.serverUrl
-        }
-      } : {}),
+      ...(config.serverUrl
+        ? {
+            tunnel: config.serverUrl,
+            transportOptions: {
+              url: config.serverUrl,
+            },
+          }
+        : {}),
 
       // Attach context
       beforeSend(event, _hint) {
@@ -68,11 +70,7 @@ export class SentryIntegration {
   /**
    * Report error to Sentry
    */
-  captureError(
-    error: Error,
-    category: ErrorCategory,
-    context?: Record<string, unknown>
-  ): string {
+  captureError(error: Error, category: ErrorCategory, context?: Record<string, unknown>): string {
     if (!this.initialized) {
       console.warn('Sentry not initialized');
       return '';
