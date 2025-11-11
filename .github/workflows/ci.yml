@@ -21,14 +21,14 @@ jobs:
         with:
           bun-version: ${{ matrix.bun-version }}
 
-       - name: Install dependencies
-         run: bun install
+      - name: Install dependencies
+        run: bun install
 
-       - name: Run linter
-         run: bun run lint
+      - name: Run linter
+        run: bun run lint
 
-       - name: Run tests
-         run: bun run test
+      - name: Run tests
+        run: bun run test
 
       - name: Build
         run: bun run build
@@ -47,13 +47,13 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
 
-       - name: Install dependencies
-         run: bun install
+      - name: Install dependencies
+        run: bun install
 
-       - name: Build
-         run: bun run build
+      - name: Build
+        run: bun run build
 
-       - name: Test CLI runs
-         run: |
-           node dist/cli/index.js --version
-           node dist/cli/index.js scan --help
+      - name: Test CLI runs
+        run: |
+          node dist/cli/index.js --version
+          node dist/cli/index.js scan --help
