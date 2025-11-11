@@ -16,6 +16,18 @@ module.exports = {
     sourceType: 'module',
     project: './tsconfig.json'
   },
+  ignorePatterns: [
+    'dist/**',
+    'demo-examples/**',
+    'poc/**',
+    'scripts/**',
+    'test-mcp-output/**',
+    'test-mcp-server.ts',
+    'run-benchmark.ts',
+    'tests/**',
+    'benchmark-results/**',
+    'bun-benchmark-results.json'
+  ],
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'warn',
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],

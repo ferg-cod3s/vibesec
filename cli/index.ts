@@ -4,7 +4,6 @@ import { Command } from 'commander';
 import { scanCommand } from './commands/scan';
 import { benchmarkCommand } from './commands/benchmark';
 import { initSentryFromEnv } from '../src/observability/integrations/sentry';
-import { Logger } from '../src/observability/logger';
 
 // Initialize observability (Sentry logging and error tracking)
 try {
@@ -14,8 +13,6 @@ try {
 } catch (error) {
   console.error('Failed to initialize Sentry:', error);
 }
-
-const logger = new Logger('vibesec-cli');
 
 const program = new Command();
 

@@ -6,7 +6,6 @@ import {
   ScanResult,
   Finding,
   ScanSummary,
-  Category,
   Severity,
 } from './types';
 import { RuleLoader } from './rule-loader';

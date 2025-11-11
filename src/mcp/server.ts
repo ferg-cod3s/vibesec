@@ -19,9 +19,7 @@ import type {
 } from './types';
 import {
   createSuccessResponse,
-  createErrorResponse,
-  isValidMCPRequest,
-  isValidToolCallParams
+  createErrorResponse
 } from './types';
 import { MCPErrorHandler, MCPOperationError, ToolExecutionError } from './error';
 import { Logger } from '../observability/logger';
@@ -190,9 +188,10 @@ export class MCPServer {
           result = { status: 'ok', timestamp: Date.now() };
           break;
 
-        default:
+        default: {
           const error = MCPErrorHandler.methodNotFound(req.method);
           return createErrorResponse(req.id, error.code, error.message, error.data);
+        }
       }
 
       // Track success

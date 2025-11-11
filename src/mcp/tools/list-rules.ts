@@ -6,7 +6,7 @@
  */
 
 import { RuleLoader } from '../../../scanner/core/rule-loader';
-import { Rule, Severity, Category } from '../../../scanner/core/types';
+import { Severity, Category } from '../../../scanner/core/types';
 import { MCPTool } from '../types';
 
 /**
