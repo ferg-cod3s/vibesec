@@ -1,5 +1,5 @@
 import { RegexAnalyzer } from '../../scanner/analyzers/regex';
-import { Rule, Pattern, Severity, Category } from '../../scanner/core/types';
+import { Rule, Severity, Category } from '../../scanner/core/types';
 
 describe('RegexAnalyzer', () => {
   const analyzer = new RegexAnalyzer();

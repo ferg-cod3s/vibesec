@@ -1,6 +1,6 @@
 {
   "name": "vibesec",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Security scanner for AI-generated code - detects vulnerabilities in vibe-coded projects",
   "main": "dist/index.js",
   "bin": {
@@ -18,7 +18,8 @@
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"**/*.{ts,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,json,md}\"",
-    "scan": "bun run cli/index.ts scan"
+    "scan": "bun run cli/index.ts scan",
+    "deploy:cloudflare": "npm run build:cloudflare && wrangler deploy"
   },
   "keywords": [
     "security",

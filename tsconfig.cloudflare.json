@@ -1,0 +1,41 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ES2020",
+    "moduleResolution": "node",
+    "outDir": "./dist-cf",
+    "lib": ["ES2020"],
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false
+  },
+  "include": [
+    "src/mcp/**/*",
+    "scanner/core/**/*",
+    "scanner/analyzers/**/*",
+    "lib/utils/**/*",
+    "src/ast/**/*",
+    "src/config/**/*",
+    "src/observability/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "dist-cf",
+    "**/*.test.ts",
+    "tests/**/*",
+    "cli/**/*",
+    "src/incremental/**/*",
+    "scanner/analyzers/dependency.ts",
+    "scanner/analyzers/regex.ts",
+    "poc/**/*",
+    "scripts/**/*",
+    "demo-*/**/*",
+    "benchmark*/**/*"
+  ]
+}
