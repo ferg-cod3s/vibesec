@@ -27,8 +27,8 @@ jobs:
       - name: Run linter
         run: bun run lint
 
-      - name: Run tests
-        run: bun test
+       - name: Run tests
+         run: bun run test
 
       - name: Build
         run: bun run build
@@ -53,7 +53,7 @@ jobs:
       - name: Build
         run: bun run build
 
-      - name: Test CLI runs
-        run: |
-          bun run cli/index.ts --version
-          bun run cli/index.ts scan --help
+       - name: Test CLI runs
+         run: |
+           node dist/cli/index.js --version
+           node dist/cli/index.js scan --help
