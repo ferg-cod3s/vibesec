@@ -1,9 +1,48 @@
 name: CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
 
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Hello World"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: npm run lint
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - run: |
+          ls -la dist/
+          test -f dist/cli/index.js || exit 1
+          test -d dist/rules || exit 1
+
+  test-install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: npm run build
+      - run: |
+          node dist/cli/index.js --version
+          node dist/cli/index.js scan --help
