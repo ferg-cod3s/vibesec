@@ -34,15 +34,14 @@ export class FriendlyErrorHandler {
    * Error message templates for common errors
    */
   private readonly errorMessages: Record<string, ErrorTemplate> = {
-    'ENOENT': {
+    ENOENT: {
       title: "Couldn't find the folder or file you wanted to scan",
-      explanation: (path) =>
-        `The path '${path || 'specified'}' doesn't exist on your computer.`,
+      explanation: (path) => `The path '${path || 'specified'}' doesn't exist on your computer.`,
       suggestions: [
         'Check the path for typos',
         'Make sure the folder or file exists',
         "Try using '.' to scan the current folder",
-        'Use absolute paths if relative paths aren\'t working',
+        "Use absolute paths if relative paths aren't working",
       ],
       examples: [
         'vibesec scan .              # Scan current folder',
@@ -51,7 +50,7 @@ export class FriendlyErrorHandler {
       ],
     },
 
-    'EACCES': {
+    EACCES: {
       title: "Don't have permission to read this folder",
       explanation: (path) =>
         `Your user account doesn't have access to '${path || 'this location'}'.`,
@@ -67,40 +66,33 @@ export class FriendlyErrorHandler {
       ],
     },
 
-    'EISDIR': {
+    EISDIR: {
       title: 'Expected a file but got a directory',
-      explanation: (path) =>
-        `The path '${path || 'specified'}' is a directory, not a file.`,
+      explanation: (path) => `The path '${path || 'specified'}' is a directory, not a file.`,
       suggestions: [
         'Use the scan command without specifying individual files',
         'VibeSec automatically scans all files in a directory',
       ],
-      examples: [
-        'vibesec scan ./myproject    # Scan entire directory',
-      ],
+      examples: ['vibesec scan ./myproject    # Scan entire directory'],
     },
 
-    'EMFILE': {
+    EMFILE: {
       title: 'Too many files open at once',
-      explanation: () =>
-        'Your system has a limit on how many files can be opened simultaneously.',
+      explanation: () => 'Your system has a limit on how many files can be opened simultaneously.',
       suggestions: [
         'Try scanning a smaller directory',
         'Close other applications that might have files open',
-        'Increase your system\'s file handle limit (advanced)',
+        "Increase your system's file handle limit (advanced)",
       ],
-      examples: [
-        'vibesec scan ./src          # Scan smaller directory',
-      ],
+      examples: ['vibesec scan ./src          # Scan smaller directory'],
     },
 
-    'MODULE_NOT_FOUND': {
+    MODULE_NOT_FOUND: {
       title: 'Missing required dependency',
-      explanation: () =>
-        'VibeSec is missing a required package to run.',
+      explanation: () => 'VibeSec is missing a required package to run.',
       suggestions: [
         'Run "bun install" to install dependencies',
-        'Make sure you\'re in the VibeSec directory',
+        "Make sure you're in the VibeSec directory",
         'Check that the installation completed successfully',
       ],
       examples: [
@@ -109,10 +101,9 @@ export class FriendlyErrorHandler {
       ],
     },
 
-    'INVALID_SEVERITY': {
+    INVALID_SEVERITY: {
       title: 'Invalid severity level specified',
-      explanation: () =>
-        'The severity level you provided is not recognized.',
+      explanation: () => 'The severity level you provided is not recognized.',
       suggestions: [
         'Valid severity levels are: critical, high, medium, low',
         'Severity is case-insensitive',
@@ -158,9 +149,7 @@ export class FriendlyErrorHandler {
     }
 
     // Help link
-    console.error(
-      chalk.gray('Need help? Check the documentation or ask your development team.')
-    );
+    console.error(chalk.gray('Need help? Check the documentation or ask your development team.'));
     console.error('');
 
     // Show technical details only for technical users or if very brief
@@ -185,7 +174,10 @@ export class FriendlyErrorHandler {
       return this.errorMessages['INVALID_SEVERITY'];
     }
 
-    if (error.message.includes('MODULE_NOT_FOUND') || error.message.includes('Cannot find module')) {
+    if (
+      error.message.includes('MODULE_NOT_FOUND') ||
+      error.message.includes('Cannot find module')
+    ) {
       return this.errorMessages['MODULE_NOT_FOUND'];
     }
 

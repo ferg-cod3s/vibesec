@@ -14,6 +14,7 @@ VibeSec is a security scanner purpose-built for AI-generated code. This POC rele
 ### ✨ Features
 
 #### Core Scanner Engine
+
 - **19 security detection rules** across 5 categories:
   - Secrets detection (API keys, tokens, credentials)
   - Injection vulnerabilities (SQL, XSS, command injection)
@@ -26,6 +27,7 @@ VibeSec is a security scanner purpose-built for AI-generated code. This POC rele
 - **Comprehensive metadata** including CWE mappings and OWASP references
 
 #### MCP Server Integration
+
 - **Model Context Protocol (MCP) support** for AI assistant integration
 - Works with Claude Code, Cursor, and Cline
 - Real-time scanning directly within AI coding assistants
@@ -33,6 +35,7 @@ VibeSec is a security scanner purpose-built for AI-generated code. This POC rele
 - Two MCP tools: `vibesec_scan` and `vibesec_list_rules`
 
 #### Reporting & UX
+
 - **Plain-language reporting** for non-technical stakeholders
 - **Security scorecard** (0-100 grading with benchmark comparison)
 - **Multiple output formats**: JSON, plain text, stakeholder reports
@@ -40,6 +43,7 @@ VibeSec is a security scanner purpose-built for AI-generated code. This POC rele
 - **Progress indicators** with ETA estimates for large scans
 
 #### Developer Experience
+
 - **CLI tool** with intuitive command structure
 - **Configuration file support** (.vibesec.yaml)
 - **CI/CD integration** examples (GitHub Actions)
@@ -86,6 +90,7 @@ VibeSec is a security scanner purpose-built for AI-generated code. This POC rele
 ### 🙏 Acknowledgments
 
 Built on research from:
+
 - Veracode's 2025 GenAI Code Security Report
 - NYU/Stanford AI-assisted coding security research
 - OWASP AI Security & Privacy Guide
@@ -96,6 +101,7 @@ Built on research from:
 ## [Unreleased]
 
 ### Planned for 0.2.0
+
 - Enhanced AST parsing for better accuracy
 - Reduced false positive rate
 - Auto-fix suggestions for common issues

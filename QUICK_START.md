@@ -9,10 +9,13 @@ Your Claude Code is configured with VibeSec. Just restart Claude Code to activat
 ## 🚀 Start Dogfooding (5 Minutes)
 
 ### Step 1: Restart Claude Code
+
 Close and reopen Claude Code to load VibeSec MCP server.
 
 ### Step 2: Verify It's Working
+
 In Claude Code, ask:
+
 ```
 What MCP tools do you have available?
 ```
@@ -20,12 +23,15 @@ What MCP tools do you have available?
 You should see `vibesec_scan` and `vibesec_list_rules`.
 
 ### Step 3: Scan Your First File
+
 ```
 Claude, can you use vibesec_scan to check src/mcp/tools/scan.ts for security issues?
 ```
 
 ### Step 4: Scan Before Every Commit
+
 Make it a habit:
+
 ```
 Claude, before I commit, scan all my changed files for security vulnerabilities.
 ```
@@ -40,12 +46,14 @@ Claude, before I commit, scan all my changed files for security vulnerabilities.
 "I just built a security scanner that works INSIDE my AI coding assistant. Watch it catch a vulnerability Claude Code missed..."
 
 **Demo (90 seconds):**
+
 1. Show Claude Code writing some code with a hardcoded API key
 2. Use VibeSec to scan it
 3. Show VibeSec catching the vulnerability
 4. Explain what it found and why it's dangerous
 
 **Setup (30 seconds):**
+
 1. Show the ~/.claude/mcp.json file
 2. "That's it. 2 minutes to set up."
 3. Show the GitHub repo
@@ -54,11 +62,13 @@ Claude, before I commit, scan all my changed files for security vulnerabilities.
 "Try it yourself - link in description. What vulnerabilities did it find in YOUR code?"
 
 ### Recording Tools:
+
 - **Screen:** OBS Studio or Loom
 - **Audio:** Built-in mic (just be clear)
 - **Editing:** DaVinci Resolve (free) or just use Loom (no editing needed)
 
 ### Upload To:
+
 - YouTube (main)
 - Twitter/X (clip version)
 - LinkedIn (professional angle)
@@ -110,6 +120,7 @@ What did it find in YOUR code? 👀
 **Title:** "Built a security scanner for Claude Code - caught 3 vulns it missed"
 
 **Post:**
+
 ```
 I've been using Claude Code for a few weeks and love it, but noticed it
 sometimes generates code with security issues (hardcoded secrets, incomplete
@@ -138,6 +149,7 @@ AI-generated code?
 **Title:** "Show HN: VibeSec – Security scanner for AI-generated code (MCP integration)"
 
 **Post:**
+
 ```
 Hi HN,
 
@@ -177,16 +189,19 @@ feedback from the HN community on the approach and what other patterns to detect
 ## 🎯 First Week Goals
 
 ### Days 1-2: Dogfooding
+
 - [ ] Scan every commit in vibesec-bun-poc
 - [ ] Document 3-5 real vulnerabilities caught
 - [ ] Take screenshots of findings
 
 ### Days 3-4: Content Creation
+
 - [ ] Record demo video (upload to YouTube)
 - [ ] Write blog post for Dev.to
 - [ ] Prepare launch posts
 
 ### Days 5-7: Launch
+
 - [ ] Post on X/Twitter (thread)
 - [ ] Post on r/ClaudeAI
 - [ ] Post on r/programming
@@ -194,6 +209,7 @@ feedback from the HN community on the approach and what other patterns to detect
 - [ ] Submit to Show HN
 
 ### Success Metrics:
+
 - 50+ GitHub stars
 - 10+ MCP installs
 - 5+ pieces of feedback
@@ -205,12 +221,14 @@ feedback from the HN community on the approach and what other patterns to detect
 ### Why VibeSec vs. Traditional Scanners?
 
 **Traditional SAST:**
+
 - Designed for human-written code
 - Batch processing (slow)
 - Not aware of AI patterns
 - Separate from dev workflow
 
 **VibeSec:**
+
 - Built FOR AI-generated code
 - Real-time (fast)
 - Catches AI-specific issues

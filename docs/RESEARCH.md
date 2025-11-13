@@ -22,6 +22,7 @@ This document contains the market research findings that informed VibeSec's prod
 ### Vibe Coding Growth
 
 **Explosive Market Growth (2025):**
+
 - **Lovable**: $100M ARR in 8 months, targeting $1B ARR within 12 months
 - **Replit**: Grew from $2.8M to $150M ARR in <1 year
 - **Anything**: $2M ARR in first 2 weeks, $100M valuation
@@ -29,10 +30,12 @@ This document contains the market research findings that informed VibeSec's prod
 - **Emergent**: Raised $23M in Series A funding
 
 **Enterprise Adoption:**
+
 - Salesforce launched Agentforce Vibes (Oct 2025)
 - Enterprise vibe coding market estimated at $10B+ by 2027
 
 **Investor Quote:**
+
 > "This is one of those spaces where every company is growing like a weed" - Investor in vibe coding space
 
 ---
@@ -71,6 +74,7 @@ This document contains the market research findings that informed VibeSec's prod
 ### Target User: Vibe Coders
 
 **Demographics:**
+
 - Solo founders (40%)
 - Small teams 2-10 people (35%)
 - PMs/designers prototyping (15%)
@@ -110,13 +114,16 @@ This document contains the market research findings that informed VibeSec's prod
 ### Existing Tools
 
 #### 1. Snyk
+
 **Focus:** Dependency vulnerability scanning
 **Strengths:**
+
 - Comprehensive CVE database
 - Wide language support
 - Good developer integrations
 
 **Gaps for Vibe Coders:**
+
 - ❌ No AI-specific pattern detection
 - ❌ Technical outputs not accessible to PMs/designers
 - ❌ Doesn't detect incomplete implementations or TODOs
@@ -127,13 +134,16 @@ This document contains the market research findings that informed VibeSec's prod
 ---
 
 #### 2. Socket.dev
+
 **Focus:** Supply chain attack detection
 **Strengths:**
+
 - Proactive malicious package detection
 - Real-time dependency monitoring
 - JavaScript, Python, Go support
 
 **Gaps for Vibe Coders:**
+
 - ❌ Only covers dependencies, not custom code
 - ❌ No AI-generated code pattern detection
 - ❌ Limited help for prompt injection or data leakage
@@ -143,13 +153,16 @@ This document contains the market research findings that informed VibeSec's prod
 ---
 
 #### 3. GitGuardian
+
 **Focus:** Secrets detection in git repos
 **Strengths:**
+
 - Real-time secrets scanning
 - IDE integration (VS Code)
 - Machine learning for secret classification
 
 **Gaps for Vibe Coders:**
+
 - ❌ Reactive (after secrets are committed)
 - ❌ Limited to credentials, not broader security
 - ❌ No AI-specific vulnerability detection
@@ -157,13 +170,16 @@ This document contains the market research findings that informed VibeSec's prod
 ---
 
 #### 4. Aikido Security
+
 **Focus:** Application security platform (code + cloud + runtime)
 **Strengths:**
+
 - Published "Vibe Coders' Security Checklist"
 - Auto-remediation with PR generation
 - AI-based auto-triage
 
 **Gaps for Vibe Coders:**
+
 - ❌ Vibe coding checklist is just a blog post, not integrated detection
 - ❌ Still primarily focused on traditional app sec
 - ❌ Limited AI-specific detection rules
@@ -174,15 +190,15 @@ This document contains the market research findings that informed VibeSec's prod
 
 ### Competitive Gaps (VibeSec Opportunity)
 
-| Need | Snyk | Socket.dev | GitGuardian | Aikido | VibeSec |
-|------|------|------------|-------------|--------|---------|
-| AI-specific detection | ❌ | ❌ | ❌ | ⚠️ | ✅ |
-| Non-technical UX | ❌ | ❌ | ❌ | ❌ | ✅ |
-| Plain-language reports | ❌ | ❌ | ❌ | ⚠️ | ✅ |
-| Incomplete code detection | ❌ | ❌ | ❌ | ❌ | ✅ |
-| Prompt injection checks | ❌ | ❌ | ❌ | ❌ | ✅ |
-| Free tier for OSS | ✅ | ❓ | ✅ | ✅ | ✅ |
-| Integrates with existing tools | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Need                           | Snyk | Socket.dev | GitGuardian | Aikido | VibeSec |
+| ------------------------------ | ---- | ---------- | ----------- | ------ | ------- |
+| AI-specific detection          | ❌   | ❌         | ❌          | ⚠️     | ✅      |
+| Non-technical UX               | ❌   | ❌         | ❌          | ❌     | ✅      |
+| Plain-language reports         | ❌   | ❌         | ❌          | ⚠️     | ✅      |
+| Incomplete code detection      | ❌   | ❌         | ❌          | ❌     | ✅      |
+| Prompt injection checks        | ❌   | ❌         | ❌          | ❌     | ✅      |
+| Free tier for OSS              | ✅   | ❓         | ✅          | ✅     | ✅      |
+| Integrates with existing tools | ✅   | ✅         | ✅          | ✅     | ✅      |
 
 ---
 
@@ -191,6 +207,7 @@ This document contains the market research findings that informed VibeSec's prod
 ### Non-Technical User Needs
 
 **Research Sources:**
+
 - Lovable/Bolt.new user forums
 - Vibe coding Discord communities
 - Reddit (r/SideProject, r/EntrepreneurRideAlong)
@@ -199,12 +216,15 @@ This document contains the market research findings that informed VibeSec's prod
 **Key Insights:**
 
 1. **Security Anxiety is Real**
+
    > "I built an app with Lovable in 3 hours but have no idea if it's safe to deploy" - Reddit user
 
 2. **Tool Complexity Barrier**
+
    > "I tried Snyk but gave up after seeing 500 issues I didn't understand" - Discord user
 
 3. **Need for Validation**
+
    > "Investors asked if we've done security testing. I said yes but honestly have no idea" - Indie Hacker forum
 
 4. **Speed is Critical**
@@ -217,16 +237,19 @@ This document contains the market research findings that informed VibeSec's prod
 ### Willingness to Pay
 
 **Survey Data (informal Twitter/Discord polls):**
+
 - 70% would pay for security tool if <$50/month
 - 45% would pay $100-$200/month for team plan
 - 90% want free tier for personal projects
 
 **Competitive Pricing:**
+
 - **Snyk**: $25/month (starter), $50K+ (enterprise)
 - **GitGuardian**: Free for individuals, enterprise pricing undisclosed
 - **Aikido**: Freemium model, enterprise pricing undisclosed
 
 **VibeSec Strategy:**
+
 - Free: Open source + <3 projects
 - Pro: $49/month (5 projects)
 - Team: $199/month (unlimited)
@@ -263,9 +286,11 @@ This document contains the market research findings that informed VibeSec's prod
 ## Go-to-Market Strategy
 
 ### Phase 1: Community-Led Growth
+
 **Timeline:** Months 1-3
 
 **Tactics:**
+
 - Launch on Product Hunt, Hacker News
 - Guest posts on security blogs (Databricks, Lawfare, Aikido)
 - Partner with vibe coding platforms
@@ -277,9 +302,11 @@ This document contains the market research findings that informed VibeSec's prod
 ---
 
 ### Phase 2: Startup Monetization
+
 **Timeline:** Months 4-6
 
 **Tactics:**
+
 - Paid tiers ($49-$199/month)
 - Case studies from early adopters
 - Investor diligence package
@@ -291,9 +318,11 @@ This document contains the market research findings that informed VibeSec's prod
 ---
 
 ### Phase 3: Enterprise Expansion
+
 **Timeline:** Months 7-12
 
 **Tactics:**
+
 - White-label for Lovable, Replit, Bolt.new
 - Enterprise sales team
 - SOC 2 / ISO 27001 compliance
@@ -307,36 +336,39 @@ This document contains the market research findings that informed VibeSec's prod
 
 ### Market Risks
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|------------|--------|------------|
-| Vibe coding fad ends | Low | High | Multiple use cases beyond pure vibe coding |
-| Large competitor enters | Medium | High | First-mover advantage, AI-specific focus |
-| Users don't care about security | Low | High | Data shows security is top concern |
-| Free tools dominate | Medium | Medium | Superior UX and integrations as differentiator |
+| Risk                            | Likelihood | Impact | Mitigation                                     |
+| ------------------------------- | ---------- | ------ | ---------------------------------------------- |
+| Vibe coding fad ends            | Low        | High   | Multiple use cases beyond pure vibe coding     |
+| Large competitor enters         | Medium     | High   | First-mover advantage, AI-specific focus       |
+| Users don't care about security | Low        | High   | Data shows security is top concern             |
+| Free tools dominate             | Medium     | Medium | Superior UX and integrations as differentiator |
 
 ### Technical Risks
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|------------|--------|------------|
-| High false positive rate | Medium | High | Continuous tuning, confidence scoring |
-| Performance issues | Low | Medium | Optimize early, parallel processing |
-| AI detection accuracy | Medium | Medium | Heuristics + community feedback loop |
+| Risk                     | Likelihood | Impact | Mitigation                            |
+| ------------------------ | ---------- | ------ | ------------------------------------- |
+| High false positive rate | Medium     | High   | Continuous tuning, confidence scoring |
+| Performance issues       | Low        | Medium | Optimize early, parallel processing   |
+| AI detection accuracy    | Medium     | Medium | Heuristics + community feedback loop  |
 
 ---
 
 ## Success Metrics
 
 ### Adoption KPIs
+
 - **Month 3:** 500 active users
 - **Month 6:** 2,000 active users, 50 paying
 - **Month 12:** 10,000 active users, 200 paying
 
 ### Revenue KPIs
+
 - **Month 6:** $10K MRR
 - **Month 12:** $50K MRR
 - **Month 18:** $100K MRR, Series A positioning
 
 ### Quality KPIs
+
 - Detection accuracy: ≥85% precision
 - False positive rate: <15%
 - User satisfaction: ≥4.0/5.0
@@ -346,12 +378,14 @@ This document contains the market research findings that informed VibeSec's prod
 ## Sources
 
 ### Primary Research
+
 - Web searches (Oct 2025)
 - Community forums and Discord servers
 - Twitter conversations with vibe coders
 - GitHub issue tracker analysis
 
 ### Secondary Research
+
 1. **Veracode 2025 GenAI Code Security Report**
    - 45% AI code failure rate
    - OWASP Top 10 vulnerabilities common

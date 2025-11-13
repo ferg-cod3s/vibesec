@@ -53,7 +53,7 @@ import { Scanner } from '../scanner/core/engine';
 
 const scanner = new Scanner({
   path: './src',
-  quiet: false
+  quiet: false,
 });
 
 const result = await scanner.scan();

@@ -13,9 +13,11 @@
 **Visual:** Friendly, modern interface (not intimidating terminal)
 
 **Narration:**
+
 > "Hey there! Are you a PM, designer, or product owner who needs to understand security scan results but doesn't speak 'developer'? This tutorial is for you. VibeSec's plain-language mode translates technical security jargon into everyday English. Let's dive in!"
 
 **Screen:**
+
 ```
 ┌─────────────────────────────────────────┐
 │  VibeSec Plain Language Mode            │
@@ -33,9 +35,11 @@
 **Visual:** Side-by-side comparison
 
 **Narration:**
+
 > "When developers scan code, they see technical terms like 'SQL injection' and 'CWE-79'. But what does that actually mean? Plain-language mode turns this:"
 
 **Screen - Left side (Technical):**
+
 ```
 Critical: SQL Injection Vulnerability
 CWE-89: Improper Neutralization of Special Elements
@@ -44,9 +48,11 @@ Risk: Arbitrary SQL execution via unsanitized input
 ```
 
 **Narration (continued):**
+
 > "Into this:"
 
 **Screen - Right side (Plain Language):**
+
 ```
 What's wrong?
   Your database query is accepting text directly from users
@@ -68,9 +74,11 @@ How urgent is this?
 **Visual:** Terminal with clear, friendly prompts
 
 **Narration:**
+
 > "Running a plain-language scan is simple. Open your terminal and type 'vibesec scan' followed by the --explain flag."
 
 **Screen:**
+
 ```bash
 $ vibesec scan . --explain
 
@@ -91,9 +99,11 @@ Done! Found 5 issues. Let's walk through them together.
 **Visual:** Full-screen view of one finding with annotations
 
 **Narration:**
+
 > "Let's look at an actual finding. VibeSec breaks it down into four simple sections: What, Why, How, and Who."
 
 **Screen:**
+
 ```
 Issue 1 of 5 - CRITICAL
 ══════════════════════════════════════════
@@ -125,6 +135,7 @@ Time to fix: 15-30 minutes
 ```
 
 **Text overlays with arrows:**
+
 - "What" → "Plain English description"
 - "Why" → "Real-world consequences"
 - "How" → "Actionable fix with example"
@@ -137,9 +148,11 @@ Time to fix: 15-30 minutes
 **Visual:** Security scorecard with visual grade
 
 **Narration:**
+
 > "VibeSec also gives you an overall security score from 0 to 100, just like a test grade. This makes it easy to track improvements over time and communicate with stakeholders."
 
 **Screen:**
+
 ```
 ═══════════════════════════════════════════════════════
 Security Score: 73/100 (C)
@@ -169,9 +182,11 @@ To improve your score:
 **Visual:** Example stakeholder report
 
 **Narration:**
+
 > "You can also generate executive summaries perfect for sharing with leadership. These focus on business impact, not technical details."
 
 **Screen:**
+
 ```bash
 $ vibesec scan -f stakeholder -o report.txt
 
@@ -212,9 +227,11 @@ Next Steps:
 **Visual:** Quick summary card
 
 **Narration:**
+
 > "And that's it! You're now empowered to understand security scan results without needing a computer science degree. Happy scanning!"
 
 **Screen:**
+
 ```
 ✨ You've learned:
   ✓ How to run plain-language scans
@@ -234,29 +251,34 @@ Next Steps:
 ## Production Notes
 
 ### Visual Style
+
 - **Warm, friendly colors:** Use blues and greens, avoid alarming reds
 - **Large text:** All text should be readable even on mobile
 - **Icons:** Use friendly icons (🎯 ✨ 💡) to create approachable feel
 - **Minimal jargon:** No technical terms without immediate explanation
 
 ### Pacing
+
 - **Slower pace:** Allow 4-5 seconds for reading text blocks
 - **Friendly tone:** Conversational, encouraging, non-intimidating
 - **Real examples:** Use relatable analogies (credit cards, house keys)
 
 ### Accessibility
+
 - **Captions:** Full transcript with emphasized keywords
 - **Audio description:** Describe all visual elements
 - **Plain language:** Avoid technical jargon entirely
 - **Visual hierarchy:** Clear sections with plenty of white space
 
 ### Analogies Used
+
 - **Hardcoded secrets** = Writing PIN on credit card
 - **SQL injection** = Letting someone write their own prescription
 - **Security score** = Test grade or car inspection
 - **Environment variables** = Safe deposit box for secrets
 
 ### B-Roll Suggestions
+
 - Team meeting with PM reviewing security report
 - Designer and developer discussing an issue
 - Product owner checking off security tasks
@@ -267,6 +289,7 @@ Next Steps:
 ## Key Takeaways
 
 By the end of this tutorial, non-technical viewers should be able to:
+
 1. ✅ Run a plain-language security scan
 2. ✅ Understand security findings without technical knowledge
 3. ✅ Interpret security scores (0-100)

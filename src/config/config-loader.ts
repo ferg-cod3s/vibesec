@@ -72,10 +72,14 @@ export class ConfigLoader {
       } else if (indent === 2 && currentSection && trimmed.includes(':')) {
         const [key, ...valueParts] = trimmed.split(':');
         const value = valueParts.join(':').trim();
-        const parsedValue = value === 'true' ? true :
-                           value === 'false' ? false :
-                           /^\d+$/.test(value) ? parseInt(value, 10) :
-                           value.replace(/^['"]|['"]$/g, '');
+        const parsedValue =
+          value === 'true'
+            ? true
+            : value === 'false'
+              ? false
+              : /^\d+$/.test(value)
+                ? parseInt(value, 10)
+                : value.replace(/^['"]|['"]$/g, '');
         (config[currentSection as keyof VibeSecConfig] as any)[key.trim()] = parsedValue;
       }
     }
@@ -86,10 +90,7 @@ export class ConfigLoader {
   async loadConfig(configPath?: string): Promise<VibeSecConfig> {
     const searchPaths = configPath
       ? [resolve(configPath)]
-      : [
-          resolve(process.cwd(), '.vibesec.yaml'),
-          resolve(process.cwd(), '.vibesec.yml'),
-        ];
+      : [resolve(process.cwd(), '.vibesec.yaml'), resolve(process.cwd(), '.vibesec.yml')];
 
     for (const path of searchPaths) {
       try {

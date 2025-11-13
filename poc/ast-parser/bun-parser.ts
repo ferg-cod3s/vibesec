@@ -59,7 +59,7 @@ export class BunASTParser {
       'function_calls'
     );
     const matches = query.captures(tree.rootNode);
-    return matches.map(m => m.node);
+    return matches.map((m) => m.node);
   }
 
   /**
@@ -67,12 +67,9 @@ export class BunASTParser {
    * Returns all string nodes
    */
   findStringLiterals(tree: Tree): any[] {
-    const query = this.getOrCreateQuery(
-      '(string) @str',
-      'string_literals'
-    );
+    const query = this.getOrCreateQuery('(string) @str', 'string_literals');
     const matches = query.captures(tree.rootNode);
-    return matches.map(m => m.node);
+    return matches.map((m) => m.node);
   }
 
   /**
@@ -84,19 +81,16 @@ export class BunASTParser {
       'var_declarations'
     );
     const matches = query.captures(tree.rootNode);
-    return matches.map(m => m.node);
+    return matches.map((m) => m.node);
   }
 
   /**
    * Find template strings (potential SQL injection vectors)
    */
   findTemplateStrings(tree: Tree): any[] {
-    const query = this.getOrCreateQuery(
-      '(template_string) @template',
-      'template_strings'
-    );
+    const query = this.getOrCreateQuery('(template_string) @template', 'template_strings');
     const matches = query.captures(tree.rootNode);
-    return matches.map(m => m.node);
+    return matches.map((m) => m.node);
   }
 
   /**

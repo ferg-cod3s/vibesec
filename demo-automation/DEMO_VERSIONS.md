@@ -11,6 +11,7 @@ We have **two demo versions** to choose from, depending on your audience and use
 **Best for:** Social media, quick showcases, experienced developers
 
 **Content:**
+
 - Brief introduction
 - List security rules
 - Scan hardcoded secrets (7 findings)
@@ -22,6 +23,7 @@ We have **two demo versions** to choose from, depending on your audience and use
 **Focus:** Pure vulnerability detection showcase
 
 **Use when:**
+
 - Posting on Twitter/X (30-60 second clips)
 - Quick Reddit posts
 - GitHub README embed
@@ -34,6 +36,7 @@ We have **two demo versions** to choose from, depending on your audience and use
 **Best for:** YouTube tutorials, comprehensive guides, new users
 
 **Content:**
+
 - **Part 1: Installation & Setup (60 seconds)**
   - Clone repository
   - Install dependencies (bun install)
@@ -53,6 +56,7 @@ We have **two demo versions** to choose from, depending on your audience and use
 **Focus:** Complete end-to-end experience
 
 **Use when:**
+
 - YouTube tutorials
 - Blog posts with walkthroughs
 - Documentation with full examples
@@ -65,6 +69,7 @@ We have **two demo versions** to choose from, depending on your audience and use
 ## 🎯 Which Demo Should You Use?
 
 ### Use Quick Demo If:
+
 - ✅ Audience already knows how to install tools
 - ✅ You want fast, punchy content
 - ✅ Platform has short attention span (Twitter, TikTok)
@@ -72,6 +77,7 @@ We have **two demo versions** to choose from, depending on your audience and use
 - ✅ Focus is on "what problems it solves"
 
 ### Use Full Demo If:
+
 - ✅ Audience is new to MCP or VibeSec
 - ✅ You want educational content
 - ✅ Platform supports longer content (YouTube, blog)
@@ -83,6 +89,7 @@ We have **two demo versions** to choose from, depending on your audience and use
 ## 🎬 Generating Both Versions
 
 ### Quick Demo (current default)
+
 ```bash
 # Generate quick demo (no setup walkthrough)
 python3 demo-automation/generate-demo-video.py \
@@ -90,6 +97,7 @@ python3 demo-automation/generate-demo-video.py \
 ```
 
 ### Full Demo with Setup
+
 ```bash
 # Generate full demo (includes setup)
 python3 demo-automation/generate-demo-video.py \
@@ -102,15 +110,15 @@ python3 demo-automation/generate-demo-video.py \
 
 ## 📊 Comparison Table
 
-| Aspect | Quick Demo | Full Demo |
-|--------|-----------|-----------|
-| **Duration** | 90 seconds | 3 minutes |
-| **File Size** | 16 KB | 25 KB |
-| **Setup Included** | ❌ No | ✅ Yes |
-| **Best For** | Social media | Tutorials |
-| **Target Audience** | Experienced devs | New users |
-| **Focus** | What it does | How to use it |
-| **Platforms** | Twitter, Reddit | YouTube, Blog |
+| Aspect              | Quick Demo       | Full Demo     |
+| ------------------- | ---------------- | ------------- |
+| **Duration**        | 90 seconds       | 3 minutes     |
+| **File Size**       | 16 KB            | 25 KB         |
+| **Setup Included**  | ❌ No            | ✅ Yes        |
+| **Best For**        | Social media     | Tutorials     |
+| **Target Audience** | Experienced devs | New users     |
+| **Focus**           | What it does     | How to use it |
+| **Platforms**       | Twitter, Reddit  | YouTube, Blog |
 
 ---
 
@@ -119,6 +127,7 @@ python3 demo-automation/generate-demo-video.py \
 Both demos can be converted to any format:
 
 ### Animated GIF
+
 ```bash
 # Quick demo (smaller file)
 agg demo-automation/vibesec-demo.cast quick-demo.gif
@@ -128,6 +137,7 @@ agg demo-automation/vibesec-demo-full.cast full-demo.gif
 ```
 
 ### MP4 Video
+
 ```bash
 # Quick demo for Twitter
 agg demo-automation/vibesec-demo.cast temp.gif
@@ -139,6 +149,7 @@ ffmpeg -i temp.gif -c:v libx264 -crf 18 full-demo.mp4
 ```
 
 ### Upload to Asciinema
+
 ```bash
 # Quick demo
 asciinema upload demo-automation/vibesec-demo.cast
@@ -152,6 +163,7 @@ asciinema upload demo-automation/vibesec-demo-full.cast
 ## 💡 Platform-Specific Recommendations
 
 ### Twitter/X
+
 **Use:** Quick Demo
 **Format:** GIF or 30-second MP4 clip
 **Why:** Fast-paced platform, attention span is short
@@ -164,6 +176,7 @@ gifsicle -O3 --colors 256 twitter.gif -o twitter-optimized.gif
 ---
 
 ### YouTube
+
 **Use:** Full Demo with Setup
 **Format:** HD MP4 (1080p)
 **Why:** Educational platform, viewers expect thorough content
@@ -178,6 +191,7 @@ ffmpeg -i temp.gif -c:v libx264 -preset slow -crf 18 \
 ---
 
 ### GitHub README
+
 **Use:** Quick Demo
 **Format:** Optimized GIF (under 5 MB)
 **Why:** Fast page load, viewers want quick overview
@@ -191,6 +205,7 @@ gifsicle -O3 --resize-width 800 --colors 128 \
 ---
 
 ### Blog Post (Dev.to, Medium)
+
 **Use:** Full Demo with Setup
 **Format:** Asciinema embed or GIF
 **Why:** Readers want complete walkthrough
@@ -207,6 +222,7 @@ agg demo-automation/vibesec-demo-full.cast blog-demo.gif
 ---
 
 ### LinkedIn
+
 **Use:** Full Demo with Setup
 **Format:** MP4 (professional quality)
 **Why:** Professional audience, expect complete picture
@@ -219,15 +235,18 @@ ffmpeg -i temp.gif -c:v libx264 -crf 20 linkedin.mp4
 ---
 
 ### Reddit r/programming or r/ClaudeAI
+
 **Use:** Either (depends on post type)
 **Format:** GIF or Asciinema link
 
 **For showcase posts:** Quick Demo
+
 ```bash
 agg demo-automation/vibesec-demo.cast reddit-quick.gif
 ```
 
 **For "how I built this" posts:** Full Demo
+
 ```bash
 asciinema upload demo-automation/vibesec-demo-full.cast
 ```
@@ -260,6 +279,7 @@ Edit `generate-demo-video.py` and comment out the setup sections:
 ### Creating Platform-Specific Variants
 
 **30-second Twitter clip:**
+
 ```python
 # Keep only:
 - Title (5 sec)
@@ -268,6 +288,7 @@ Edit `generate-demo-video.py` and comment out the setup sections:
 ```
 
 **60-second LinkedIn:**
+
 ```python
 # Keep only:
 - Title (5 sec)
@@ -281,6 +302,7 @@ Edit `generate-demo-video.py` and comment out the setup sections:
 ## 📏 Timing Breakdown
 
 ### Quick Demo (90 seconds)
+
 ```
 0:00-0:10   Title & Introduction
 0:10-0:25   List Security Rules
@@ -290,6 +312,7 @@ Edit `generate-demo-video.py` and comment out the setup sections:
 ```
 
 ### Full Demo (3 minutes)
+
 ```
 0:00-0:10   Title & Introduction
 0:10-0:30   Setup Step 1: Clone repo
@@ -357,11 +380,13 @@ asciinema upload demo-automation/vibesec-demo-full.cast
 ## 🎯 Quick Reference
 
 **Quick Demo:**
+
 - Use for: Social media, quick showcases
 - Duration: 90 seconds
 - File: `vibesec-demo.cast` (16 KB)
 
 **Full Demo:**
+
 - Use for: Tutorials, first-time users
 - Duration: 3 minutes
 - File: `vibesec-demo-full.cast` (25 KB)

@@ -9,12 +9,12 @@ The VibeSec security scanner has been significantly expanded from detecting **5 
 
 ### Before vs After
 
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| **Total Rules** | ~19 | 93 | +389% |
-| **Rule Categories** | 5 | 16 | +220% |
-| **Issues Detected (VibeSec Examples)** | 11 | 118 | +973% |
-| **Languages Supported** | JS/TS | JS/TS/Python/PHP/Java | Expanded |
+| Metric                                 | Before | After                 | Improvement |
+| -------------------------------------- | ------ | --------------------- | ----------- |
+| **Total Rules**                        | ~19    | 93                    | +389%       |
+| **Rule Categories**                    | 5      | 16                    | +220%       |
+| **Issues Detected (VibeSec Examples)** | 11     | 118                   | +973%       |
+| **Languages Supported**                | JS/TS  | JS/TS/Python/PHP/Java | Expanded    |
 
 ### Detection Capabilities Added
 
@@ -56,7 +56,7 @@ The VibeSec security scanner has been significantly expanded from detecting **5 
    - Unsafe object merging
    - Recursive merge functions
    - Vulnerable lodash versions
-   - Direct __proto__ assignment
+   - Direct **proto** assignment
 
 7. **HTTP Security Headers** ✅
    - Missing CSP (Content-Security-Policy)
@@ -115,6 +115,7 @@ The VibeSec security scanner has been significantly expanded from detecting **5 
 - **shell-injection-python**: Detects Python os.system() and subprocess issues
 
 **Example Detection:**
+
 ```javascript
 // DETECTED: CRITICAL
 exec(`git clone ${req.query.repo}`);
@@ -134,6 +135,7 @@ execFile('git', ['clone', userRepo]);
 - **unsafe-file-download**: Download endpoints with user input
 
 **Example Detection:**
+
 ```javascript
 // DETECTED: CRITICAL
 fs.readFile(`./uploads/${req.params.filename}`, ...);
@@ -163,6 +165,7 @@ if (!filepath.startsWith(path.resolve('./uploads'))) {
 - **insecure-tls-version**: TLS 1.0/1.1 usage
 
 **Example Detection:**
+
 ```javascript
 // DETECTED: HIGH
 const hash = crypto.createHash('md5').update(data).digest('hex');
@@ -183,6 +186,7 @@ const hash = crypto.createHash('sha256').update(data).digest('hex');
 - **json-csrf-vulnerability**: JSON endpoints without protection
 
 **Example Detection:**
+
 ```javascript
 // DETECTED: HIGH
 app.post('/transfer', (req, res) => {
@@ -209,6 +213,7 @@ app.post('/transfer', csrf({ cookie: true }), (req, res) => {
 - **ssrf-dns-rebinding**: DNS rebinding vulnerabilities
 
 **Example Detection:**
+
 ```javascript
 // DETECTED: CRITICAL
 const response = await fetch(req.query.url);
@@ -228,11 +233,12 @@ if (!isUrlSafe(req.query.url, allowedDomains)) {
 - **unsafe-object-merge**: Object.assign with user input
 - **dangerous-recursive-merge**: Recursive merge without protection
 - **lodash-vulnerable-version**: Vulnerable lodash versions
-- **direct-proto-assignment**: Direct __proto__ manipulation
+- **direct-proto-assignment**: Direct **proto** manipulation
 - **unsafe-json-parse**: JSON.parse with user reviver
 - **unsafe-property-access**: Dynamic property access
 
 **Example Detection:**
+
 ```javascript
 // DETECTED: HIGH
 const config = Object.assign({}, req.body);
@@ -266,6 +272,7 @@ const safeMerge = (target, source) => {
 - **cache-control-sensitive-data**: Missing cache control
 
 **Example Detection:**
+
 ```javascript
 // DETECTED: HIGH
 const app = express();
@@ -291,6 +298,7 @@ app.use(helmet());
 - **protobuf-without-validation**: Protocol Buffers validation
 
 **Example Detection:**
+
 ```python
 # DETECTED: CRITICAL
 import pickle
@@ -308,6 +316,7 @@ data = json.loads(request.data)
 **Command:** `bun run cli/index.ts scan ./examples`
 
 #### Before Expansion
+
 ```
 Files scanned: 7
 Issues found: 11 (mostly hardcoded secrets and basic XSS)
@@ -315,6 +324,7 @@ Score: 0/100 (F)
 ```
 
 #### After Expansion
+
 ```
 Files scanned: 7
 Issues found: 118
@@ -327,27 +337,29 @@ Score: Would be significantly lower with comprehensive detection
 
 ### Issue Breakdown by Category (After)
 
-| Category | Count | Severity |
-|----------|-------|----------|
-| Command Injection | 4 | CRITICAL |
-| Path Traversal | 3 | CRITICAL |
-| SSRF | 2 | CRITICAL |
-| Crypto Weaknesses | 5 | CRITICAL-HIGH |
-| CSRF Missing | 8 | HIGH |
-| Prototype Pollution | 6 | HIGH |
-| Headers Missing | 45 | HIGH-LOW |
-| XSS | 12 | HIGH |
-| SQL Injection | 8 | CRITICAL |
-| Hardcoded Secrets | 15 | CRITICAL |
-| Others | 10 | MEDIUM-LOW |
+| Category            | Count | Severity      |
+| ------------------- | ----- | ------------- |
+| Command Injection   | 4     | CRITICAL      |
+| Path Traversal      | 3     | CRITICAL      |
+| SSRF                | 2     | CRITICAL      |
+| Crypto Weaknesses   | 5     | CRITICAL-HIGH |
+| CSRF Missing        | 8     | HIGH          |
+| Prototype Pollution | 6     | HIGH          |
+| Headers Missing     | 45    | HIGH-LOW      |
+| XSS                 | 12    | HIGH          |
+| SQL Injection       | 8     | CRITICAL      |
+| Hardcoded Secrets   | 15    | CRITICAL      |
+| Others              | 10    | MEDIUM-LOW    |
 
 ## Language Support Expansion
 
 ### Before
+
 - JavaScript
 - TypeScript (limited)
 
 ### After
+
 - **JavaScript** (comprehensive)
 - **TypeScript** (comprehensive)
 - **Python** (Flask, Django patterns)
@@ -390,7 +402,7 @@ rules:
         - https://owasp.org/...
     metadata:
       cwe: CWE-78
-      owasp: "A03:2021"
+      owasp: 'A03:2021'
       tags:
         - command-injection
         - rce

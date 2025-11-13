@@ -1,6 +1,6 @@
-import * as fs from "fs";
-import * as path from "path";
-import { performance } from "perf_hooks";
+import * as fs from 'fs';
+import * as path from 'path';
+import { performance } from 'perf_hooks';
 
 // Simple parser using regex (like Bun fallback)
 function extractFunctions(content: string): string[] {
@@ -54,7 +54,7 @@ function parseFile(filePath: string): {
   templates: string[];
 } {
   const start = performance.now();
-  const content = fs.readFileSync(filePath, "utf-8");
+  const content = fs.readFileSync(filePath, 'utf-8');
   const end = performance.now();
 
   return {
@@ -67,13 +67,14 @@ function parseFile(filePath: string): {
 }
 
 // Main benchmark
-const corpusDir = process.argv[2] || "../shared-corpus";
-const files = fs.readdirSync(corpusDir)
-  .filter((f) => f.endsWith(".js") || f.endsWith(".ts"))
+const corpusDir = process.argv[2] || '../shared-corpus';
+const files = fs
+  .readdirSync(corpusDir)
+  .filter((f) => f.endsWith('.js') || f.endsWith('.ts'))
   .map((f) => path.join(corpusDir, f))
   .sort();
 
-console.log("\nRunning benchmark: Bun Parser");
+console.log('\nRunning benchmark: Bun Parser');
 console.log(`Files to process: ${files.length}`);
 
 const startTime = performance.now();
@@ -99,7 +100,7 @@ const maxTime = Math.max(...parseTimes);
 
 // Save results
 const results = {
-  name: "Bun Parser",
+  name: 'Bun Parser',
   duration: {
     start: Math.floor(startTime),
     end: Math.floor(endTime),
@@ -117,10 +118,10 @@ const results = {
   },
 };
 
-fs.writeFileSync("bun-benchmark-results.json", JSON.stringify([results], null, 2));
+fs.writeFileSync('bun-benchmark-results.json', JSON.stringify([results], null, 2));
 
-console.log("\nBenchmark results saved to: bun-benchmark-results.json");
-console.log("\n=== Benchmark Summary ===");
+console.log('\nBenchmark results saved to: bun-benchmark-results.json');
+console.log('\n=== Benchmark Summary ===');
 console.log(`Files processed: ${files.length}`);
 console.log(
   `Total parse time: ${totalParseTime.toFixed(2)} ms (${(totalParseTime / 1000).toFixed(2)} s)`

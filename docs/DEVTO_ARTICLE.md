@@ -1,7 +1,7 @@
 ---
 title: "I Scanned 6 AI-Generated Codebases for Security Issues. Here's What I Found."
 published: false
-description: "A comprehensive security analysis of popular AI-generated open-source projects reveals critical vulnerabilities in 50% of codebases"
+description: 'A comprehensive security analysis of popular AI-generated open-source projects reveals critical vulnerabilities in 50% of codebases'
 tags: security, ai, javascript, opensource
 cover_image:
 canonical_url:
@@ -35,6 +35,7 @@ Before diving into results, here's what VibeSec checks for:
 - **Fix templates** with working code examples
 
 Categories include:
+
 - 🔴 Command Injection
 - 🔴 SQL Injection & Path Traversal
 - 🔴 Hardcoded Secrets & Weak Crypto
@@ -63,13 +64,13 @@ All are publicly available on GitHub. All are designed to work with or alongside
 
 ### Overall Statistics
 
-| Metric | Result |
-|--------|--------|
-| **Average Security Score** | **41/100 (F)** |
-| **Projects with Critical Issues** | 50% (3/6) |
-| **Projects Scoring 100/100** | 33% (2/6) |
-| **Total Issues Found** | 229 |
-| **Most Common Issue** | Missing HTTP Security Headers (31%) |
+| Metric                            | Result                              |
+| --------------------------------- | ----------------------------------- |
+| **Average Security Score**        | **41/100 (F)**                      |
+| **Projects with Critical Issues** | 50% (3/6)                           |
+| **Projects Scoring 100/100**      | 33% (2/6)                           |
+| **Total Issues Found**            | 229                                 |
+| **Most Common Issue**             | Missing HTTP Security Headers (31%) |
 
 ### Score Distribution
 
@@ -104,6 +105,7 @@ All are publicly available on GitHub. All are designed to work with or alongside
 **Autodoc** (TypeScript) and **Agents** (Python) both scored perfect 100/100 scores.
 
 What they got right:
+
 - ✅ No hardcoded secrets
 - ✅ Proper environment variable usage
 - ✅ Safe file operations with validation
@@ -119,6 +121,7 @@ What they got right:
 **5 issues found** (1 critical, 2 high, 1 medium, 1 low)
 
 Sample issue:
+
 ```typescript
 // docs/docusaurus.config.ts
 apiKey: 'a811f8bcdd87a8b3fe7f22a353b968ef',  // ❌ Hardcoded
@@ -127,6 +130,7 @@ apiKey: 'a811f8bcdd87a8b3fe7f22a353b968ef',  // ❌ Hardcoded
 Even with a comment saying "Public API key: it is safe to commit", hardcoding credentials is an anti-pattern that can lead to accidental exposure of other keys.
 
 Other issues:
+
 - Missing Content-Security-Policy headers
 - Missing X-Frame-Options (clickjacking protection)
 
@@ -141,6 +145,7 @@ Other issues:
 This WhatsApp chatbot framework had severe security issues:
 
 **Command Injection** (5 instances):
+
 ```javascript
 // ❌ CRITICAL
 exec(`git clone ${userRepo}`);
@@ -150,15 +155,17 @@ execFile('git', ['clone', userRepo]);
 ```
 
 **Hardcoded API Keys** (8 instances):
+
 ```javascript
 // ❌ CRITICAL
-const apiKey = "sk_test_1234567890abcdef";
+const apiKey = 'sk_test_1234567890abcdef';
 
 // ✅ Fixed
 const apiKey = process.env.API_KEY;
 ```
 
 **SQL Injection** (3 instances):
+
 ```javascript
 // ❌ CRITICAL
 db.query(`SELECT * FROM users WHERE id = ${userId}`);
@@ -168,6 +175,7 @@ db.query('SELECT * FROM users WHERE id = ?', [userId]);
 ```
 
 **Path Traversal** (4 instances):
+
 ```javascript
 // ❌ CRITICAL
 fs.readFile(`./data/${req.params.file}`);
@@ -203,6 +211,7 @@ The highest issue count, primarily due to:
 ### 1. HTTP Security Headers Are Universally Overlooked
 
 **31%** of all issues were missing HTTP security headers:
+
 - Content-Security-Policy (XSS protection)
 - Strict-Transport-Security (HTTPS enforcement)
 - X-Frame-Options (clickjacking protection)
@@ -212,14 +221,14 @@ The highest issue count, primarily due to:
 
 ### 2. Project Size Matters
 
-| Project | Files | Issues | Issues/File |
-|---------|-------|--------|-------------|
-| Agents | 4 | 0 | 0.0 |
-| Autodoc | 8 | 0 | 0.0 |
-| Plandex | 15 | 5 | 0.3 |
-| Elia | 12 | 13 | 1.1 |
-| BuilderBot | 24 | 77 | 3.2 |
-| CodePrism | 31 | 134 | 4.3 |
+| Project    | Files | Issues | Issues/File |
+| ---------- | ----- | ------ | ----------- |
+| Agents     | 4     | 0      | 0.0         |
+| Autodoc    | 8     | 0      | 0.0         |
+| Plandex    | 15    | 5      | 0.3         |
+| Elia       | 12    | 13     | 1.1         |
+| BuilderBot | 24    | 77     | 3.2         |
+| CodePrism  | 31    | 134    | 4.3         |
 
 **Finding:** Security issues grow faster than project size. Larger AI-generated codebases need more rigorous review.
 
@@ -234,6 +243,7 @@ But 4 out of 6 have critical security vulnerabilities.
 ### 4. Common Critical Mistakes
 
 The most frequent critical issues:
+
 1. **Hardcoded secrets** (12 instances)
 2. **Command injection** (8 instances)
 3. **SQL injection** (5 instances)
@@ -273,15 +283,17 @@ When reviewing AI-generated code, look for:
 ### Best Practices
 
 1. **Environment Variables for Secrets**
+
    ```javascript
    // ❌ Never
-   const apiKey = "sk_live_xxx";
+   const apiKey = 'sk_live_xxx';
 
    // ✅ Always
    const apiKey = process.env.API_KEY;
    ```
 
 2. **Parameterized Queries**
+
    ```javascript
    // ❌ Never
    db.query(`SELECT * FROM users WHERE id = ${id}`);
@@ -291,6 +303,7 @@ When reviewing AI-generated code, look for:
    ```
 
 3. **Use Security Middleware**
+
    ```javascript
    // ✅ Express example
    const helmet = require('helmet');
@@ -314,6 +327,7 @@ This scan represents a **snapshot**, not a condemnation. Here's what to remember
 ### AI Code is Not Inherently Insecure
 
 Two projects (33%) scored perfect 100/100 scores. AI **can** generate secure code when:
+
 - Given security-conscious prompts
 - Following established patterns
 - Working in codebases with good examples
@@ -321,6 +335,7 @@ Two projects (33%) scored perfect 100/100 scores. AI **can** generate secure cod
 ### Context Matters
 
 Some "issues" may be false positives:
+
 - Terminal apps don't need CSP headers
 - Example/demo code might intentionally use simplified patterns
 - Framework code may expect users to add security layers
@@ -329,9 +344,10 @@ Some "issues" may be false positives:
 
 The takeaway isn't "don't use AI." It's:
 
-**AI writes code. Humans write *secure* code.**
+**AI writes code. Humans write _secure_ code.**
 
 AI is a powerful tool for productivity, but security requires:
+
 - Understanding of threats
 - Knowledge of best practices
 - Critical review of generated code
@@ -342,11 +358,13 @@ AI is a powerful tool for productivity, but security requires:
 Want to scan your own AI-generated code?
 
 **VibeSec Scanner** (Open Source, Free)
+
 - GitHub: _(coming soon)_
 - Install: `npm install -g vibesec`
 - Run: `vibesec scan ./your-project`
 
 Get:
+
 - Security score (0-100)
 - Detailed issue reports
 - Plain language explanations
@@ -374,6 +392,7 @@ Review it. Test it. Secure it.
 What's your experience with AI-generated code security? Have you found similar issues? Let me know in the comments!
 
 If you found this useful:
+
 - ⭐ Star [VibeSec on GitHub](https://github.com/f3rg/vibesec)
 - 🔗 Share this article
 - 💬 Follow for more AI + security content
@@ -385,12 +404,13 @@ If you found this useful:
 I'm building tools to help developers write more secure code in the age of AI. VibeSec is my first project in this space - more to come!
 
 **Connect:**
+
 - GitHub: [@f3rg](https://github.com/f3rg)
 - Twitter: _(add your handle)_
 - LinkedIn: _(add your profile)_
 
 ---
 
-*Note: All projects scanned are open-source and publicly available. Issues were reported responsibly to project maintainers before publication.*
+_Note: All projects scanned are open-source and publicly available. Issues were reported responsibly to project maintainers before publication._
 
 #ai #security #devtools #opensource #javascript #typescript #python

@@ -29,14 +29,14 @@ export class PlainLanguageReporter {
    * Makes technical concepts relatable through everyday comparisons
    */
   private readonly analogies: Record<string, string> = {
-    'secrets': 'password written on a sticky note on your monitor',
-    'injection': 'unlocked front door that anyone can walk through',
+    secrets: 'password written on a sticky note on your monitor',
+    injection: 'unlocked front door that anyone can walk through',
     'sql-injection': 'unlocked front door that anyone can walk through',
-    'xss': 'poisoned water supply affecting everyone who drinks',
+    xss: 'poisoned water supply affecting everyone who drinks',
     'command-injection': 'blank check handed to a stranger',
     'path-traversal': 'skeleton key that opens any room',
-    'auth': 'broken lock on your front door',
-    'incomplete': 'half-built security fence with gaps',
+    auth: 'broken lock on your front door',
+    incomplete: 'half-built security fence with gaps',
     'ai-specific': 'AI system that can be tricked into misbehaving',
   };
 
@@ -74,30 +74,30 @@ export class PlainLanguageReporter {
    * Fix time estimates based on complexity
    */
   private readonly fixTimeEstimates: Record<string, string> = {
-    'secrets': '10-15 minutes',
-    'injection': '15-30 minutes',
+    secrets: '10-15 minutes',
+    injection: '15-30 minutes',
     'sql-injection': '15-30 minutes',
-    'xss': '20-40 minutes',
+    xss: '20-40 minutes',
     'command-injection': '15-30 minutes',
-    'auth': '1-2 hours',
-    'incomplete': '30 minutes - 2 hours',
+    auth: '1-2 hours',
+    incomplete: '30 minutes - 2 hours',
     'ai-specific': '1-4 hours',
-    'default': '30 minutes - 1 hour',
+    default: '30 minutes - 1 hour',
   };
 
   /**
    * Suggestions for who can fix each type of issue
    */
   private readonly whoCanFix: Record<string, string> = {
-    'secrets': 'Any developer',
-    'injection': 'Backend developer',
+    secrets: 'Any developer',
+    injection: 'Backend developer',
     'sql-injection': 'Backend developer',
-    'xss': 'Frontend or full-stack developer',
+    xss: 'Frontend or full-stack developer',
     'command-injection': 'Backend developer',
-    'auth': 'Senior developer or security engineer',
-    'incomplete': 'Original developer or tech lead',
+    auth: 'Senior developer or security engineer',
+    incomplete: 'Original developer or tech lead',
     'ai-specific': 'AI/ML engineer or senior developer',
-    'default': 'Any developer',
+    default: 'Any developer',
   };
 
   /**
@@ -124,8 +124,12 @@ export class PlainLanguageReporter {
 
     lines.push(chalk.bold('Security Score:'));
     lines.push('');
-    lines.push(scoreColor(`  ${securityScore.score}/100 (${securityScore.grade}) - ${securityScore.rating}`));
-    lines.push(chalk.gray(`  ${getBenchmarkComparison(securityScore.score, result.scan.filesScanned)}`));
+    lines.push(
+      scoreColor(`  ${securityScore.score}/100 (${securityScore.grade}) - ${securityScore.rating}`)
+    );
+    lines.push(
+      chalk.gray(`  ${getBenchmarkComparison(securityScore.score, result.scan.filesScanned)}`)
+    );
     lines.push('');
 
     // Summary in plain language
@@ -160,9 +164,7 @@ export class PlainLanguageReporter {
 
     if (bySeverity.low > 0) {
       lines.push(
-        chalk.gray(
-          `ℹ️  ${bySeverity.low} minor issue${bySeverity.low > 1 ? 's' : ''} to consider`
-        )
+        chalk.gray(`ℹ️  ${bySeverity.low} minor issue${bySeverity.low > 1 ? 's' : ''} to consider`)
       );
     }
 
@@ -212,15 +214,30 @@ export class PlainLanguageReporter {
       lines.push('');
 
       if (bySeverity.critical > 0) {
-        lines.push(chalk.red(`  1. Fix the ${bySeverity.critical} urgent issue${bySeverity.critical > 1 ? 's' : ''} TODAY`));
+        lines.push(
+          chalk.red(
+            `  1. Fix the ${bySeverity.critical} urgent issue${bySeverity.critical > 1 ? 's' : ''} TODAY`
+          )
+        );
       }
 
       if (bySeverity.high > 0) {
-        lines.push(chalk.yellow(`  ${bySeverity.critical > 0 ? '2' : '1'}. Address the ${bySeverity.high} important issue${bySeverity.high > 1 ? 's' : ''} this week`));
+        lines.push(
+          chalk.yellow(
+            `  ${bySeverity.critical > 0 ? '2' : '1'}. Address the ${bySeverity.high} important issue${bySeverity.high > 1 ? 's' : ''} this week`
+          )
+        );
       }
 
-      const nextStep = bySeverity.critical > 0 && bySeverity.high > 0 ? '3' : bySeverity.critical > 0 || bySeverity.high > 0 ? '2' : '1';
-      lines.push(chalk.blue(`  ${nextStep}. Run 'vibesec scan --explain' again after making fixes`));
+      const nextStep =
+        bySeverity.critical > 0 && bySeverity.high > 0
+          ? '3'
+          : bySeverity.critical > 0 || bySeverity.high > 0
+            ? '2'
+            : '1';
+      lines.push(
+        chalk.blue(`  ${nextStep}. Run 'vibesec scan --explain' again after making fixes`)
+      );
       lines.push('');
 
       lines.push(chalk.gray('💭 Need help understanding these issues?'));
@@ -247,16 +264,14 @@ export class PlainLanguageReporter {
     const color = this.getSeverityColor(finding.severity);
 
     // Title with severity
-    lines.push(
-      color.bold(
-        `${plainSeverity.emoji} [${number}] ${plainSeverity.label}`
-      )
-    );
+    lines.push(color.bold(`${plainSeverity.emoji} [${number}] ${plainSeverity.label}`));
     lines.push('');
 
     // What was found
     lines.push(chalk.bold('Found:'));
-    lines.push(`${finding.title} in ${chalk.cyan(finding.location.file + ':' + finding.location.line)}`);
+    lines.push(
+      `${finding.title} in ${chalk.cyan(finding.location.file + ':' + finding.location.line)}`
+    );
     lines.push('');
 
     // What this means (plain language explanation)
@@ -345,19 +360,24 @@ export class PlainLanguageReporter {
    */
   private describeRealWorldImpact(finding: Finding): string {
     const impacts: Record<string, string> = {
-      'secrets': 'If this code is shared (GitHub, email, etc.), anyone who sees it can:\n  • Use your API keys and credentials\n  • Rack up charges on your accounts\n  • Access your private data',
+      secrets:
+        'If this code is shared (GitHub, email, etc.), anyone who sees it can:\n  • Use your API keys and credentials\n  • Rack up charges on your accounts\n  • Access your private data',
 
-      'injection': 'An attacker could:\n  • Steal all your data\n  • Delete your database\n  • Take over user accounts',
+      injection:
+        'An attacker could:\n  • Steal all your data\n  • Delete your database\n  • Take over user accounts',
 
-      'sql-injection': 'An attacker could:\n  • Read all data in your database\n  • Modify or delete records\n  • Bypass authentication and access any account',
+      'sql-injection':
+        'An attacker could:\n  • Read all data in your database\n  • Modify or delete records\n  • Bypass authentication and access any account',
 
-      'xss': 'Attackers could:\n  • Steal user session cookies\n  • Redirect users to malicious sites\n  • Deface your website',
+      xss: 'Attackers could:\n  • Steal user session cookies\n  • Redirect users to malicious sites\n  • Deface your website',
 
-      'command-injection': 'An attacker could:\n  • Execute commands on your server\n  • Read sensitive files\n  • Take complete control of your system',
+      'command-injection':
+        'An attacker could:\n  • Execute commands on your server\n  • Read sensitive files\n  • Take complete control of your system',
 
-      'auth': 'Users could:\n  • Access features they haven\'t paid for\n  • View other users\' private data\n  • Bypass security restrictions',
+      auth: "Users could:\n  • Access features they haven't paid for\n  • View other users' private data\n  • Bypass security restrictions",
 
-      'default': 'This could lead to:\n  • Security vulnerabilities\n  • Data exposure\n  • System compromise',
+      default:
+        'This could lead to:\n  • Security vulnerabilities\n  • Data exposure\n  • System compromise',
     };
 
     const categoryKey = finding.category.toLowerCase();
@@ -388,11 +408,7 @@ export class PlainLanguageReporter {
     const categoryKey = finding.category.toLowerCase();
     const ruleKey = finding.rule.toLowerCase();
 
-    return (
-      this.whoCanFix[ruleKey] ||
-      this.whoCanFix[categoryKey] ||
-      this.whoCanFix['default']
-    );
+    return this.whoCanFix[ruleKey] || this.whoCanFix[categoryKey] || this.whoCanFix['default'];
   }
 
   /**

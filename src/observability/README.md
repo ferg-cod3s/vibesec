@@ -3,6 +3,7 @@
 ## Overview
 
 Comprehensive observability and error reporting system for VibeSec, providing:
+
 - Structured logging
 - Metrics collection
 - Error tracking and categorization
@@ -28,9 +29,13 @@ logger.error('Parse failed', { file: 'bad.ts' }, parseError);
 logger.fatal('System crash', {}, systemError);
 
 // Measure operation duration
-const result = await logger.measure('parse_file', async () => {
-  return await parser.parseFile('app.ts');
-}, { file: 'app.ts' });
+const result = await logger.measure(
+  'parse_file',
+  async () => {
+    return await parser.parseFile('app.ts');
+  },
+  { file: 'app.ts' }
+);
 
 // Export logs for debugging
 const logs = logger.exportLogs();
@@ -135,13 +140,16 @@ export class ObservableScanner {
     for (const file of files) {
       try {
         // Measure file parsing
-        const fileFindings = await logger.measure('parse_file', async () => {
-          return await this.parseFile(file);
-        }, { file });
+        const fileFindings = await logger.measure(
+          'parse_file',
+          async () => {
+            return await this.parseFile(file);
+          },
+          { file }
+        );
 
         findings.push(...fileFindings);
         metrics.increment('files_scanned');
-
       } catch (error) {
         metrics.increment('errors_total');
         errorReporter.reportParseError(file, error as Error);
@@ -195,7 +203,9 @@ export async function scanCommand(options: ScanOptions): Promise<void> {
       const scanMetrics = metrics.getScanMetrics();
       console.log('\n=== Scan Metrics ===');
       console.log(`Files scanned: ${scanMetrics.filesScanned}`);
-      console.log(`Cache hit rate: ${(scanMetrics.cacheHits / scanMetrics.totalFiles * 100).toFixed(1)}%`);
+      console.log(
+        `Cache hit rate: ${((scanMetrics.cacheHits / scanMetrics.totalFiles) * 100).toFixed(1)}%`
+      );
       console.log(`Avg parse time: ${scanMetrics.avgFileParseTime.toFixed(2)}ms`);
       console.log(`Peak memory: ${(scanMetrics.peakMemoryUsage / 1024 / 1024).toFixed(2)}MB`);
     }
@@ -213,7 +223,6 @@ export async function scanCommand(options: ScanOptions): Promise<void> {
       await writeFile('vibesec-errors.json', errorReporter.export());
       console.log('\nLogs exported to vibesec-*.json files');
     }
-
   } catch (error) {
     logger.fatal('Scan failed', {}, error as Error);
     errorReporter.report('system_error', 'Scan crashed', error as Error);
@@ -277,6 +286,7 @@ if (stats.unresolved > threshold) {
 ## Performance Impact
 
 The observability system is designed for minimal overhead:
+
 - Logging: <0.1ms per log entry
 - Metrics: <0.05ms per metric record
 - Error reporting: <0.2ms per error

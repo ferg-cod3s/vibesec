@@ -3,6 +3,16 @@
 import { Command } from 'commander';
 import { scanCommand } from './commands/scan';
 import { benchmarkCommand } from './commands/benchmark';
+import { initSentryFromEnv } from '../src/observability/integrations/sentry';
+
+// Initialize observability (Sentry logging and error tracking)
+try {
+  if (process.env.SENTRY_DSN) {
+    initSentryFromEnv();
+  }
+} catch (error) {
+  console.error('Failed to initialize Sentry:', error);
+}
 
 const program = new Command();
 

@@ -58,7 +58,9 @@ export class BenchmarkSuite {
         `   Duration: ${PerformanceBenchmark.formatDuration(report.benchmarkResult.duration)}`
       );
       console.log(`   Files/sec: ${report.benchmarkResult.filesPerSecond.toFixed(2)}`);
-      console.log(`   Peak Memory: ${MemoryProfiler.formatMemory(report.memoryProfile.peakHeapUsed)}\n`);
+      console.log(
+        `   Peak Memory: ${MemoryProfiler.formatMemory(report.memoryProfile.peakHeapUsed)}\n`
+      );
     }
 
     return reports;
@@ -280,9 +282,7 @@ export class BenchmarkSuite {
     } else {
       // Small, medium, large - just vary the file size
       const lines = type === 'small' ? 50 : type === 'medium' ? 100 : 200;
-      return lang === 'js'
-        ? this.getGenericJSContent(lines)
-        : this.getGenericPyContent(lines);
+      return lang === 'js' ? this.getGenericJSContent(lines) : this.getGenericPyContent(lines);
     }
   }
 
@@ -423,9 +423,7 @@ def process_data(data):
       lines.push(`  Duration: ${PerformanceBenchmark.formatDuration(result.duration)}`);
       lines.push(`  Files Scanned: ${result.filesScanned}`);
       lines.push(`  Throughput: ${result.filesPerSecond.toFixed(2)} files/sec`);
-      lines.push(
-        `  Avg File Time: ${(result.duration / result.filesScanned).toFixed(2)}ms`
-      );
+      lines.push(`  Avg File Time: ${(result.duration / result.filesScanned).toFixed(2)}ms`);
 
       // 10K projection
       const projected10K = PerformanceBenchmark.getProjectedTime10K(result);
@@ -445,9 +443,7 @@ def process_data(data):
 
       const memLeak = MemoryProfiler.detectLeak(mem);
       if (memLeak.detected) {
-        lines.push(
-          `  ⚠️  Memory Leak: ${MemoryProfiler.formatMemory(memLeak.growthRate)}/s`
-        );
+        lines.push(`  ⚠️  Memory Leak: ${MemoryProfiler.formatMemory(memLeak.growthRate)}/s`);
       }
       lines.push('');
 

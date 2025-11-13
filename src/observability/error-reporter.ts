@@ -91,24 +91,24 @@ export class ErrorReporter {
    * Report parse error
    */
   reportParseError(file: string, error: Error, context?: Record<string, unknown>): ErrorReport {
-    return this.report(
-      ErrorCategory.PARSE_ERROR,
-      `Failed to parse file: ${file}`,
-      error,
-      { file, ...context }
-    );
+    return this.report(ErrorCategory.PARSE_ERROR, `Failed to parse file: ${file}`, error, {
+      file,
+      ...context,
+    });
   }
 
   /**
    * Report config error
    */
-  reportConfigError(configPath: string, error: Error, context?: Record<string, unknown>): ErrorReport {
-    return this.report(
-      ErrorCategory.CONFIG_ERROR,
-      `Failed to load config: ${configPath}`,
-      error,
-      { configPath, ...context }
-    );
+  reportConfigError(
+    configPath: string,
+    error: Error,
+    context?: Record<string, unknown>
+  ): ErrorReport {
+    return this.report(ErrorCategory.CONFIG_ERROR, `Failed to load config: ${configPath}`, error, {
+      configPath,
+      ...context,
+    });
   }
 
   /**
@@ -126,13 +126,15 @@ export class ErrorReporter {
   /**
    * Report cache error
    */
-  reportCacheError(operation: string, error: Error, context?: Record<string, unknown>): ErrorReport {
-    return this.report(
-      ErrorCategory.CACHE_ERROR,
-      `Cache ${operation} failed`,
-      error,
-      { operation, ...context }
-    );
+  reportCacheError(
+    operation: string,
+    error: Error,
+    context?: Record<string, unknown>
+  ): ErrorReport {
+    return this.report(ErrorCategory.CACHE_ERROR, `Cache ${operation} failed`, error, {
+      operation,
+      ...context,
+    });
   }
 
   /**

@@ -49,20 +49,20 @@ console.log(`Found ${result.summary.total} issues`);
 
 ```typescript
 class Scanner {
-  constructor(options: ScanOptions)
+  constructor(options: ScanOptions);
 }
 
 interface ScanOptions {
-  path: string;              // Directory or file to scan
-  exclude?: string[];        // Glob patterns to exclude
-  include?: string[];        // Glob patterns to include
-  severity?: Severity;       // Minimum severity level
+  path: string; // Directory or file to scan
+  exclude?: string[]; // Glob patterns to exclude
+  include?: string[]; // Glob patterns to include
+  severity?: Severity; // Minimum severity level
   format?: 'text' | 'json' | 'sarif';
-  output?: string;           // Output file path
-  rulesPath?: string;        // Custom rules directory
-  parallel?: boolean;        // Enable parallel scanning (default: true)
-  maxFileSize?: number;      // Max file size in bytes (default: 1MB)
-  quiet?: boolean;           // Suppress progress output
+  output?: string; // Output file path
+  rulesPath?: string; // Custom rules directory
+  parallel?: boolean; // Enable parallel scanning (default: true)
+  maxFileSize?: number; // Max file size in bytes (default: 1MB)
+  quiet?: boolean; // Suppress progress output
 }
 ```
 
@@ -100,22 +100,22 @@ interface ScanResult {
 
 ```typescript
 interface ScanResult {
-  version: string;              // VibeSec version
-  scan: ScanMetadata;           // Scan execution metadata
-  summary: ScanSummary;         // Finding statistics
-  findings: Finding[];          // Array of all findings
+  version: string; // VibeSec version
+  scan: ScanMetadata; // Scan execution metadata
+  summary: ScanSummary; // Finding statistics
+  findings: Finding[]; // Array of all findings
 }
 
 interface ScanMetadata {
-  path: string;                 // Scanned path
-  filesScanned: number;         // Number of files scanned
-  duration: number;             // Scan duration in seconds
-  timestamp: string;            // ISO 8601 timestamp
-  version: string;              // VibeSec version
+  path: string; // Scanned path
+  filesScanned: number; // Number of files scanned
+  duration: number; // Scan duration in seconds
+  timestamp: string; // ISO 8601 timestamp
+  version: string; // VibeSec version
 }
 
 interface ScanSummary {
-  total: number;                // Total findings
+  total: number; // Total findings
   bySeverity: {
     critical: number;
     high: number;
@@ -128,16 +128,16 @@ interface ScanSummary {
 }
 
 interface Finding {
-  id: string;                   // Unique finding ID
-  rule: string;                 // Rule ID that triggered
-  severity: Severity;           // critical|high|medium|low
-  category: Category;           // secrets|injection|auth|etc
-  title: string;                // Short title
-  description: string;          // Detailed description
-  location: Location;           // File and line number
-  snippet: string;              // Code snippet
-  fix: FixRecommendation;       // How to fix
-  metadata: FindingMetadata;    // CWE, OWASP, confidence
+  id: string; // Unique finding ID
+  rule: string; // Rule ID that triggered
+  severity: Severity; // critical|high|medium|low
+  category: Category; // secrets|injection|auth|etc
+  title: string; // Short title
+  description: string; // Detailed description
+  location: Location; // File and line number
+  snippet: string; // Code snippet
+  fix: FixRecommendation; // How to fix
+  metadata: FindingMetadata; // CWE, OWASP, confidence
 }
 ```
 
@@ -156,9 +156,9 @@ interface Reporter {
 }
 
 interface ReporterOptions {
-  color?: boolean;              // Enable color output
-  verbose?: boolean;            // Verbose output
-  [key: string]: unknown;       // Custom options
+  color?: boolean; // Enable color output
+  verbose?: boolean; // Verbose output
+  [key: string]: unknown; // Custom options
 }
 ```
 
@@ -326,7 +326,7 @@ Load custom detection rules from a directory:
 ```typescript
 const scanner = new Scanner({
   path: './src',
-  rulesPath: './my-rules',  // Custom rules directory
+  rulesPath: './my-rules', // Custom rules directory
 });
 
 const result = await scanner.scan();
@@ -366,21 +366,19 @@ const scanner = new Scanner({ path: './src' });
 const result = await scanner.scan();
 
 // Filter by severity
-const criticalFindings = result.findings.filter(f => f.severity === 'critical');
+const criticalFindings = result.findings.filter((f) => f.severity === 'critical');
 console.log(`Critical issues: ${criticalFindings.length}`);
 
 // Filter by category
-const secretsFindings = result.findings.filter(f => f.category === 'secrets');
+const secretsFindings = result.findings.filter((f) => f.category === 'secrets');
 console.log(`Secret leaks: ${secretsFindings.length}`);
 
 // Filter by confidence
-const highConfidence = result.findings.filter(f => f.metadata.confidence > 0.8);
+const highConfidence = result.findings.filter((f) => f.metadata.confidence > 0.8);
 console.log(`High confidence findings: ${highConfidence.length}`);
 
 // Filter by file pattern
-const apiFindings = result.findings.filter(f =>
-  f.location.file.includes('/api/')
-);
+const apiFindings = result.findings.filter((f) => f.location.file.includes('/api/'));
 console.log(`API issues: ${apiFindings.length}`);
 ```
 
@@ -418,11 +416,7 @@ async function scanMultipleProjects(projects: string[]) {
   return allFindings;
 }
 
-const findings = await scanMultipleProjects([
-  './project-a',
-  './project-b',
-  './project-c',
-]);
+const findings = await scanMultipleProjects(['./project-a', './project-b', './project-c']);
 ```
 
 ### Error Handling
@@ -501,7 +495,7 @@ interface FixRecommendation {
 interface FindingMetadata {
   cwe?: string;
   owasp?: string;
-  confidence: number;  // 0.0 to 1.0
+  confidence: number; // 0.0 to 1.0
   [key: string]: unknown;
 }
 
@@ -535,9 +529,7 @@ import type {
 
 // Use in function signatures
 function processScanResult(result: ScanResult): void {
-  const criticalFindings = result.findings.filter(
-    (f: Finding) => f.severity === Severity.CRITICAL
-  );
+  const criticalFindings = result.findings.filter((f: Finding) => f.severity === Severity.CRITICAL);
   // ...
 }
 ```
@@ -564,13 +556,13 @@ async function ciScan() {
     const result = await scanner.scan();
 
     // Check for critical/high severity issues
-    const blockers = result.findings.filter(f =>
-      f.severity === 'critical' || f.severity === 'high'
+    const blockers = result.findings.filter(
+      (f) => f.severity === 'critical' || f.severity === 'high'
     );
 
     if (blockers.length > 0) {
       console.error(`❌ Found ${blockers.length} critical/high severity issues`);
-      blockers.forEach(f => {
+      blockers.forEach((f) => {
         console.error(`  - ${f.title} (${f.location.file}:${f.location.line})`);
       });
       process.exit(1);
@@ -599,48 +591,54 @@ export class SlackReporter implements Reporter {
   constructor(private webhookUrl: string) {}
 
   async format(result: ScanResult): Promise<string> {
-    const color = result.summary.bySeverity.critical > 0 ? 'danger' :
-                  result.summary.bySeverity.high > 0 ? 'warning' : 'good';
+    const color =
+      result.summary.bySeverity.critical > 0
+        ? 'danger'
+        : result.summary.bySeverity.high > 0
+          ? 'warning'
+          : 'good';
 
     const payload = {
-      attachments: [{
-        color,
-        title: '🔒 VibeSec Security Scan Results',
-        fields: [
-          {
-            title: 'Project',
-            value: result.scan.path,
-            short: true,
-          },
-          {
-            title: 'Total Issues',
-            value: result.summary.total.toString(),
-            short: true,
-          },
-          {
-            title: 'Critical',
-            value: result.summary.bySeverity.critical.toString(),
-            short: true,
-          },
-          {
-            title: 'High',
-            value: result.summary.bySeverity.high.toString(),
-            short: true,
-          },
-          {
-            title: 'Files Scanned',
-            value: result.scan.filesScanned.toString(),
-            short: true,
-          },
-          {
-            title: 'Duration',
-            value: `${result.scan.duration.toFixed(2)}s`,
-            short: true,
-          },
-        ],
-        footer: 'VibeSec',
-        ts: Math.floor(Date.parse(result.scan.timestamp) / 1000),
-      }],
+      attachments: [
+        {
+          color,
+          title: '🔒 VibeSec Security Scan Results',
+          fields: [
+            {
+              title: 'Project',
+              value: result.scan.path,
+              short: true,
+            },
+            {
+              title: 'Total Issues',
+              value: result.summary.total.toString(),
+              short: true,
+            },
+            {
+              title: 'Critical',
+              value: result.summary.bySeverity.critical.toString(),
+              short: true,
+            },
+            {
+              title: 'High',
+              value: result.summary.bySeverity.high.toString(),
+              short: true,
+            },
+            {
+              title: 'Files Scanned',
+              value: result.scan.filesScanned.toString(),
+              short: true,
+            },
+            {
+              title: 'Duration',
+              value: `${result.scan.duration.toFixed(2)}s`,
+              short: true,
+            },
+          ],
+          footer: 'VibeSec',
+          ts: Math.floor(Date.parse(result.scan.timestamp) / 1000),
+        },
+      ],
     };
 
     const response = await fetch(this.webhookUrl, {

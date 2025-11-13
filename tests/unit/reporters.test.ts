@@ -42,21 +42,24 @@ describe('Reporters', () => {
     summary: {
       total: findings.length,
       bySeverity: {
-        critical: findings.filter(f => f.severity === Severity.CRITICAL).length,
-        high: findings.filter(f => f.severity === Severity.HIGH).length,
-        medium: findings.filter(f => f.severity === Severity.MEDIUM).length,
-        low: findings.filter(f => f.severity === Severity.LOW).length,
+        critical: findings.filter((f) => f.severity === Severity.CRITICAL).length,
+        high: findings.filter((f) => f.severity === Severity.HIGH).length,
+        medium: findings.filter((f) => f.severity === Severity.MEDIUM).length,
+        low: findings.filter((f) => f.severity === Severity.LOW).length,
       },
       byCategory: {
-        [Category.INJECTION]: findings.filter(f => f.category === Category.INJECTION).length,
-        [Category.SECRETS]: findings.filter(f => f.category === Category.SECRETS).length,
-        [Category.AUTH]: findings.filter(f => f.category === Category.AUTH).length,
-        [Category.INCOMPLETE]: findings.filter(f => f.category === Category.INCOMPLETE).length,
-        [Category.AI_SPECIFIC]: findings.filter(f => f.category === Category.AI_SPECIFIC).length,
-        [Category.DEPENDENCIES]: findings.filter(f => f.category === Category.DEPENDENCIES).length,
-        [Category.WEB_SECURITY]: findings.filter(f => f.category === Category.WEB_SECURITY).length,
-        [Category.CRYPTOGRAPHY]: findings.filter(f => f.category === Category.CRYPTOGRAPHY).length,
-        [Category.CUSTOM]: findings.filter(f => f.category === Category.CUSTOM).length,
+        [Category.INJECTION]: findings.filter((f) => f.category === Category.INJECTION).length,
+        [Category.SECRETS]: findings.filter((f) => f.category === Category.SECRETS).length,
+        [Category.AUTH]: findings.filter((f) => f.category === Category.AUTH).length,
+        [Category.INCOMPLETE]: findings.filter((f) => f.category === Category.INCOMPLETE).length,
+        [Category.AI_SPECIFIC]: findings.filter((f) => f.category === Category.AI_SPECIFIC).length,
+        [Category.DEPENDENCIES]: findings.filter((f) => f.category === Category.DEPENDENCIES)
+          .length,
+        [Category.WEB_SECURITY]: findings.filter((f) => f.category === Category.WEB_SECURITY)
+          .length,
+        [Category.CRYPTOGRAPHY]: findings.filter((f) => f.category === Category.CRYPTOGRAPHY)
+          .length,
+        [Category.CUSTOM]: findings.filter((f) => f.category === Category.CUSTOM).length,
       },
     },
     findings,
@@ -68,9 +71,9 @@ describe('Reporters', () => {
     it('should generate valid JSON', () => {
       const finding = createTestFinding();
       const result = createTestResult([finding]);
-      
+
       const output = reporter.generate(result);
-      
+
       expect(() => JSON.parse(output)).not.toThrow();
     });
 
@@ -78,7 +81,7 @@ describe('Reporters', () => {
       const result = createTestResult([]);
       const output = reporter.generate(result);
       const parsed = JSON.parse(output);
-      
+
       expect(parsed.scan).toBeDefined();
       expect(parsed.scan.path).toBe('/test/path');
       expect(parsed.scan.filesScanned).toBe(10);
@@ -94,7 +97,7 @@ describe('Reporters', () => {
       const result = createTestResult(findings);
       const output = reporter.generate(result);
       const parsed = JSON.parse(output);
-      
+
       expect(parsed.summary.total).toBe(3);
       expect(parsed.summary.bySeverity.critical).toBe(1);
       expect(parsed.summary.bySeverity.high).toBe(1);
@@ -106,7 +109,7 @@ describe('Reporters', () => {
       const result = createTestResult([finding]);
       const output = reporter.generate(result);
       const parsed = JSON.parse(output);
-      
+
       const outputFinding = parsed.findings[0];
       expect(outputFinding.id).toBe('test-finding-1');
       expect(outputFinding.rule).toBe('test-rule');
@@ -125,7 +128,7 @@ describe('Reporters', () => {
       const result = createTestResult([finding]);
       const output = reporter.generate(result);
       const parsed = JSON.parse(output);
-      
+
       const outputFinding = parsed.findings[0];
       expect(outputFinding.metadata.cwe).toBe('CWE-89');
       expect(outputFinding.metadata.owasp).toBe('A1:2017');
@@ -135,7 +138,7 @@ describe('Reporters', () => {
     it('should format JSON with proper indentation', () => {
       const result = createTestResult([]);
       const output = reporter.generate(result);
-      
+
       expect(output).toContain('\n');
       expect(output).toContain('  '); // Should have 2-space indentation
     });
@@ -144,7 +147,7 @@ describe('Reporters', () => {
       const result = createTestResult([]);
       const output = reporter.generate(result);
       const parsed = JSON.parse(output);
-      
+
       expect(parsed.findings).toEqual([]);
       expect(parsed.summary.total).toBe(0);
     });
@@ -156,7 +159,7 @@ describe('Reporters', () => {
     it('should generate text output', () => {
       const result = createTestResult([]);
       const output = reporter.generate(result);
-      
+
       expect(typeof output).toBe('string');
       expect(output.length).toBeGreaterThan(0);
     });
@@ -164,14 +167,14 @@ describe('Reporters', () => {
     it('should include header', () => {
       const result = createTestResult([]);
       const output = reporter.generate(result);
-      
+
       expect(output).toContain('VibeSec Security Scan Results');
     });
 
     it('should include scan metadata', () => {
       const result = createTestResult([]);
       const output = reporter.generate(result);
-      
+
       expect(output).toContain('/test/path');
       expect(output).toContain('10'); // files scanned
       expect(output).toContain('1.23'); // duration
@@ -180,7 +183,7 @@ describe('Reporters', () => {
     it('should show success message when no findings', () => {
       const result = createTestResult([]);
       const output = reporter.generate(result);
-      
+
       expect(output).toContain('No security issues detected');
     });
 
@@ -188,7 +191,7 @@ describe('Reporters', () => {
       const finding = createTestFinding();
       const result = createTestResult([finding]);
       const output = reporter.generate(result);
-      
+
       expect(output).toContain('SQL Injection');
       expect(output).toContain('test.js:10');
       expect(output).toContain('Use parameterized queries');
@@ -203,7 +206,7 @@ describe('Reporters', () => {
       ];
       const result = createTestResult(findings);
       const output = reporter.generate(result);
-      
+
       expect(output).toContain('CRITICAL');
       expect(output).toContain('HIGH');
       expect(output).toContain('MEDIUM');
@@ -216,7 +219,7 @@ describe('Reporters', () => {
       });
       const result = createTestResult([finding]);
       const output = reporter.generate(result);
-      
+
       expect(output).toContain('Code:');
       expect(output).toContain('const query =');
     });
@@ -225,7 +228,7 @@ describe('Reporters', () => {
       const finding = createTestFinding();
       const result = createTestResult([finding]);
       const output = reporter.generate(result);
-      
+
       expect(output).toContain('Fix:');
       expect(output).toContain('Use parameterized queries');
     });
@@ -234,7 +237,7 @@ describe('Reporters', () => {
       const finding = createTestFinding();
       const result = createTestResult([finding]);
       const output = reporter.generate(result);
-      
+
       expect(output).toContain('References:');
       expect(output).toContain('https://owasp.org/sql-injection');
     });
@@ -243,7 +246,7 @@ describe('Reporters', () => {
       const finding = createTestFinding();
       const result = createTestResult([finding]);
       const output = reporter.generate(result);
-      
+
       expect(output).toContain('CWE-89');
       expect(output).toContain('OWASP A1:2017');
     });
@@ -255,7 +258,7 @@ describe('Reporters', () => {
       ];
       const result = createTestResult(findings);
       const output = reporter.generate(result);
-      
+
       expect(output).toContain('Summary:');
       expect(output).toContain('2 security issues detected');
     });
@@ -264,7 +267,7 @@ describe('Reporters', () => {
       const finding = createTestFinding();
       const result = createTestResult([finding]);
       const output = reporter.generate(result);
-      
+
       expect(output).toContain('Next Steps:');
       expect(output).toContain('Fix CRITICAL issues immediately');
     });
@@ -278,12 +281,12 @@ describe('Reporters', () => {
       ];
       const result = createTestResult(findings);
       const output = reporter.generate(result);
-      
+
       const criticalPos = output.indexOf('Critical Issue');
       const highPos = output.indexOf('High Issue');
       const mediumPos = output.indexOf('Medium Issue');
       const lowPos = output.indexOf('Low Issue');
-      
+
       expect(criticalPos).toBeLessThan(highPos);
       expect(highPos).toBeLessThan(mediumPos);
       expect(mediumPos).toBeLessThan(lowPos);

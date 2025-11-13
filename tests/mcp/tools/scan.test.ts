@@ -2,6 +2,7 @@
  * Tests for vibesec_scan MCP tool
  */
 
+import { describe, it, expect, beforeAll } from 'bun:test';
 import { vibesecScanTool, handleScan } from '../../../src/mcp/tools/scan';
 import { writeFile, mkdir, rm } from 'fs/promises';
 import { join } from 'path';
@@ -43,7 +44,7 @@ function authenticateUser(username: string, password: string) {
       expect(vibesecScanTool.inputSchema).toBeTruthy();
       expect(vibesecScanTool.inputSchema.type).toBe('object');
       expect(vibesecScanTool.inputSchema.properties).toBeTruthy();
-      expect(vibesecScanTool.inputSchema.properties?.files).toBeTruthy();
+      expect(vibesecScanTool.inputSchema.properties.files).toBeTruthy();
     });
 
     it('should require files parameter', () => {
@@ -81,15 +82,13 @@ function authenticateUser(username: string, password: string) {
     });
 
     it('should reject invalid severity', async () => {
-      await expect(
-        handleScan({ files: ['test.ts'], severity: 'invalid' })
-      ).rejects.toThrow('severity');
+      await expect(handleScan({ files: ['test.ts'], severity: 'invalid' })).rejects.toThrow(
+        'severity'
+      );
     });
 
     it('should reject invalid format', async () => {
-      await expect(
-        handleScan({ files: ['test.ts'], format: 'invalid' })
-      ).rejects.toThrow('format');
+      await expect(handleScan({ files: ['test.ts'], format: 'invalid' })).rejects.toThrow('format');
     });
   });
 

@@ -37,15 +37,7 @@
     },
     "category": {
       "type": "string",
-      "enum": [
-        "secrets",
-        "injection",
-        "auth",
-        "ai-specific",
-        "incomplete",
-        "crypto",
-        "config"
-      ],
+      "enum": ["secrets", "injection", "auth", "ai-specific", "incomplete", "crypto", "config"],
       "description": "Security category"
     },
     "languages": {

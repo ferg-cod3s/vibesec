@@ -30,15 +30,11 @@ async function testSentryIntegration() {
   console.log('2. Capturing test error...');
   try {
     const testError = new Error('Test error from VibeSec - Self-hosted Sentry integration test');
-    const eventId = sentry.captureError(
-      testError,
-      ErrorCategory.SYSTEM_ERROR,
-      {
-        test: true,
-        component: 'sentry-integration',
-        timestamp: new Date().toISOString(),
-      }
-    );
+    const eventId = sentry.captureError(testError, ErrorCategory.SYSTEM_ERROR, {
+      test: true,
+      component: 'sentry-integration',
+      timestamp: new Date().toISOString(),
+    });
     console.log(`   ✅ Error captured with event ID: ${eventId}\n`);
   } catch (error) {
     console.error('   ❌ Failed to capture error:', error);
@@ -61,7 +57,7 @@ async function testSentryIntegration() {
   console.log('5. Testing performance monitoring...');
   await sentry.startSpan('test-scan', 'scan', async () => {
     // Simulate some work
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
   });
   console.log('   ✅ Span completed\n');
 

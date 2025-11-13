@@ -60,6 +60,7 @@ docker run -v $(pwd):/app vibesec/vibesec scan /app
 Scan a directory or file for security vulnerabilities.
 
 **Usage:**
+
 ```bash
 vibesec scan .
 vibesec scan src/
@@ -68,17 +69,17 @@ vibesec scan src/api/auth.js
 
 **Options:**
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `--format` | `json\|text\|html\|sarif` | `text` | Output format |
-| `--severity` | `critical\|high\|medium\|low` | all | Minimum severity to report |
-| `--output` | `string` | stdout | Output file path |
-| `--config` | `string` | `.vibesec.yaml` | Config file path |
-| `--exclude` | `string[]` | `[]` | Patterns to exclude |
-| `--integrations` | `string[]` | `[]` | Enable integrations (snyk, socket) |
-| `--fail-on` | `critical\|high\|medium\|low` | none | Exit code 1 if issues found |
-| `--verbose` | `boolean` | `false` | Verbose output |
-| `--quiet` | `boolean` | `false` | Suppress non-error output |
+| Option           | Type                          | Default         | Description                        |
+| ---------------- | ----------------------------- | --------------- | ---------------------------------- |
+| `--format`       | `json\|text\|html\|sarif`     | `text`          | Output format                      |
+| `--severity`     | `critical\|high\|medium\|low` | all             | Minimum severity to report         |
+| `--output`       | `string`                      | stdout          | Output file path                   |
+| `--config`       | `string`                      | `.vibesec.yaml` | Config file path                   |
+| `--exclude`      | `string[]`                    | `[]`            | Patterns to exclude                |
+| `--integrations` | `string[]`                    | `[]`            | Enable integrations (snyk, socket) |
+| `--fail-on`      | `critical\|high\|medium\|low` | none            | Exit code 1 if issues found        |
+| `--verbose`      | `boolean`                     | `false`         | Verbose output                     |
+| `--quiet`        | `boolean`                     | `false`         | Suppress non-error output          |
 
 **Examples:**
 
@@ -100,6 +101,7 @@ vibesec scan . --verbose
 ```
 
 **Exit Codes:**
+
 - `0` - Success (no issues or below fail-on threshold)
 - `1` - Issues found (at or above fail-on threshold)
 - `2` - Scanning error
@@ -111,17 +113,18 @@ vibesec scan . --verbose
 Generate a report from previous scan results.
 
 **Usage:**
+
 ```bash
 vibesec report --input scan-results.json --format html
 ```
 
 **Options:**
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `--input` | `string` | required | Input JSON scan results |
-| `--format` | `html\|markdown\|sarif` | `html` | Output format |
-| `--output` | `string` | stdout | Output file path |
+| Option     | Type                    | Default  | Description             |
+| ---------- | ----------------------- | -------- | ----------------------- |
+| `--input`  | `string`                | required | Input JSON scan results |
+| `--format` | `html\|markdown\|sarif` | `html`   | Output format           |
+| `--output` | `string`                | stdout   | Output file path        |
 
 **Examples:**
 
@@ -140,6 +143,7 @@ vibesec report --input results.json --format sarif --output results.sarif
 Manage VibeSec configuration.
 
 **Actions:**
+
 - `init` - Create default `.vibesec.yaml`
 - `validate` - Validate existing config
 - `show` - Display current config
@@ -164,16 +168,17 @@ vibesec config show
 Update detection rules from community repository.
 
 **Usage:**
+
 ```bash
 vibesec update-rules
 ```
 
 **Options:**
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `--source` | `string` | `https://rules.vibesec.dev` | Rules repository URL |
-| `--force` | `boolean` | `false` | Force update even if up-to-date |
+| Option     | Type      | Default                     | Description                     |
+| ---------- | --------- | --------------------------- | ------------------------------- |
+| `--source` | `string`  | `https://rules.vibesec.dev` | Rules repository URL            |
+| `--force`  | `boolean` | `false`                     | Force update even if up-to-date |
 
 ---
 
@@ -182,6 +187,7 @@ vibesec update-rules
 Validate a custom detection rule.
 
 **Usage:**
+
 ```bash
 vibesec validate-rule rules/custom/my-rule.yaml
 ```
@@ -205,7 +211,7 @@ const options: ScanOptions = {
   path: './src',
   severity: 'high',
   format: 'json',
-  integrations: ['snyk', 'socket']
+  integrations: ['snyk', 'socket'],
 };
 
 const results: ScanResult = await scan(options);
@@ -226,14 +232,14 @@ Scan a directory or file for security issues.
 
 ```typescript
 interface ScanOptions {
-  path: string;                    // Path to scan
-  format?: 'json' | 'text';        // Output format (default: 'json')
-  severity?: SeverityLevel;        // Minimum severity
-  exclude?: string[];              // Exclude patterns
-  integrations?: string[];         // Enable integrations
-  config?: string;                 // Config file path
-  failOn?: SeverityLevel;          // Fail threshold
-  verbose?: boolean;               // Verbose output
+  path: string; // Path to scan
+  format?: 'json' | 'text'; // Output format (default: 'json')
+  severity?: SeverityLevel; // Minimum severity
+  exclude?: string[]; // Exclude patterns
+  integrations?: string[]; // Enable integrations
+  config?: string; // Config file path
+  failOn?: SeverityLevel; // Fail threshold
+  verbose?: boolean; // Verbose output
 }
 
 type SeverityLevel = 'critical' | 'high' | 'medium' | 'low';
@@ -512,11 +518,11 @@ scan:
   exclude:
     - node_modules/
     - vendor/
-    - "*.test.js"
-    - "**/__tests__/**"
+    - '*.test.js'
+    - '**/__tests__/**'
 
 severity:
-  fail_on: high  # critical|high|medium|low
+  fail_on: high # critical|high|medium|low
 
 detectors:
   secrets: true
@@ -529,10 +535,10 @@ detectors:
 
 rules:
   disabled:
-    - hardcoded-api-key  # Disable specific rules
+    - hardcoded-api-key # Disable specific rules
   overrides:
     hardcoded-password:
-      severity: high  # Override severity
+      severity: high # Override severity
 
 integrations:
   snyk:
@@ -601,6 +607,7 @@ Compatible with GitHub Security, VS Code, and other SARIF-compliant tools.
 ### HTML
 
 Interactive web-based report with:
+
 - Searchable findings
 - Collapsible code snippets
 - Filter by severity/category
@@ -775,16 +782,16 @@ async function runSecurityScan() {
   try {
     const results = await scan({
       path: './src',
-      failOn: 'high'
+      failOn: 'high',
     });
 
     if (results.summary.critical > 0 || results.summary.high > 0) {
       await sendSlackNotification({
         channel: '#security-alerts',
         message: `⚠️ Security scan found ${results.summary.critical} critical and ${results.summary.high} high severity issues!`,
-        findings: results.findings.filter(f =>
-          f.severity === 'critical' || f.severity === 'high'
-        )
+        findings: results.findings.filter(
+          (f) => f.severity === 'critical' || f.severity === 'high'
+        ),
       });
     }
 
@@ -846,6 +853,7 @@ runSecurityScan();
 ### Integration APIs
 
 Rate limits are determined by third-party services:
+
 - **Snyk:** Varies by plan
 - **Socket.dev:** Varies by plan
 

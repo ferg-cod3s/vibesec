@@ -9,7 +9,12 @@ Catches vulnerabilities your AI assistant missed. Integrates directly with Claud
 
 ```bash
 # 2-minute setup for Claude Code
-echo '{"mcpServers":{"vibesec":{"command":"bun","args":["run","/path/to/vibesec-bun-poc/bin/vibesec-mcp"]}}}' > ~/.claude/mcp.json
+git clone https://github.com/vibesec/vibesec.git
+cd vibesec
+npm install
+npm run build
+
+echo '{"mcpServers":{"vibesec":{"command":"node","args":["/path/to/vibesec/dist/mcp/server.js"]}}' > ~/.claude/mcp.json
 
 # Restart Claude Code - that's it!
 ```
@@ -24,12 +29,15 @@ VibeSec now works **inside** your AI coding assistant through MCP integration:
 - 🔒 **100% local** - your code never leaves your machine
 
 **Demo:**
+
 ```
 You: "Claude, can you scan this file for security issues using VibeSec?"
 Claude: *uses vibesec_scan tool* "Found 2 critical issues:
   1. Hardcoded API key on line 23
   2. SQL injection risk in query builder..."
 ```
+
+[See it in action →](./docs/demo.gif)
 
 ---
 
@@ -90,6 +98,7 @@ vibesec scan . --explain
 ## 📊 What VibeSec Detects
 
 ### AI-Generated Code Patterns
+
 - ✅ Hardcoded secrets and API keys
 - ✅ Missing input validation (SQL injection, XSS)
 - ✅ Insecure authentication patterns
@@ -100,12 +109,13 @@ vibesec scan . --explain
 - ✅ Data exfiltration risks
 
 ### Language Support
+
 - JavaScript/TypeScript ✅
-- Python *(coming soon)*
-- Go *(coming soon)*
-- Java *(coming soon)*
-- Ruby *(coming soon)*
-- PHP *(coming soon)*
+- Python _(coming soon)_
+- Go _(coming soon)_
+- Java _(coming soon)_
+- Ruby _(coming soon)_
+- PHP _(coming soon)_
 
 **Note:** POC currently focuses on JavaScript/TypeScript. Built with TypeScript + Bun runtime. See [TECH_STACK.md](docs/TECH_STACK.md) for details.
 
@@ -155,10 +165,10 @@ scan:
   exclude:
     - node_modules/
     - vendor/
-    - "*.test.js"
+    - '*.test.js'
 
 severity:
-  fail_on: high  # fail CI if high/critical issues found
+  fail_on: high # fail CI if high/critical issues found
 
 detectors:
   secrets: true
@@ -213,11 +223,13 @@ output:
 ## 🤝 Integrations
 
 ### Current
+
 - ✅ GitHub Actions
 - ✅ Snyk (dependency vulnerabilities)
 - ✅ Socket.dev (supply chain security)
 
 ### Roadmap
+
 - ⏳ GitLab CI/CD
 - ⏳ CircleCI
 - ⏳ Jenkins
@@ -232,6 +244,7 @@ output:
 **📋 Active Planning:** [GitHub Project Board](https://github.com/users/ferg-cod3s/projects/4)
 
 ### POC (Weeks 1-2) ✅ COMPLETE
+
 - [x] Core scanner engine with 19 security rules
 - [x] Multi-detector system (secrets, injection, auth, incomplete code, AI-specific)
 - [x] CLI tool with progress indicators
@@ -241,7 +254,9 @@ output:
 - [x] User testing materials and feedback forms
 
 ### MVP (Weeks 3-8) 🚧 IN PROGRESS
+
 Track progress on our [GitHub Project](https://github.com/users/ferg-cod3s/projects/4):
+
 - [ ] Enhanced Scanner (Tree-sitter AST, incremental scanning)
 - [ ] AI-Specific Detection Engine (confidence scoring, heuristics)
 - [ ] Integration Layer (Snyk, Socket.dev, GitHub Actions)
@@ -250,6 +265,7 @@ Track progress on our [GitHub Project](https://github.com/users/ferg-cod3s/proje
 - [ ] Polish & Launch (docs, examples, beta testing)
 
 ### Post-MVP 🔮
+
 - [ ] IDE Integrations (VS Code, JetBrains)
 - [ ] Language Expansion (Ruby, PHP, Java, C#, Swift)
 - [ ] AI Chatbot ("Ask VibeSec")
@@ -279,6 +295,7 @@ npm test -- --coverage
 ## 📝 Examples
 
 ### Basic Scan
+
 ```bash
 # Scan current directory
 vibesec scan .
@@ -294,6 +311,7 @@ vibesec scan -f stakeholder -o security-report.txt
 ```
 
 ### Using Security Scorecard
+
 ```bash
 # Get security score (0-100) with benchmark comparison
 vibesec scan --explain
@@ -305,6 +323,7 @@ vibesec scan --explain
 ```
 
 ### Accessibility Features
+
 ```bash
 # Disable colors (for screen readers or terminals without color support)
 vibesec scan --no-color
@@ -314,6 +333,7 @@ NO_COLOR=1 vibesec scan .
 ```
 
 ### CI/CD Integration
+
 ```yaml
 # .github/workflows/vibesec.yml
 name: VibeSec Security Scan
@@ -353,6 +373,7 @@ VibeSec is open-source software licensed under the [MIT License](LICENSE).
 ## 🙏 Acknowledgments
 
 VibeSec is built on research from:
+
 - Veracode's 2025 GenAI Code Security Report
 - NYU/Stanford AI-assisted coding security research
 - OWASP AI Security & Privacy Guide

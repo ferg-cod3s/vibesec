@@ -22,7 +22,7 @@ module.exports = {
     'run-benchmark.ts',
     'tests/**',
     'benchmark-results/**',
-    'bun-benchmark-results.json',
+    'bun-benchmark-results.json'
   ],
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'warn',

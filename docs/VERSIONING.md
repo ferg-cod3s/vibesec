@@ -8,11 +8,11 @@ When a Pull Request is merged to `main`, the version is automatically bumped bas
 
 ### PR Labels for Version Bumping
 
-| Label | Bump Type | When to Use | Example |
-|-------|-----------|-------------|---------|
-| `major` or `breaking` | **Major** (1.0.0 → 2.0.0) | Breaking changes, incompatible API changes | Removing MCP support, changing CLI arguments |
-| `minor` or `feature` | **Minor** (1.0.0 → 1.1.0) | New features, backward-compatible additions | Adding new detection rules, new reporters |
-| `patch`, `bugfix`, or `fix` | **Patch** (1.0.0 → 1.0.1) | Bug fixes, documentation, performance improvements | Fixing false positives, updating docs |
+| Label                       | Bump Type                 | When to Use                                        | Example                                      |
+| --------------------------- | ------------------------- | -------------------------------------------------- | -------------------------------------------- |
+| `major` or `breaking`       | **Major** (1.0.0 → 2.0.0) | Breaking changes, incompatible API changes         | Removing MCP support, changing CLI arguments |
+| `minor` or `feature`        | **Minor** (1.0.0 → 1.1.0) | New features, backward-compatible additions        | Adding new detection rules, new reporters    |
+| `patch`, `bugfix`, or `fix` | **Patch** (1.0.0 → 1.0.1) | Bug fixes, documentation, performance improvements | Fixing false positives, updating docs        |
 
 **Default:** If no label is present, a `patch` version bump is applied.
 
@@ -116,11 +116,11 @@ See [CHANGELOG.md](../CHANGELOG.md) for complete version history.
 
 The following secrets must be configured in your GitHub repository settings for automated releases to work:
 
-| Secret Name | Purpose | How to Obtain |
-|-------------|---------|---------------|
-| `NPM_TOKEN` | Publish to npm registry | Create at [npmjs.com/settings/tokens](https://www.npmjs.com/settings/tokens) (Automation token) |
-| `DOCKERHUB_USERNAME` | Docker Hub login | Your Docker Hub username |
-| `DOCKERHUB_TOKEN` | Docker Hub authentication | Create at [hub.docker.com/settings/security](https://hub.docker.com/settings/security) |
+| Secret Name            | Purpose                      | How to Obtain                                                                                                                           |
+| ---------------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `NPM_TOKEN`            | Publish to npm registry      | Create at [npmjs.com/settings/tokens](https://www.npmjs.com/settings/tokens) (Automation token)                                         |
+| `DOCKERHUB_USERNAME`   | Docker Hub login             | Your Docker Hub username                                                                                                                |
+| `DOCKERHUB_TOKEN`      | Docker Hub authentication    | Create at [hub.docker.com/settings/security](https://hub.docker.com/settings/security)                                                  |
 | `CLOUDFLARE_API_TOKEN` | Deploy to Cloudflare Workers | Create at [dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens) (Edit Cloudflare Workers permission) |
 
 **Note:** The Cloudflare account ID is already configured in `wrangler.toml`, so you only need to add the API token as a secret.

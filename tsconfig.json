@@ -17,21 +17,6 @@
     "moduleResolution": "node",
     "types": ["node", "jest"]
   },
-  "include": [
-    "cli/**/*",
-    "scanner/**/*",
-    "reporters/**/*",
-    "src/**/*",
-    "lib/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "**/*.test.ts",
-    "tests/**/*",
-    "poc/**/*",
-    "demo-examples/**/*",
-    "demo-automation/**/*",
-    "benchmark-results/**/*"
-  ]
+  "include": ["cli/**/*", "scanner/**/*", "reporters/**/*", "src/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "tests/**/*"]
 }

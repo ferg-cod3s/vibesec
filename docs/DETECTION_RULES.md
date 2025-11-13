@@ -30,15 +30,15 @@ VibeSec uses a flexible, YAML-based rule system for defining security checks. Ru
 
 ### Rule Categories
 
-| Category | Description | Examples |
-|----------|-------------|----------|
-| **secrets** | Hardcoded credentials | API keys, passwords, tokens |
-| **injection** | Input validation flaws | SQL injection, XSS, command injection |
-| **auth** | Authentication issues | Weak auth, broken access control |
-| **ai-specific** | AI code patterns | Prompt injection, data leakage |
-| **incomplete** | Placeholder code | TODO/FIXME in security code |
-| **crypto** | Cryptographic flaws | Weak algorithms, bad key management |
-| **config** | Misconfiguration | Over-permissive CORS, debug mode |
+| Category        | Description            | Examples                              |
+| --------------- | ---------------------- | ------------------------------------- |
+| **secrets**     | Hardcoded credentials  | API keys, passwords, tokens           |
+| **injection**   | Input validation flaws | SQL injection, XSS, command injection |
+| **auth**        | Authentication issues  | Weak auth, broken access control      |
+| **ai-specific** | AI code patterns       | Prompt injection, data leakage        |
+| **incomplete**  | Placeholder code       | TODO/FIXME in security code           |
+| **crypto**      | Cryptographic flaws    | Weak algorithms, bad key management   |
+| **config**      | Misconfiguration       | Over-permissive CORS, debug mode      |
 
 ---
 
@@ -46,7 +46,7 @@ VibeSec uses a flexible, YAML-based rule system for defining security checks. Ru
 
 ### Basic Structure
 
-```yaml
+````yaml
 id: unique-rule-identifier
 name: Human-Readable Rule Name
 description: |
@@ -67,7 +67,7 @@ patterns:
   - type: ast
     query: 'AST query (optional)'
 
-confidence: 0.95  # 0.0-1.0, how confident detection is
+confidence: 0.95 # 0.0-1.0, how confident detection is
 
 fix:
   recommendation: |
@@ -97,24 +97,24 @@ metadata:
 
 author: Rule Author Name (optional)
 date: 2025-10-09 (optional)
-```
+````
 
 ### Field Definitions
 
-| Field | Required | Type | Description |
-|-------|----------|------|-------------|
-| `id` | ✅ | string | Unique identifier (kebab-case) |
-| `name` | ✅ | string | Display name for finding |
-| `description` | ✅ | string | Detailed explanation (supports markdown) |
-| `severity` | ✅ | enum | critical, high, medium, low |
-| `category` | ✅ | enum | See categories above |
-| `languages` | ✅ | array | Supported languages |
-| `patterns` | ✅ | array | Detection patterns (regex/AST) |
-| `confidence` | ✅ | number | 0.0-1.0 confidence score |
-| `fix` | ✅ | object | Remediation guidance |
-| `metadata` | ⚠️ | object | CWE, OWASP, tags (recommended) |
-| `author` | ❌ | string | Rule author (optional) |
-| `date` | ❌ | string | Creation date (optional) |
+| Field         | Required | Type   | Description                              |
+| ------------- | -------- | ------ | ---------------------------------------- |
+| `id`          | ✅       | string | Unique identifier (kebab-case)           |
+| `name`        | ✅       | string | Display name for finding                 |
+| `description` | ✅       | string | Detailed explanation (supports markdown) |
+| `severity`    | ✅       | enum   | critical, high, medium, low              |
+| `category`    | ✅       | enum   | See categories above                     |
+| `languages`   | ✅       | array  | Supported languages                      |
+| `patterns`    | ✅       | array  | Detection patterns (regex/AST)           |
+| `confidence`  | ✅       | number | 0.0-1.0 confidence score                 |
+| `fix`         | ✅       | object | Remediation guidance                     |
+| `metadata`    | ⚠️       | object | CWE, OWASP, tags (recommended)           |
+| `author`      | ❌       | string | Rule author (optional)                   |
+| `date`        | ❌       | string | Creation date (optional)                 |
 
 ---
 
@@ -124,7 +124,7 @@ date: 2025-10-09 (optional)
 
 #### hardcoded-api-key
 
-```yaml
+````yaml
 id: hardcoded-api-key
 name: Hardcoded API Key Detected
 description: |
@@ -168,7 +168,7 @@ metadata:
   cwe: CWE-798
   owasp: A3:2017
   tags: [ai-prone, production-blocker]
-```
+````
 
 #### hardcoded-password
 
@@ -200,7 +200,7 @@ metadata:
 
 #### sql-injection-js
 
-```yaml
+````yaml
 id: sql-injection-js
 name: SQL Injection Vulnerability (JavaScript)
 description: |
@@ -246,11 +246,11 @@ metadata:
   cwe: CWE-89
   owasp: A1:2017
   tags: [ai-prone, production-blocker]
-```
+````
 
 #### xss-vulnerability
 
-```yaml
+````yaml
 id: xss-vulnerability
 name: Cross-Site Scripting (XSS) Vulnerability
 severity: high
@@ -283,7 +283,7 @@ fix:
 metadata:
   cwe: CWE-79
   owasp: A7:2017
-```
+````
 
 ---
 
@@ -291,7 +291,7 @@ metadata:
 
 #### weak-password-validation
 
-```yaml
+````yaml
 id: weak-password-validation
 name: Weak Password Requirements
 severity: medium
@@ -325,7 +325,7 @@ fix:
 metadata:
   cwe: CWE-521
   tags: [compliance-required]
-```
+````
 
 ---
 
@@ -333,7 +333,7 @@ metadata:
 
 #### prompt-injection-risk
 
-```yaml
+````yaml
 id: prompt-injection-risk
 name: Potential Prompt Injection Vulnerability
 description: |
@@ -381,11 +381,11 @@ fix:
 metadata:
   cwe: CWE-20
   tags: [ai-specific, emerging-threat]
-```
+````
 
 #### data-exfiltration-logging
 
-```yaml
+````yaml
 id: data-exfiltration-logging
 name: Sensitive Data Logged
 severity: medium
@@ -420,7 +420,7 @@ fix:
 metadata:
   cwe: CWE-532
   tags: [ai-prone, compliance-required]
-```
+````
 
 ---
 
@@ -462,7 +462,7 @@ metadata:
 
 #### overpermissive-cors
 
-```yaml
+````yaml
 id: overpermissive-cors
 name: Over-Permissive CORS Configuration
 severity: medium
@@ -495,7 +495,7 @@ fix:
 metadata:
   cwe: CWE-942
   tags: [ai-prone]
-```
+````
 
 ---
 
@@ -536,10 +536,10 @@ Create test fixtures:
 
 ```javascript
 // tests/fixtures/vulnerable/my-custom-rule/bad.js
-dangerousFunction(userInput);  // Should trigger
+dangerousFunction(userInput); // Should trigger
 
 // tests/fixtures/secure/my-custom-rule/good.js
-safeAlternative(userInput);  // Should NOT trigger
+safeAlternative(userInput); // Should NOT trigger
 ```
 
 ### Step 3: Validate
@@ -605,6 +605,7 @@ To be accepted into the community rule set:
 ### Bounties
 
 We offer $50-$200 per accepted rule depending on:
+
 - Complexity and value
 - Test coverage quality
 - Documentation quality
@@ -696,12 +697,13 @@ A: Yes, override in config:
 rules:
   overrides:
     hardcoded-password:
-      severity: high  # downgrade from critical
+      severity: high # downgrade from critical
 ```
 
 **Q: How do I report a false positive?**
 
 A: Open an issue with:
+
 - Rule ID
 - Code snippet
 - Why it's a false positive

@@ -26,6 +26,7 @@ Looking for 5 beta testers! 🙋
 ```
 
 **Thread Continuation:**
+
 ```
 2/ The problem: AI tools (Claude, ChatGPT, Cursor) are amazing
 for speed, but they often generate insecure code
@@ -169,6 +170,7 @@ First 10 replies. Go! 👇
 **Title:** 🛡️ Free Security Scan Offer
 
 **Body:**
+
 ```markdown
 Hi @username! 👋
 
@@ -179,12 +181,14 @@ I noticed [PROJECT_NAME] was built with [ChatGPT/Claude/Cursor],
 and I'd love to offer a free security scan!
 
 ## What You Get
+
 - ✅ Security score (0-100)
 - ✅ Plain language explanations (no jargon)
 - ✅ Specific fix recommendations
 - ✅ My help addressing any issues
 
 ## What I Get
+
 - ✅ Real-world testing
 - ✅ Your feedback on the tool
 - ✅ ~10 minutes of your time
@@ -206,6 +210,7 @@ Instead of technical jargon like "CWE-798", VibeSec explains:
 ## Interested?
 
 Comment below and I'll:
+
 1. Scan the repo
 2. Share results
 3. Help fix any issues
@@ -220,7 +225,8 @@ P.S. If you'd rather run it yourself: [Quick Start link]
 **Title:** Security Scan Results + Beta Testing Opportunity
 
 **Body:**
-```markdown
+
+````markdown
 ## Security Scan for [PROJECT_NAME]
 
 Hey @username!
@@ -233,6 +239,7 @@ the results. I'm also looking for beta testers if you're interested!
 **Security Score:** XX/100 (Grade: [A-F])
 
 **Issues Found:**
+
 - 🚨 Critical: X issues
 - ⚠️ High: X issues
 - 📋 Medium: X issues
@@ -256,17 +263,20 @@ I'm looking for developers building with AI (Claude/ChatGPT/Cursor)
 to beta test VibeSec.
 
 **Why VibeSec?**
+
 - Specifically designed for AI-generated code
 - Plain language explanations (great for non-technical teammates)
 - Security scorecard (0-100)
 - Executive-friendly reports
 
 **What I Need:**
+
 - ~15 minutes of your time
 - Feedback on usability
 - Suggestions for improvement
 
 **What You Get:**
+
 - Free security scans
 - Help fixing issues
 - Early access to new features
@@ -276,13 +286,16 @@ Interested? Comment below!
 ---
 
 **Try it yourself:**
+
 ```bash
 npm install -g vibesec
 vibesec scan --explain
 ```
+````
 
 [Quick Start Guide](link)
-```
+
+````
 
 ### Template 3: Pull Request Comment
 
@@ -300,22 +313,25 @@ concerns. I ran VibeSec on it and found:
 
 ```typescript
 const apiKey = "sk_live_abc123"; // ⚠️ Should use process.env.API_KEY
-```
+````
 
 **Risk:** If this repo is public (or becomes public), this key
 is compromised
 
 **Fix:** (2 minutes)
+
 ```typescript
 const apiKey = process.env.API_KEY;
 ```
 
 Then add to `.env`:
+
 ```
 API_KEY=sk_live_abc123
 ```
 
 And `.gitignore`:
+
 ```
 .env
 ```
@@ -327,6 +343,7 @@ for AI-generated code. Happy to scan the whole codebase and
 share results!
 
 [Quick Start](link)
+
 ```
 
 ---
@@ -339,6 +356,7 @@ share results!
 
 **Body:**
 ```
+
 Hi [Name],
 
 I came across [PROJECT_NAME] on GitHub - great to see you
@@ -354,12 +372,14 @@ critical security issues (hardcoded secrets, SQL injection, etc).
 Most developers don't realize AI tools generate insecure code.
 
 **What I'm offering:**
+
 1. Free security scan of [PROJECT_NAME]
 2. Plain language report (no security expertise needed)
 3. Help fixing any issues
 4. Security score (0-100)
 
 **What I need:**
+
 - 15 minutes of your time
 - Feedback on the tool
 - Permission to anonymously share findings
@@ -376,6 +396,7 @@ Best,
 P.S. You can also try it yourself:
 npm install -g vibesec
 vibesec scan --explain
+
 ```
 
 ### Template 2: Follow-Up Email
@@ -384,6 +405,7 @@ vibesec scan --explain
 
 **Body:**
 ```
+
 Hi [Name],
 
 Following up on my previous email - wanted to check if you'd
@@ -403,6 +425,7 @@ Also attaching the security score: XX/100
 Let me know!
 
 [Your Name]
+
 ```
 
 ---
@@ -414,6 +437,7 @@ Let me know!
 **In #show-your-work or #projects channel:**
 
 ```
+
 🛡️ Built VibeSec - Security Scanner for AI-Generated Code
 
 **The Problem:**
@@ -439,7 +463,8 @@ DM me if you're building with AI and want a free security scan
 Try it: npm install -g vibesec
 
 [Demo screenshot]
-```
+
+````
 
 ---
 
@@ -497,7 +522,7 @@ AST analysis for vulnerability detection
 ```bash
 npm install -g vibesec
 vibesec scan --explain
-```
+````
 
 [Quick Start Guide](link)
 
@@ -511,6 +536,7 @@ comment below or DM me!
 [Screenshot of scan results]
 
 Feedback welcome! 🙏
+
 ```
 
 ### Template 2: r/ChatGPT Comment
@@ -518,6 +544,7 @@ Feedback welcome! 🙏
 **On posts about AI-generated code:**
 
 ```
+
 Built with ChatGPT? Make sure to run a security scan!
 
 I scanned 20 ChatGPT-generated projects and 73% had critical
@@ -533,6 +560,7 @@ Example:
 "CWE-89: SQL Injection vulnerability"
 
 Free + open source. Happy to scan your project if interested!
+
 ```
 
 ---
@@ -542,6 +570,7 @@ Free + open source. Happy to scan your project if interested!
 ### Template 1: LinkedIn Post
 
 ```
+
 🚨 I scanned 20 AI-generated projects for security issues
 
 The results surprised me:
@@ -572,6 +601,7 @@ Looking for beta testers! DM if you're building with AI.
 [Screenshot of scan results]
 
 #AI #Security #SoftwareDevelopment #ChatGPT #ClaudeAI
+
 ```
 
 ---
@@ -685,3 +715,4 @@ Before sending any outreach:
 4. Send 5-10 per day (don't spam)
 5. Track responses
 6. Iterate based on what works!
+```
