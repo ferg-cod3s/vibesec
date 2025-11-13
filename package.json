@@ -1,6 +1,6 @@
 {
   "name": "vibesec",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Security scanner for AI-generated code - detects vulnerabilities in vibe-coded projects",
   "main": "dist/index.js",
   "bin": {
