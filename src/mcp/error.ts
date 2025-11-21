@@ -270,6 +270,32 @@ export class ToolValidationError extends MCPOperationError {
 /**
  * Tool execution error
  */
+export enum MCPErrorCode {
+  /** Invalid JSON was received */
+  PARSE_ERROR = -32700,
+
+  /** JSON-RPC request is invalid */
+  INVALID_REQUEST = -32600,
+
+  /** Requested method does not exist */
+  METHOD_NOT_FOUND = -32601,
+
+  /** Method parameters are invalid */
+  INVALID_PARAMS = -32602,
+
+  /** Internal server error */
+  INTERNAL_ERROR = -32603,
+
+  /** Requested tool does not exist */
+  TOOL_NOT_FOUND = -32001,
+
+  /** Tool execution failed */
+  TOOL_EXECUTION_ERROR = -32002,
+
+  /** Tool arguments are invalid */
+  INVALID_TOOL_ARGS = -32003,
+}
+
 export class ToolExecutionError extends MCPOperationError {
   constructor(toolName: string, cause: Error) {
     super(`Tool execution failed: ${toolName}`, MCPErrorCode.TOOL_EXECUTION_ERROR, {
